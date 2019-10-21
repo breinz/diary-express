@@ -1,0 +1,37 @@
+-expense = expense || {}
+-errors = errors || {}
+
++alert-error("expense")
+
+form(method="post")
+
+    .row
+        .col-md-6
+            .form-group
+                label(for="amount")=t("expense.model.amount")
+                input.form-control#amount.form-control-lg(type="number", name="amount" step="0.01" value=expense.amount class=errors.amount?"is-invalid":false autofocus)
+                +form-error(t(`expense.error.amount.${errors.amount}`), errors.amount)
+            
+        .col-md-6
+            .form-group
+                label(for="date")=t("expense.model.date")
+                input#date.form-control(type="date", name="date" value=(new Date(expense.date||Date.now())).toISOString().substr(0,10))
+    
+    .form-group
+        =t("expense.model.category")
+        br
+        label.category-select(for=`category_none` data-color="#DDD")
+            .btn(data-sameWidth="c")
+                i.big.fa.fa-fw.fa-ban
+                br
+                =t("expenseCategory.none")
+            input(type="radio", name="category" value="null" id="category_none" checked=expense.category==null)
+        for category in categories
+            label.category-select(for=`category_${category._id}` data-color=category.color)
+                .btn(data-sameWidth="c")
+                    i.big.fa.fa-fw(class=`fa-${category.icon}`)
+                    br
+                    =category.name
+                input(type="radio", name="category" value=category._id id=`category_${category._id}` checked=category._id.equals(expense.category))
+    
+    input.btn.btn-success(type="submit", value=t("action.save"))

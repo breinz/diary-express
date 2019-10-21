@@ -1,0 +1,33 @@
+extends ../../layout/layout
+
+mixin line(category)
+    tr
+        td(data-link=`/expense/category/${category._id}`)
+            i.fa.fa-fw(class=`fa-${category.icon}`)
+            |&nbsp;
+            =category.name
+        td.actions
+            .btn-group
+                +edit_btn(`/expense/category/${category._id}/edit`, "", t("action.edit"), "a")
+                +delete_btn(`/expense/category/${category._id}/delete`, "", t("action.delete"), "a")
+
+block content
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    .h1-actions
+                        +new_btn("/expense/category/new", t("expenseCategory.button.new"))
+                    h1 Categories
+
+                    if categories.length
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th=t("expenseCategory.model.name")
+                                    th
+                            for category in categories
+                                +line(category)
+
+                    else
+                        +no-data

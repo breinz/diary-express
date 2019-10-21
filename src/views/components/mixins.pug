@@ -1,0 +1,76 @@
+mixin alert-error(item)
+    if Object.keys(errors).length
+        .alert.alert-danger
+            b Please review the form errors:
+            ul.mb-0
+                for key in Object.keys(errors)
+                    li=t(`${item}.error.${key}.${errors[key]}`)
+
+mixin form-text(instruction, error, hasError)
+    if hasError
+        +form-error(error)
+    else
+        +form-instruction(instruction)
+
+mixin form-error(val, hasError=true)
+    if hasError
+        small.text-danger.form-text=val
+
+mixin form-instruction(val)
+    if val.length
+        small.form-text.text-muted=val
+
+mixin no-data
+    .alert.alert-secondary.text-center.mb-0
+        i.fa.fa-cat.text-muted
+        |&nbsp;No data to show
+
+mixin new_btn(url, label, title, sameW)
+    a.btn.btn-outline-success.btn-sm(
+        href=url 
+        title=title && title.length > 0 ? title : false
+        data-sameWidth=sameW && sameW.length > 0 ? sameW : false
+        )&attributes(attributes)
+        i.fa.fa-plus.fa-fw
+        if label
+            br
+            =label
+
+mixin edit_btn(url, label, title, sameW)
+    a.btn.btn-outline-primary.btn-sm.edit_btn(
+        href=url 
+        title=title && title.length > 0 ? title : false
+        data-sameWidth=sameW && sameW.length > 0 ? sameW : false
+        )
+        i.fa.fa-pen.fa-fw
+        if label
+            br
+            =label
+
+mixin delete_btn(url, label, title, sameW)
+    a.btn.btn-outline-danger.btn-sm.delete_btn(
+        href=url 
+        title=title && title.length > 0 ? title : false 
+        data-sameWidth=sameW && sameW.length > 0 ? sameW : false
+        data-delete="Confirm this action"
+        )
+        //onclick="return confirm('Confirm this action')" 
+        i.fa.fa-trash.fa-fw
+        if label
+            br
+            =label
+
+mixin deleted-alert(permanent_url, recover_url)
+    .alert.alert-danger.text-center
+        .big.align-middle(style="display:inline")
+            i.fa.fa-trash(style="opacity:1")
+        |&emsp;
+        span.align-middle 
+            |This element has been deleted &emsp;
+            a.btn.btn-outline-danger.btn-sm(href=permanent_url data-samewidth="deleted_alert_sw" data-delete="Are you 100% sure?") 
+                i.fa.fa-skull-crossbones
+                |&nbsp;Delete&nbsp;permanently
+            |&emsp;
+            a.btn.btn-outline-secondary.btn-sm(href=recover_url data-samewidth="deleted_alert_sw") 
+                i.fa.fa-undo
+                |&nbsp;Recover

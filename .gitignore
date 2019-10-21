@@ -1,0 +1,7 @@
+node_modules
+/src/config.ts
+/dist/config.js
+*.log
+/coverage
+__snapshots__
+/assets

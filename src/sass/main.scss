@@ -1,0 +1,91 @@
+@import "fontawesome";
+@import "solid";
+
+@import "chartist";
+
+@import "_variables_override";
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+$transition: 0.2s ease-in-out;
+
+@import "topbar";
+
+// ---------------------------------------------------------------
+// BODY
+// ---------------------------------------------------------------
+
+body {
+  background-color: $gray-100;
+}
+
+// ---------------------------------------------------------------
+// FONT
+// ---------------------------------------------------------------
+
+.big {
+  font-size: 3rem;
+  font-weight: bold;
+  line-height: 3rem;
+}
+
+.huge {
+  font-size: 8rem;
+  font-weight: bold;
+}
+
+// ---------------------------------------------------------------
+// ALERT
+// ---------------------------------------------------------------
+
+.alert-hollow {
+  border: 1px solid $gray-400;
+  background-color: $white;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+}
+
+// ---------------------------------------------------------------
+// HEADERS
+// ---------------------------------------------------------------
+
+.h1-actions {
+  float: right;
+  margin-bottom: 0.5rem;
+}
+
+// ---------------------------------------------------------------
+// LISTS
+// ---------------------------------------------------------------
+
+ul {
+  &.inline {
+    display: inline-block;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: inline-block;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  &.margin {
+    li {
+      margin-right: 1rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------
+// TABLES
+// ---------------------------------------------------------------
+
+.actions {
+  width: 1px;
+  white-space: nowrap;
+}

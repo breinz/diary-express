@@ -1,0 +1,26 @@
+#topbar
+    .container
+        .row
+            .col-sm-8
+                #topbar-title 
+                    #topbar-title-1 Julien 
+                    #topbar-title-2 Breiner
+                ul.inline.margin
+                    if current_user
+                        if current_user.admin
+                            li
+                                a(href="/expense") Expenses
+                            li
+                                a(href="#") People
+                            li
+                                a(href="#") Places
+            .col-sm-4.text-right
+                ul.inline.margin
+                    if current_user
+                        li
+                            a.btn(href="/logout")
+                                i.fa.fa-sign-out-alt
+                    else
+                        li
+                            a.btn(href="/login")
+                                i.fa.fa-sign-in-alt

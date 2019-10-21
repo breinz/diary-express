@@ -1,0 +1,46 @@
+#topbar {
+  background-color: $gray-800;
+
+  color: $white;
+
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+  border-bottom: 1px solid #000;
+
+  .col-title {
+    width: 1rem;
+  }
+
+  #topbar-title {
+    display: inline-block;
+    margin-right: 2rem;
+
+    #topbar-title-1,
+    #topbar-title-2 {
+      display: inline-block;
+      font-size: 1.3rem;
+    }
+
+    #topbar-title-1 {
+      opacity: 0.5;
+    }
+
+    #topbar-title-2 {
+      font-weight: bold;
+    }
+  }
+
+  ul {
+    li {
+      a {
+        color: $white;
+        &:hover {
+          color: $gray-400;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}

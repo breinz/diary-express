@@ -1,0 +1,62 @@
+extends ../layout/layout
+
+mixin line(expense)
+    tr
+        td(data-link=`/expense/${expense._id}`)=util.todayOrDate(expense.date)
+        td(data-link=`/expense/${expense._id}`)
+            i.fa.fa-fw(class=`fa-${expense.category?expense.category.icon:"ban text-muted"}`)
+            |&nbsp;
+            =expense.amount
+        td.actions
+            .btn-group
+                +edit_btn(`/expense/${expense._id}/edit`, "", t("action.edit"), "a")
+                +delete_btn(`/expense/${expense._id}/delete`, "", t("action.delete"), "a")
+
+block content
+    .container
+        .row
+            .col-lg-3.col-md-4.col-sm-6
+                .row
+                    .col
+                        .alert.alert-hollow
+                            .text-center
+                                .big
+                                    =report.total
+                                    |&nbsp;&euro;
+                                =t("expense.report.spent.this_month")
+                        .alert.alert-hollow
+                            .row
+                                for item in report.categories
+                                    .col-8(style=`background-color:${item.category?item.category.color:"#EEE"}`)
+                                        i.fa.fa-fw(class=`fa-${item.category?item.category.icon:"ban text-muted"}`)
+                                        |&nbsp;
+                                        =item.category ? item.category.name : t("expenseCategory.none")
+                                    .col-4.text-right(style=`background-color:${item.category?item.category.color:"#EEE"}`)
+                                        strong=item.total
+
+
+            .col-12
+                .alert.alert-hollow
+                    .h1-actions
+                        .btn-group
+                            a.btn.btn-outline-success(href="/expense/new" data-sameWidth="b")
+                                i.fa.fa-plus
+                                br
+                                =t("expense.button.new")
+                            a.btn.btn-outline-secondary(href="/expense/category" data-sameWidth="b")
+                                i.fa.fa-list
+                                br
+                                =t("expense.button.categories.manage")
+                    h1 Expenses
+
+                    if expenses.length
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th=t("expense.model.date")
+                                    th=t("expense.model.amount")
+                                    th.actions
+                            for expense in expenses
+                                +line(expense)
+                    else
+                        +no-data

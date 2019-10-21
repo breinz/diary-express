@@ -1,0 +1,35 @@
+extends ../layout/layout
+
+
+block content
+    
+    -data = data || {}
+    -errors = errors || {}
+    
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    
+                    h1 Signin
+
+                    +alert-error("user")
+
+                    form(method="post")
+
+                        .form-group
+                            label(for="email") Email
+                            input.form-control#email(type="text" name="email" value=data.email class=errors.email?"is-invalid":false autofocus)
+                            +form-error(t(`user.error.email.${errors.email}`), errors.email)
+                        
+                        .form-group
+                            label(for="password") Password
+                            input.form-control#password(type="password" name="password" class=errors.password?"is-invalid":false)
+                            +form-error(t(`user.error.password.${errors.password}`), errors.password)
+                        
+                        .form-group
+                            label(for="password_repeat") Repeat password
+                            input.form-control#password(type="password" name="password_repeat" class=errors.password_repeat?"is-invalid":false)
+                            +form-error(t(`user.error.password_repeat.${errors.password_repeat}`), errors.password_repeat)
+                        
+                        input.btn.btn-success(type="submit", value="Signin")

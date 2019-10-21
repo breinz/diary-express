@@ -1,0 +1,21 @@
+extends ../layout/layout
+
+block content
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    
+                    h1 LOGIN
+
+                    form(method="post")
+
+                        .form-group
+                            label(for="email") Email
+                            input.form-control#email(type="text" name="email")
+                        
+                        .form-group
+                            label(for="email") Password
+                            input.form-control#password(type="password" name="password")
+                        
+                        input.btn.btn-success(type="submit", value="Login")

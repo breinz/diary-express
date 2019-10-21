@@ -1,0 +1,19 @@
+extends ../layout/layout
+
+block content
+
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    .h1-actions
+                        .btn-group
+                            +edit_btn(`/expense/${expense._id}/edit`, t("action.edit"), "", "a")
+                            +delete_btn(`/expense/${expense._id}/delete`, t("action.delete"), "", "a")
+                    h1=t("expense.title.expense")
+
+                    dl
+                        dt=t("expense.model.date")
+                        dd=util.todayOrDate(expense.date)
+                        dt=t("expense.model.amount")
+                        dd=expense.amount

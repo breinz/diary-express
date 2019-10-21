@@ -1,0 +1,12 @@
+if flash
+
+    .container
+        .row
+            .col-sm-12
+                if flash.success
+                    .alert.alert-success.flash
+                        =flash.success
+
+                if flash.error
+                    .alert.alert-danger.flash
+                        =flash.error

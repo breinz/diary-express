@@ -1,0 +1,23 @@
+-category = category || {}
+-errors = errors || {}
+
++alert-error("expenseCategory")
+
+form(method="post")
+
+    .form-group
+        label(for="name")=t("expenseCategory.model.name")
+        input.form-control#amount(type="text", name="name" value=category.name autofocus class=errors.name?"is-invalid":false)
+        +form-error(t(`expenseCategory.error.name.${errors.name}`), errors.name)
+    
+    .form-group
+        label(for="icon")=t("expenseCategory.model.icon")
+        input#icon.form-control(type="text", name="icon" value=category.icon class=errors.icon?"is-invalid":false)
+        +form-text(t("expenseCategory.instruction.icon"), t(`expenseCategory.error.name.${errors.icon}`), errors.icon)
+    
+    .form-group
+        label(for="color")=t("expenseCategory.model.color")
+        input#color.form-control(type="text", name="color" value=category.color class=errors.color?"is-invalid":false)
+        +form-text(t("expenseCategory.instruction.color"), t(`expenseCategory.error.name.${errors.color}`), errors.color)
+    
+    input.btn.btn-success(type="submit", value=t("action.save"))

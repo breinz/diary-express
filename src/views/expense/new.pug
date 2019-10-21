@@ -1,0 +1,10 @@
+extends ../layout/layout
+
+block content
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    h1=t("expense.title.new")
+
+                    include form

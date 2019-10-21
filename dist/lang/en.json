@@ -1,0 +1,111 @@
+{
+    "today": "Today",
+    "action": {
+        "save": "Save",
+        "edit": "Edit",
+        "delete": "Delete"
+    },
+    "flash": {
+        "error": {
+            "unknown": "An unexpected error occured"
+        }
+    },
+    "user": {
+        "error": {
+            "email": {
+                "required": "Email is required"
+            },
+            "password": {
+                "required": "Password is required",
+                "unvalid": "The password is not valid (minimum 4 characters)",
+                "no_match": "The passwords don't match"
+            },
+            "password_repeat": {
+                "required": "Please repeat the password"
+            },
+            "login_required": "You need to be logged in to access this content",
+            "admin_required": "You don't have access to this content"
+        },
+        "flash": {
+            "signed_in": "Signed in",
+            "logged_in": "Logged in",
+            "logged_out": "Logged out"
+        }
+    },
+    "expense": {
+        "button": {
+            "new": "New expense",
+            "categories": {
+                "manage": "Categories"
+            }
+        },
+        "title": {
+            "new": "New expense",
+            "edit": "Edit expense",
+            "expense": "Expense"
+        },
+        "model": {
+            "amount": "Amount",
+            "date": "Date",
+            "category": "Category"
+        },
+        "error": {
+            "amount": {
+                "required": "The amount is required"
+            },
+            "date": {
+                "required": "The date is required"
+            }
+        },
+        "flash": {
+            "created": "Expense saved!",
+            "edited": "Expense edited",
+            "deleted": "Expense deleted",
+            "error": {
+                "not_found": "Expense not found"
+            }
+        },
+        "report": {
+            "spent": {
+                "this_month": "Spent this month"
+            }
+        }
+    },
+    "expenseCategory": {
+        "button": {
+            "new": "New category"
+        },
+        "title": {
+            "new": "New category"
+        },
+        "model": {
+            "name": "Name",
+            "icon": "Icon",
+            "color": "Color"
+        },
+        "error": {
+            "name": {
+                "required": "The name is required"
+            },
+            "icon": {
+                "required": "The icon is required"
+            },
+            "color": {
+                "required": "The color is required"
+            },
+            "not_found": "Category not found"
+        },
+        "instruction": {
+            "icon": "Font awesome icon (utensils is good for food for example)",
+            "color": "Color (#000000 is black for example)"
+        },
+        "flash": {
+            "created": "Category created",
+            "edited": "Category edited",
+            "deleted": "Category deleted",
+            "recovered": "Category recovered",
+            "removed": "Category permanently removed"
+        },
+        "none": "No category"
+    }
+}
