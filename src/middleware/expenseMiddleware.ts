@@ -2,9 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import expenseCategoryMiddleware from "./expenseCategoryMiddleware";
 import ExpenseValidator from "../validator/ExpenseValidator";
 import Expense, { ExpenseModel } from "../model/ExpenseModel";
-import { Mongoose } from "mongoose";
 import Util from "../helper/Util";
-import { ExpenseCategoryModel } from "../model/ExpenseCategoryModel";
+import ExpenseCategory, { ExpenseCategoryModel } from "../model/ExpenseCategoryModel";
 
 class ExpenseMiddleware {
 
@@ -50,10 +49,17 @@ class ExpenseMiddleware {
 
     public async getReport(req: Request, res: Response, next: NextFunction) {
 
+        let [total, categories, reports] = await Promise.all([
+            expenseMiddleware.getReport_total(),
+            expenseMiddleware.getReport_categories(),
+            expenseMiddleware.getReport_report(req)
+        ]);
+
         req.expenseReport = {
-            total: await expenseMiddleware.getReport_total(),
-            categories: await expenseMiddleware.getReport_categories()
-        }
+            total,
+            categories,
+            reports
+        };
 
         next();
 
@@ -148,11 +154,75 @@ class ExpenseMiddleware {
                     path: "$category",
                     preserveNullAndEmptyArrays: true
                 }
+            }, {
+                $sort: {
+                    total: -1
+                }
             }
         ]);
 
         return <any>report;
+    }
 
+    private async getReport_report(req: Request): Promise<any> {
+
+        const report = await ExpenseCategory.aggregate([
+            {
+                $match: {
+                    "report.active": true,
+                    "user": req.current_user._id
+                }
+            }, {
+                $lookup: {
+                    from: 'expenses',
+                    let: {
+                        expense: "$_id",
+                        date: "$date"
+                    },
+                    pipeline: [{
+                        $match: {
+                            $expr: {
+                                $and: [{
+                                    $eq: ["$category", "$$expense"]
+                                },
+                                {
+                                    $gte: ["$date", req.util.bom()]
+                                },
+                                {
+                                    $lte: ["$date", req.util.bonm()]
+                                }
+                                ]
+                            }
+                        }
+                    }],
+                    as: 'expenses'
+                }
+            }, {
+                $addFields: {
+                    "report.value": {
+                        $divide: [{
+                            $sum: "$expenses.amount"
+                        }, {
+                            $multiply: [
+                                "$report.times",
+                                {
+                                    $cond: {
+                                        if: {
+                                            $eq: ["$report.period", "day"]
+                                        },
+                                        then: new Date().getDate()/* req.util.daysInMonth()*/,
+                                        else: 20
+                                    }
+                                }
+
+                            ]
+                        }]
+                    }
+                }
+            }
+        ]);
+
+        return report;
     }
 }
 

@@ -1,0 +1,34 @@
+-people = people || {}
+-errors = errors || {}
+
+form(method="post")
+    .row
+        .col-sm-6
+            .form-group
+                label(for="firstName")=t("people.model.firstName")
+                input.form-control#firstName(type="text" value=people.firstName autofocus class=errors.firstName?"is-invalid":false)
+
+        .col-sm-6
+            .form-group
+                label(for="lastName")=t("people.model.lastName")
+                input.form-control#lastName(type="text" value=people.lastName class=errors.lastName?"is-invalid":false)
+    
+    .row
+        .col-6.col-sm-3
+            .form-group
+                label(for="sexe")=t("people.model.sex")
+                br
+                input#sexe(type="checkbox" data-toggle="toggle" data-onstyle="danger" data-offstyle="info" data-on="<i class='fa fa-2x fa-female'></i>" data-off="<i class='fa fa-2x fa-male'></i>" name="sexe" checked=people.sexe)
+        
+        .col-6.col-sm-3
+            .form-group
+                label(for="age")=t("people.model.age")
+                input.form-control#age(type="number" value=people.age class=errors.age?"is-invalid":false)
+
+        .col-sm-6
+            .form-group
+                label(for="metIn")=t("people.model.metIn")
+                input.form-control#metIn(type="text" value=people.metIn class=errors.metIn?"is-invalid":false)
+
+
+    input.btn.btn-success(type="submit", value=t("action.save"))

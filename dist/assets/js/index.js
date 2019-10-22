@@ -1,4 +1,186 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/*! ========================================================================
+ * Bootstrap Toggle: bootstrap-toggle.js v2.2.0
+ * http://www.bootstraptoggle.com
+ * ========================================================================
+ * Copyright 2014 Min Hur, The New York Times Company
+ * Licensed under MIT
+ * ======================================================================== */
+
+
++function ($) {
+	'use strict';
+
+	// TOGGLE PUBLIC CLASS DEFINITION
+	// ==============================
+
+	var Toggle = function (element, options) {
+		this.$element = $(element)
+		this.options = $.extend({}, this.defaults(), options)
+		this.render()
+	}
+
+	Toggle.VERSION = '2.2.0'
+
+	Toggle.DEFAULTS = {
+		on: 'On',
+		off: 'Off',
+		onstyle: 'primary',
+		offstyle: 'default',
+		size: 'normal',
+		style: '',
+		width: null,
+		height: null
+	}
+
+	Toggle.prototype.defaults = function () {
+		return {
+			on: this.$element.attr('data-on') || Toggle.DEFAULTS.on,
+			off: this.$element.attr('data-off') || Toggle.DEFAULTS.off,
+			onstyle: this.$element.attr('data-onstyle') || Toggle.DEFAULTS.onstyle,
+			offstyle: this.$element.attr('data-offstyle') || Toggle.DEFAULTS.offstyle,
+			size: this.$element.attr('data-size') || Toggle.DEFAULTS.size,
+			style: this.$element.attr('data-style') || Toggle.DEFAULTS.style,
+			width: this.$element.attr('data-width') || Toggle.DEFAULTS.width,
+			height: this.$element.attr('data-height') || Toggle.DEFAULTS.height
+		}
+	}
+
+	Toggle.prototype.render = function () {
+		this._onstyle = 'btn-' + this.options.onstyle
+		this._offstyle = 'btn-' + this.options.offstyle
+		var size = this.options.size === 'large' ? 'btn-lg'
+			: this.options.size === 'small' ? 'btn-sm'
+				: this.options.size === 'mini' ? 'btn-xs'
+					: ''
+		var $toggleOn = $('<label class="btn">').html(this.options.on)
+			.addClass(this._onstyle + ' ' + size)
+		var $toggleOff = $('<label class="btn">').html(this.options.off)
+			.addClass(this._offstyle + ' ' + size + ' active')
+		var $toggleHandle = $('<span class="toggle-handle btn btn-default">')
+			.addClass(size)
+		var $toggleGroup = $('<div class="toggle-group">')
+			.append($toggleOn, $toggleOff, $toggleHandle)
+		var $toggle = $('<div class="toggle btn" data-toggle="toggle">')
+			.addClass(this.$element.prop('checked') ? this._onstyle : this._offstyle + ' off')
+			.addClass(size).addClass(this.options.style)
+
+		this.$element.wrap($toggle)
+		$.extend(this, {
+			$toggle: this.$element.parent(),
+			$toggleOn: $toggleOn,
+			$toggleOff: $toggleOff,
+			$toggleGroup: $toggleGroup
+		})
+		this.$toggle.append($toggleGroup)
+
+		var width = this.options.width || Math.max($toggleOn.outerWidth(), $toggleOff.outerWidth()) + ($toggleHandle.outerWidth() / 2)
+		var height = this.options.height || Math.max($toggleOn.outerHeight(), $toggleOff.outerHeight())
+		$toggleOn.addClass('toggle-on')
+		$toggleOff.addClass('toggle-off')
+		this.$toggle.css({ width: width, height: height })
+		if (this.options.height) {
+			$toggleOn.css('line-height', $toggleOn.height() + 'px')
+			$toggleOff.css('line-height', $toggleOff.height() + 'px')
+		}
+		this.update(true)
+		this.trigger(true)
+	}
+
+	Toggle.prototype.toggle = function () {
+		if (this.$element.prop('checked')) this.off()
+		else this.on()
+	}
+
+	Toggle.prototype.on = function (silent) {
+		if (this.$element.prop('disabled')) return false
+		this.$toggle.removeClass(this._offstyle + ' off').addClass(this._onstyle)
+		this.$element.prop('checked', true)
+		if (!silent) this.trigger()
+	}
+
+	Toggle.prototype.off = function (silent) {
+		if (this.$element.prop('disabled')) return false
+		this.$toggle.removeClass(this._onstyle).addClass(this._offstyle + ' off')
+		this.$element.prop('checked', false)
+		if (!silent) this.trigger()
+	}
+
+	Toggle.prototype.enable = function () {
+		this.$toggle.removeAttr('disabled')
+		this.$element.prop('disabled', false)
+	}
+
+	Toggle.prototype.disable = function () {
+		this.$toggle.attr('disabled', 'disabled')
+		this.$element.prop('disabled', true)
+	}
+
+	Toggle.prototype.update = function (silent) {
+		if (this.$element.prop('disabled')) this.disable()
+		else this.enable()
+		if (this.$element.prop('checked')) this.on(silent)
+		else this.off(silent)
+	}
+
+	Toggle.prototype.trigger = function (silent) {
+		this.$element.off('change.bs.toggle')
+		if (!silent) this.$element.change()
+		this.$element.on('change.bs.toggle', $.proxy(function () {
+			this.update()
+		}, this))
+	}
+
+	Toggle.prototype.destroy = function () {
+		this.$element.off('change.bs.toggle')
+		this.$toggleGroup.remove()
+		this.$element.removeData('bs.toggle')
+		this.$element.unwrap()
+	}
+
+	// TOGGLE PLUGIN DEFINITION
+	// ========================
+
+	function Plugin(option) {
+		return this.each(function () {
+			var $this = $(this)
+			var data = $this.data('bs.toggle')
+			var options = typeof option == 'object' && option
+
+			if (!data) $this.data('bs.toggle', (data = new Toggle(this, options)))
+			if (typeof option == 'string' && data[option]) data[option]()
+		})
+	}
+
+	var old = $.fn.bootstrapToggle
+
+	$.fn.bootstrapToggle = Plugin
+	$.fn.bootstrapToggle.Constructor = Toggle
+
+	// TOGGLE NO CONFLICT
+	// ==================
+
+	$.fn.toggle.noConflict = function () {
+		$.fn.bootstrapToggle = old
+		return this
+	}
+
+	// TOGGLE DATA-API
+	// ===============
+
+	$(function () {
+		$('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle()
+	})
+
+	$(document).on('click.bs.toggle', 'div[data-toggle^=toggle]', function (e) {
+		var $checkbox = $(this).find('input[type=checkbox]')
+		$checkbox.bootstrapToggle('toggle')
+		e.preventDefault()
+	})
+
+}(jQuery);
+
+},{}],2:[function(require,module,exports){
 (function (global){
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -4518,7 +4700,7 @@ return Chartist;
 }));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -4695,7 +4877,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 module.exports = stringify
 stringify.default = stringify
 stringify.stable = deterministicStringify
@@ -4858,7 +5040,7 @@ function replaceGetterValues (replacer) {
   }
 }
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.4.1
  * https://jquery.com/
@@ -15458,7 +15640,7 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -15496,7 +15678,7 @@ Agent.prototype._setDefaults = function (req) {
 };
 
 module.exports = Agent;
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -16516,7 +16698,7 @@ request.put = function (url, data, fn) {
   if (fn) req.end(fn);
   return req;
 };
-},{"./agent-base":5,"./is-object":7,"./request-base":8,"./response-base":9,"component-emitter":2,"fast-safe-stringify":3}],7:[function(require,module,exports){
+},{"./agent-base":6,"./is-object":8,"./request-base":9,"./response-base":10,"component-emitter":3,"fast-safe-stringify":4}],8:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -16533,7 +16715,7 @@ function isObject(obj) {
 }
 
 module.exports = isObject;
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -17280,7 +17462,7 @@ RequestBase.prototype._setTimeouts = function () {
     }, this._responseTimeout);
   }
 };
-},{"./is-object":7}],9:[function(require,module,exports){
+},{"./is-object":8}],10:[function(require,module,exports){
 "use strict";
 
 /**
@@ -17411,7 +17593,7 @@ ResponseBase.prototype._setStatusProperties = function (status) {
   this.notFound = status === 404;
   this.unprocessableEntity = status === 422;
 };
-},{"./utils":10}],10:[function(require,module,exports){
+},{"./utils":11}],11:[function(require,module,exports){
 "use strict";
 
 /**
@@ -17482,7 +17664,7 @@ exports.cleanHeader = function (header, changesOrigin) {
 
   return header;
 };
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17494,24 +17676,35 @@ var Chart = (function () {
     function Chart() {
     }
     Chart.prototype.init = function () {
-        if (jquery_1.default(".ct-chart").length == 0)
+        this.reportMonthCategories();
+    };
+    Chart.prototype.reportMonthCategories = function () {
+        if (jquery_1.default("#chart-report-month-categories").length == 0)
             return;
-        var data = {
-            labels: ["Mon", 'Tue', 'Wed', 'Thu', 'Fri'],
-            series: [5, 2, 4, 2, 5]
-        };
         var options = {
             width: 300,
             height: 300,
         };
-        new chartist_1.default.Pie('.ct-chart', data, options);
+        var chart = new chartist_1.default.Pie('#chart-report-month-categories', data, options);
+        if (data.colors) {
+            var i_1 = 0;
+            chart.on("draw", function (context) {
+                if (i_1 > data.colors.length - 1)
+                    i_1 = 0;
+                if (context.type == "slice") {
+                    context.element.attr({
+                        style: "fill: " + data.colors[i_1++]
+                    });
+                }
+            });
+        }
     };
     return Chart;
 }());
 var chart = new Chart();
 exports.default = chart;
 
-},{"chartist":1,"jquery":4}],12:[function(require,module,exports){
+},{"chartist":2,"jquery":5}],13:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17546,7 +17739,7 @@ var ExpenseCategory = (function () {
 var expenseCategory = new ExpenseCategory();
 exports.default = expenseCategory;
 
-},{"jquery":4}],13:[function(require,module,exports){
+},{"jquery":5}],14:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17558,15 +17751,19 @@ var table_1 = __importDefault(require("./table"));
 var link_1 = __importDefault(require("./link"));
 var expenseCategory_1 = __importDefault(require("./expenseCategory"));
 var chart_1 = __importDefault(require("./chart"));
+var toggle_1 = __importDefault(require("./toggle"));
 jquery_1.default(document).ready(function () {
     sameWidth_1.default.init();
     table_1.default.init();
     link_1.default.init();
     expenseCategory_1.default.init();
     chart_1.default.init();
+    toggle_1.default.init();
+    window.jQuery = jquery_1.default;
+    require("bootstrap-toggle");
 });
 
-},{"./chart":11,"./expenseCategory":12,"./link":14,"./sameWidth":15,"./table":16,"jquery":4}],14:[function(require,module,exports){
+},{"./chart":12,"./expenseCategory":13,"./link":15,"./sameWidth":16,"./table":17,"./toggle":18,"bootstrap-toggle":1,"jquery":5}],15:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17602,7 +17799,7 @@ var Link = (function () {
 }());
 exports.default = new Link();
 
-},{"jquery":4,"superagent":6}],15:[function(require,module,exports){
+},{"jquery":5,"superagent":7}],16:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17627,7 +17824,7 @@ var SameWidth = (function () {
 }());
 exports.default = new SameWidth();
 
-},{"jquery":4}],16:[function(require,module,exports){
+},{"jquery":5}],17:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17642,7 +17839,6 @@ var Table = (function () {
     };
     Table.prototype.convertToLink = function () {
         jquery_1.default("[data-link]").each(function () {
-            console.log(jquery_1.default(this));
             var link = jquery_1.default(this).attr("data-link");
             jquery_1.default(this).css("cursor", "pointer");
             jquery_1.default(this).on("click", function () {
@@ -17654,4 +17850,38 @@ var Table = (function () {
 }());
 exports.default = new Table();
 
-},{"jquery":4}]},{},[13]);
+},{"jquery":5}],18:[function(require,module,exports){
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var jquery_1 = __importDefault(require("jquery"));
+var Toggle = (function () {
+    function Toggle() {
+    }
+    Toggle.prototype.init = function () {
+        jquery_1.default("[data-toggle-reveal]").change(function () {
+            var targets = jquery_1.default(jquery_1.default(this).attr("data-toggle-reveal"));
+            if (jquery_1.default(this).prop("checked")) {
+                targets.show();
+            }
+            else {
+                targets.hide();
+            }
+        }).each(function () {
+            var targets = jquery_1.default(jquery_1.default(this).attr("data-toggle-reveal"));
+            if (jquery_1.default(this).prop("checked")) {
+                targets.show();
+            }
+            else {
+                targets.hide();
+            }
+        });
+    };
+    return Toggle;
+}());
+var toggle = new Toggle();
+exports.default = toggle;
+
+},{"jquery":5}]},{},[14]);

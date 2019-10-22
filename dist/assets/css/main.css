@@ -12023,6 +12023,111 @@ a.text-dark:hover, a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6; } }
 
+/*! ========================================================================
+ * Bootstrap Toggle: bootstrap-toggle.css v2.2.0
+ * http://www.bootstraptoggle.com
+ * ========================================================================
+ * Copyright 2014 Min Hur, The New York Times Company
+ * Licensed under MIT
+ * ======================================================================== */
+.checkbox label .toggle,
+.checkbox-inline .toggle {
+  margin-left: -20px;
+  margin-right: 5px; }
+
+.toggle {
+  position: relative;
+  overflow: hidden; }
+
+.toggle input[type="checkbox"] {
+  display: none; }
+
+.toggle-group {
+  position: absolute;
+  width: 200%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  transition: left 0.35s;
+  -webkit-transition: left 0.35s;
+  -moz-user-select: none;
+  -webkit-user-select: none; }
+
+.toggle.off .toggle-group {
+  left: -100%; }
+
+.toggle-on {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 50%;
+  margin: 0;
+  border: 0;
+  border-radius: 0; }
+
+.toggle-off {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  right: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0; }
+
+.toggle-handle {
+  position: relative;
+  margin: 0 auto;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: 100%;
+  width: 0px;
+  border-width: 0 1px; }
+
+.toggle.btn {
+  min-width: 59px;
+  min-height: 34px; }
+
+.toggle-on.btn {
+  padding-right: 24px; }
+
+.toggle-off.btn {
+  padding-left: 24px; }
+
+.toggle.btn-lg, .btn-group-lg > .toggle.btn {
+  min-width: 79px;
+  min-height: 45px; }
+
+.toggle-on.btn-lg, .btn-group-lg > .toggle-on.btn {
+  padding-right: 31px; }
+
+.toggle-off.btn-lg, .btn-group-lg > .toggle-off.btn {
+  padding-left: 31px; }
+
+.toggle-handle.btn-lg, .btn-group-lg > .toggle-handle.btn {
+  width: 40px; }
+
+.toggle.btn-sm, .btn-group-sm > .toggle.btn {
+  min-width: 50px;
+  min-height: 30px; }
+
+.toggle-on.btn-sm, .btn-group-sm > .toggle-on.btn {
+  padding-right: 20px; }
+
+.toggle-off.btn-sm, .btn-group-sm > .toggle-off.btn {
+  padding-left: 20px; }
+
+.toggle.btn-xs {
+  min-width: 35px;
+  min-height: 22px; }
+
+.toggle-on.btn-xs {
+  padding-right: 12px; }
+
+.toggle-off.btn-xs {
+  padding-left: 12px; }
+
 #topbar {
   background-color: #343a40;
   color: #fff;
@@ -12061,6 +12166,12 @@ body {
   font-size: 8rem;
   font-weight: bold; }
 
+.text-overflow {
+  text-overflow: ellipsis; }
+
+.no-wrap {
+  white-space: nowrap; }
+
 .alert-hollow {
   border: 1px solid #ced4da;
   background-color: #fff;
@@ -12088,3 +12199,29 @@ ul.margin li {
 .actions {
   width: 1px;
   white-space: nowrap; }
+
+.btn-default {
+  color: #212529;
+  background-color: #e9ecef;
+  border-color: #e9ecef; }
+  .btn-default:hover {
+    color: #212529;
+    background-color: #d3d9df;
+    border-color: #cbd3da; }
+  .btn-default:focus, .btn-default.focus {
+    box-shadow: 0 0 0 0.2rem rgba(203, 206, 209, 0.5); }
+  .btn-default.disabled, .btn-default:disabled {
+    color: #212529;
+    background-color: #e9ecef;
+    border-color: #e9ecef; }
+  .btn-default:not(:disabled):not(.disabled):active, .btn-default:not(:disabled):not(.disabled).active,
+  .show > .btn-default.dropdown-toggle {
+    color: #212529;
+    background-color: #cbd3da;
+    border-color: #c4ccd4; }
+    .btn-default:not(:disabled):not(.disabled):active:focus, .btn-default:not(:disabled):not(.disabled).active:focus,
+    .show > .btn-default.dropdown-toggle:focus {
+      box-shadow: 0 0 0 0.2rem rgba(203, 206, 209, 0.5); }
+
+.icon-shadow {
+  -webkit-text-stroke: 2px #000; }

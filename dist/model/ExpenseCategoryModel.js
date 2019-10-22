@@ -8,8 +8,10 @@ var expenseCategorySchema = new mongoose_1.Schema({
     color: String,
     user: { type: mongoose_1.Schema.Types.ObjectId, ref: "user" },
     report: {
-        average: Boolean,
-        per_day: Number
+        active: Boolean,
+        times: Number,
+        period: String,
+        per: String
     },
     deleted: { type: Boolean, default: false }
 });

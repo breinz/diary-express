@@ -7,7 +7,6 @@ class Table {
 
     public convertToLink() {
         $("[data-link]").each(function () {
-            console.log($(this));
             const link = $(this).attr("data-link");
             $(this).css("cursor", "pointer");
             $(this).on("click", () => {

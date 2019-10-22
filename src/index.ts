@@ -60,7 +60,8 @@ app.use(async (req, res, next) => {
     req.lang = lang;
     res.locals.current_lang = lang;
 
-    const util = new Util(t)
+    const util = new Util(t);
+    req.util = util;
     res.locals.util = util;
 
     next();

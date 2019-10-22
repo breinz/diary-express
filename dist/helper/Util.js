@@ -27,6 +27,13 @@ var Util = (function () {
         d.setMonth(d.getMonth() + 1);
         return d;
     };
+    Util.prototype.daysInMonth = function () {
+        var d = new Date();
+        d.setDate(1);
+        d.setMonth(d.getMonth() + 1);
+        d.setDate(d.getDate() - 1);
+        return d.getDate();
+    };
     return Util;
 }());
 exports.default = Util;

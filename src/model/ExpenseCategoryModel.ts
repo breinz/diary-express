@@ -12,8 +12,10 @@ export type ExpenseCategoryModel = Document & {
     color: string,
     user: Types.ObjectId | string | UserModel,
     report: {
-        average: boolean,
-        per_day: number
+        active: boolean,
+        times: number,
+        period: string,
+        per: string
     }
     deleted: boolean
 }
@@ -27,8 +29,10 @@ const expenseCategorySchema = new Schema({
     color: String,
     user: { type: Schema.Types.ObjectId, ref: "user" },
     report: {
-        average: Boolean,
-        per_day: Number
+        active: Boolean,
+        times: Number,
+        period: String,
+        per: String
     },
     deleted: { type: Boolean, default: false }
 });

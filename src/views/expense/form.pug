@@ -22,7 +22,7 @@ form(method="post")
         br
         label.category-select(for=`category_none` data-color="#DDD")
             .btn(data-sameWidth="c")
-                i.big.fa.fa-fw.fa-ban
+                i.big.fa.fa-fw.fa-question
                 br
                 =t("expenseCategory.none")
             input(type="radio", name="category" value="null" id="category_none" checked=expense.category==null)

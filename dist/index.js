@@ -88,6 +88,7 @@ app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, fun
                 req.lang = lang;
                 res.locals.current_lang = lang;
                 util = new Util_1.default(t);
+                req.util = util;
                 res.locals.util = util;
                 next();
                 return [2];

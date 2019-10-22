@@ -10,7 +10,7 @@ mixin form-text(instruction, error, hasError)
     if hasError
         +form-error(error)
     else
-        +form-instruction(instruction)
+        +form-instruction(instruction)&attributes(attributes)
 
 mixin form-error(val, hasError=true)
     if hasError
@@ -18,7 +18,7 @@ mixin form-error(val, hasError=true)
 
 mixin form-instruction(val)
     if val.length
-        small.form-text.text-muted=val
+        small.form-text.text-muted&attributes(attributes)!=val
 
 mixin no-data
     .alert.alert-secondary.text-center.mb-0

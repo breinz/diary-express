@@ -81,7 +81,8 @@
         "model": {
             "name": "Name",
             "icon": "Icon",
-            "color": "Color"
+            "color": "Color",
+            "report": "Report"
         },
         "error": {
             "name": {
@@ -93,11 +94,14 @@
             "color": {
                 "required": "The color is required"
             },
-            "not_found": "Category not found"
+            "not_found": "Category not found",
+            "report": {
+                "invalid": "Report data aren't valid"
+            }
         },
         "instruction": {
-            "icon": "Font awesome icon (utensils is good for food for example)",
-            "color": "Color (#000000 is black for example)"
+            "icon": "Category icon (<b>utensils</b> is good for food for example) visit <a href='https://fontawesome.com/icons?d=gallery&m=free'>font awesome</a> list",
+            "color": "Try one of <b>#c3e6cb</b> (green) <b>#f5c6cb</b> (red) <b>#ffeeba</b> (yellow) <b>#b8daff</b> (blue) <b>#d6d8db</b> (gray) <b>#bee5eb</b> (cyan)"
         },
         "flash": {
             "created": "Category created",
@@ -107,5 +111,20 @@
             "removed": "Category permanently removed"
         },
         "none": "No category"
+    },
+    "people": {
+        "button": {
+            "new": "New people"
+        },
+        "title": {
+            "new": "New people"
+        },
+        "model": {
+            "firstName": "First name",
+            "lastName": "Last name",
+            "sex": "Sex",
+            "age": "Age",
+            "metIn": "Met in"
+        }
     }
 }

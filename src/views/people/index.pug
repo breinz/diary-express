@@ -1,0 +1,44 @@
+extends ../layout/layout
+
+mixin line(expense)
+    tr
+        td(data-link=`/expense/${expense._id}`)=util.todayOrDate(expense.date)
+        td(data-link=`/expense/${expense._id}`)
+            .container
+                .row
+                    .col-sm-6.text-right
+                        i.fa.fa-fw(class=`fa-${expense.category?expense.category.icon:"question"}`)
+                        |&nbsp;
+                        =expense.amount.toFixed(2)
+        td.actions
+            .btn-group
+                +edit_btn(`/expense/${expense._id}/edit`, "", t("action.edit"), "a")
+                +delete_btn(`/expense/${expense._id}/delete`, "", t("action.delete"), "a")
+
+block content
+    .container
+        .row
+            
+            .col-12
+                .alert.alert-hollow
+                    .h1-actions
+                        .btn-group
+                            a.btn.btn-outline-success(href="/people/new" data-sameWidth="b")
+                                i.fa.fa-plus
+                                br
+                                =t("people.button.new")
+                            
+                    h1=t("people.title.index")
+
+                    if peoples && peoples.length
+                        table.table.table-hover
+                            
+                            //thead
+                                tr
+                                    th=t("people.model.date")
+                                    th=t("people.model.amount")
+                                    th.actions
+                            for people in peoples
+                                +line(people)
+                    else
+                        +no-data

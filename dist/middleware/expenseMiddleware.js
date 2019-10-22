@@ -43,6 +43,7 @@ var expenseCategoryMiddleware_1 = __importDefault(require("./expenseCategoryMidd
 var ExpenseValidator_1 = __importDefault(require("../validator/ExpenseValidator"));
 var ExpenseModel_1 = __importDefault(require("../model/ExpenseModel"));
 var Util_1 = __importDefault(require("../helper/Util"));
+var ExpenseCategoryModel_1 = __importDefault(require("../model/ExpenseCategoryModel"));
 var ExpenseMiddleware = (function () {
     function ExpenseMiddleware() {
     }
@@ -124,19 +125,21 @@ var ExpenseMiddleware = (function () {
     };
     ExpenseMiddleware.prototype.getReport = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _a = req;
-                        _b = {};
-                        return [4, expenseMiddleware.getReport_total()];
+            var _a, total, categories, reports;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4, Promise.all([
+                            expenseMiddleware.getReport_total(),
+                            expenseMiddleware.getReport_categories(),
+                            expenseMiddleware.getReport_report(req)
+                        ])];
                     case 1:
-                        _b.total = _c.sent();
-                        return [4, expenseMiddleware.getReport_categories()];
-                    case 2:
-                        _a.expenseReport = (_b.categories = _c.sent(),
-                            _b);
+                        _a = _b.sent(), total = _a[0], categories = _a[1], reports = _a[2];
+                        req.expenseReport = {
+                            total: total,
+                            categories: categories,
+                            reports: reports
+                        };
                         next();
                         return [2];
                 }
@@ -257,8 +260,78 @@ var ExpenseMiddleware = (function () {
                                         path: "$category",
                                         preserveNullAndEmptyArrays: true
                                     }
+                                }, {
+                                    $sort: {
+                                        total: -1
+                                    }
                                 }
                             ])];
+                    case 1:
+                        report = _a.sent();
+                        return [2, report];
+                }
+            });
+        });
+    };
+    ExpenseMiddleware.prototype.getReport_report = function (req) {
+        return __awaiter(this, void 0, void 0, function () {
+            var report;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, ExpenseCategoryModel_1.default.aggregate([
+                            {
+                                $match: {
+                                    "report.active": true,
+                                    "user": req.current_user._id
+                                }
+                            }, {
+                                $lookup: {
+                                    from: 'expenses',
+                                    let: {
+                                        expense: "$_id",
+                                        date: "$date"
+                                    },
+                                    pipeline: [{
+                                            $match: {
+                                                $expr: {
+                                                    $and: [{
+                                                            $eq: ["$category", "$$expense"]
+                                                        },
+                                                        {
+                                                            $gte: ["$date", req.util.bom()]
+                                                        },
+                                                        {
+                                                            $lte: ["$date", req.util.bonm()]
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }],
+                                    as: 'expenses'
+                                }
+                            }, {
+                                $addFields: {
+                                    "report.value": {
+                                        $divide: [{
+                                                $sum: "$expenses.amount"
+                                            }, {
+                                                $multiply: [
+                                                    "$report.times",
+                                                    {
+                                                        $cond: {
+                                                            if: {
+                                                                $eq: ["$report.period", "day"]
+                                                            },
+                                                            then: new Date().getDate(),
+                                                            else: 20
+                                                        }
+                                                    }
+                                                ]
+                                            }]
+                                    }
+                                }
+                            }
+                        ])];
                     case 1:
                         report = _a.sent();
                         return [2, report];

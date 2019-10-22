@@ -5,6 +5,7 @@ import table from "./table";
 import link from "./link";
 import expenseCategory from "./expenseCategory";
 import chart from "./chart";
+import toggle from "./toggle";
 
 $(document).ready(function () {
 
@@ -13,4 +14,8 @@ $(document).ready(function () {
     link.init();
     expenseCategory.init();
     chart.init();
+    toggle.init();
+
+    (<any>window).jQuery = $;
+    require("bootstrap-toggle");
 });

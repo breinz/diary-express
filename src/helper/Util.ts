@@ -39,4 +39,15 @@ export default class Util {
         d.setMonth(d.getMonth() + 1);
         return d;
     }
+
+    /**
+     * How many days in this month
+     */
+    public daysInMonth(): number {
+        let d = new Date();
+        d.setDate(1);
+        d.setMonth(d.getMonth() + 1);
+        d.setDate(d.getDate() - 1);
+        return d.getDate();
+    }
 }
