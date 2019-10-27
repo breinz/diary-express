@@ -110,21 +110,64 @@
             "recovered": "Category recovered",
             "removed": "Category permanently removed"
         },
-        "none": "No category"
+        "none": {
+            "name": "No category",
+            "color": "#CCC"
+        }
     },
     "people": {
         "button": {
             "new": "New people"
         },
         "title": {
-            "new": "New people"
+            "new": "New people",
+            "index": "People"
         },
         "model": {
             "firstName": "First name",
             "lastName": "Last name",
             "sex": "Sex",
             "age": "Age",
-            "metIn": "Met in"
+            "metIn": "Met in",
+            "from": "From",
+            "name": "Name"
+        },
+        "error": {
+            "firstName": {
+                "required": "The first name is required"
+            },
+            "metIn": {
+                "required": "Where did you meet?"
+            }
+        },
+        "flash": {
+            "created": "People has been reated",
+            "edited": "People has been edited",
+            "deleted": "People has been deleted",
+            "recovered": "People has been recovered",
+            "removed": "People has been removed"
+        }
+    },
+    "country": {
+        "btn": {
+            "index": "Countries",
+            "new": "New country"
+        },
+        "model": {
+            "name": "Name"
+        },
+        "flash": {
+            "created": "The country has been created",
+            "edited": "The country has been dited",
+            "deleted": "The country has been deleted"
+        },
+        "error": {
+            "name": {
+                "required": "The name is required"
+            }
+        },
+        "title": {
+            "new": "New country"
         }
     }
 }

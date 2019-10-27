@@ -19,8 +19,9 @@ class Chart {
         };*/
 
         let options = {
-            width: 300,
-            height: 300,
+            /*width: 300,
+            height: 300,*/
+            height: "90%"
             /*labelInterpolationFnc: function (value: any) {
                 return value[0]
             }*/

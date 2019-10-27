@@ -1,19 +1,13 @@
 extends ../layout/layout
 
-mixin line(expense)
+mixin line(people)
     tr
-        td(data-link=`/expense/${expense._id}`)=util.todayOrDate(expense.date)
-        td(data-link=`/expense/${expense._id}`)
-            .container
-                .row
-                    .col-sm-6.text-right
-                        i.fa.fa-fw(class=`fa-${expense.category?expense.category.icon:"question"}`)
-                        |&nbsp;
-                        =expense.amount.toFixed(2)
+        td(data-link=`/people/${people._id}`)=people.firstName+" "+people.lastName
+        td(data-link=`/people/${people._id}`)=people.from.name
         td.actions
             .btn-group
-                +edit_btn(`/expense/${expense._id}/edit`, "", t("action.edit"), "a")
-                +delete_btn(`/expense/${expense._id}/delete`, "", t("action.delete"), "a")
+                +edit_btn(`/people/${people._id}/edit`, "", t("action.edit"), "a")
+                +delete_btn(`/people/${people._id}/delete`, "", t("action.delete"), "a")
 
 block content
     .container
@@ -27,16 +21,21 @@ block content
                                 i.fa.fa-plus
                                 br
                                 =t("people.button.new")
+                            a.btn.btn-outline-secondary(href="/country" data-sameWidth="b")
+                                i.fa.fa-globe-americas
+                                br
+                                =t("country.btn.index")
+                            
                             
                     h1=t("people.title.index")
 
                     if peoples && peoples.length
                         table.table.table-hover
                             
-                            //thead
+                            thead
                                 tr
-                                    th=t("people.model.date")
-                                    th=t("people.model.amount")
+                                    th=t("people.model.name")
+                                    th=t("people.model.from")
                                     th.actions
                             for people in peoples
                                 +line(people)

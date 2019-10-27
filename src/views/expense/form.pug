@@ -20,11 +20,11 @@ form(method="post")
     .form-group
         =t("expense.model.category")
         br
-        label.category-select(for=`category_none` data-color="#DDD")
+        label.category-select(for=`category_none` data-color=t("expenseCategory.none.color"))
             .btn(data-sameWidth="c")
                 i.big.fa.fa-fw.fa-question
                 br
-                =t("expenseCategory.none")
+                =t("expenseCategory.none.name")
             input(type="radio", name="category" value="null" id="category_none" checked=expense.category==null)
         for category in categories
             label.category-select(for=`category_${category._id}` data-color=category.color)

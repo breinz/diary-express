@@ -39,107 +39,68 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var PeopleModel_1 = __importDefault(require("../model/PeopleModel"));
-var PeopleController = (function () {
-    function PeopleController() {
+var CountryModel_1 = __importDefault(require("../model/CountryModel"));
+var CountryController = (function () {
+    function CountryController() {
     }
-    PeopleController.prototype.getIndex = function (req, res, next) {
-        res.render("people/index", {
-            peoples: req.peoples
+    CountryController.prototype.getIndex = function (req, res, next) {
+        res.render("country/index", {
+            countries: req.countries
         });
     };
-    PeopleController.prototype.getPeople = function (req, res, next) {
-        res.render("people/people", {
-            people: req.people
+    CountryController.prototype.getNew = function (req, res, next) {
+        res.render("country/new");
+    };
+    CountryController.prototype.postNew = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, CountryModel_1.default.create(req.body)];
+                    case 1:
+                        _a.sent();
+                        req.flash("success", req.t("country.flash.created"));
+                        res.redirect("/country");
+                        return [2];
+                }
+            });
         });
     };
-    PeopleController.prototype.getNew = function (req, res, next) {
-        res.render("people/new");
+    CountryController.prototype.getEdit = function (req, res, next) {
+        res.render("country/edit", {
+            country: req.country
+        });
     };
-    PeopleController.prototype.postNew = function (req, res, next) {
+    CountryController.prototype.postEdit = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        req.body.user = req.current_user;
-                        return [4, PeopleModel_1.default.create(req.body)];
+                        Object.assign(req.country, req.body);
+                        return [4, req.country.save()];
                     case 1:
                         _a.sent();
-                        req.flash("success", req.t("people.flash.created"));
-                        res.redirect("/people");
+                        req.flash("success", req.t("country.flash.edited"));
+                        res.redirect("/country");
                         return [2];
                 }
             });
         });
     };
-    PeopleController.prototype.getEdit = function (req, res, next) {
-        res.render("people/edit", {
-            people: req.people
-        });
-    };
-    PeopleController.prototype.postEdit = function (req, res, next) {
+    CountryController.prototype.deleteDelete = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        Object.assign(req.people, req.body);
-                        return [4, req.people.save()];
+                    case 0: return [4, CountryModel_1.default.deleteOne({ _id: req.country._id })];
                     case 1:
                         _a.sent();
-                        req.flash("success", req.t("people.flash.edited"));
-                        res.redirect(req.referer);
+                        req.flash("success", req.t("country.flash.deleted"));
+                        res.json({ success: true, redirect: "/country" });
                         return [2];
                 }
             });
         });
     };
-    PeopleController.prototype.deleteDelete = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        req.people.deleted = true;
-                        return [4, req.people.save()];
-                    case 1:
-                        _a.sent();
-                        req.flash("success", req.t("people.flash.deleted"));
-                        res.json({ success: true, redirect: req.headers.referer });
-                        return [2];
-                }
-            });
-        });
-    };
-    PeopleController.prototype.getRecover = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        req.people.deleted = false;
-                        return [4, req.people.save()];
-                    case 1:
-                        _a.sent();
-                        req.flash("success", req.t("people.flash.recovered"));
-                        res.redirect(req.headers.referer);
-                        return [2];
-                }
-            });
-        });
-    };
-    PeopleController.prototype.deleteRemove = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, PeopleModel_1.default.deleteOne({ _id: req.people._id })];
-                    case 1:
-                        _a.sent();
-                        req.flash("success", req.t("people.flash.removed"));
-                        res.json({ success: true, redirect: "/people" });
-                        return [2];
-                }
-            });
-        });
-    };
-    return PeopleController;
+    return CountryController;
 }());
-var peopleController = new PeopleController();
-exports.default = peopleController;
+var countryController = new CountryController();
+exports.default = countryController;

@@ -1,0 +1,30 @@
+extends ../layout/layout
+
+mixin line(country)
+    tr
+        td=country.name
+        td.actions
+            .btn-group
+                +edit_btn(`/country/${country._id}/edit`)
+                +delete_btn(`/country/${country._id}/delete`)
+
+block content
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    
+                    .h1-actions
+                        +new_btn("/country/new", t("country.btn.new"))
+                    h1 Countries
+
+                    if countries.length
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th Name
+                                    th
+                            for country in countries
+                                +line(country)
+                    else
+                        +no-data

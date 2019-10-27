@@ -17682,8 +17682,7 @@ var Chart = (function () {
         if (jquery_1.default("#chart-report-month-categories").length == 0)
             return;
         var options = {
-            width: 300,
-            height: 300,
+            height: "90%"
         };
         var chart = new chartist_1.default.Pie('#chart-report-month-categories', data, options);
         if (data.colors) {

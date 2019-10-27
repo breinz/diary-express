@@ -6,7 +6,7 @@ import logoutRouter from "./logoutRouter";
 import signinRouter from "./signinRouter";
 import expenseRouter from "./expenseRouter";
 import peopleRouter from "./peopleRouter";
-import userMiddleware from "../middleware/userMiddleware";
+import countryRouter from "./countryRouter";
 
 const router = Router();
 
@@ -20,5 +20,6 @@ router.use("/logout", logoutRouter);
 
 router.use("/expense", expenseRouter);
 router.use("/people", peopleRouter);
+router.use("/country", countryRouter);
 
 export default router;

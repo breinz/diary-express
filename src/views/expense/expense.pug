@@ -12,8 +12,19 @@ block content
                             +delete_btn(`/expense/${expense._id}/delete`, t("action.delete"), "", "a")
                     h1=t("expense.title.expense")
 
-                    dl
-                        dt=t("expense.model.date")
-                        dd=util.todayOrDate(expense.date)
-                        dt=t("expense.model.amount")
-                        dd=expense.amount
+                    .row
+                        .col-sm-6
+                            .text-center
+                                i.fa.fa-fw.huge.icon-shadow(class=`fa-${expense.category?expense.category.icon:"question"}` style=`color:${expense.category?expense.category.color:"#CCC"}`)
+                                br
+                                =expense.category?expense.category.name:"No category"
+                        .col-sm-6
+
+                        
+                            dl
+                                dt=t("expense.model.date")
+                                dd=util.todayOrDate(expense.date)
+                                dt=t("expense.model.amount")
+                                dd.big
+                                    =expense.amount.toFixed(2)
+                                    |&nbsp;€

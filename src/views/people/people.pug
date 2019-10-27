@@ -1,0 +1,33 @@
+extends ../layout/layout
+
+block content
+    .container
+        .row
+            .col
+                if people.deleted
+                    +deleted-alert(`/people/${people._id}/remove`, `/people/${people._id}/recover`)
+                .alert.alert-hollow
+                    h1
+                        if !people.deleted
+                            .h1-actions
+                                .btn-group
+                                    +edit_btn(`/people/${people._id}/edit`, t("action.edit"), "", "a")
+                                    +delete_btn(`/people/${people._id}/delete`, t("action.delete"), "", "a")
+                        if people.sexe
+                            i.text-danger.fa.fa-female
+                        else
+                            i.text-info.fa.fa-male
+                        |&nbsp;
+                        =people.firstName+" "+people.lastName
+                    
+                    dl
+                        if people.age
+                            dt=t("people.model.age")
+                            dd=people.age
+                        
+                        dt=t("people.model.metIn")
+                        dd=people.metIn
+
+                        dt=t("people.model.from")
+                        dd
+                            a(href=`/country/${people.from._id}`)=people.from.name

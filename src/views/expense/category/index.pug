@@ -3,7 +3,7 @@ extends ../../layout/layout
 mixin line(category)
     tr
         td(data-link=`/expense/category/${category._id}`)
-            i.fa.fa-fw.icon-shadow(class=`fa-${category.icon}` style=`color:${category.color}`)
+            i.fa.fa-fw(class=`fa-${category.icon}` style=`color:${category.color}`)
             |&nbsp;
             =category.name
         td.actions

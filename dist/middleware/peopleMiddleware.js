@@ -39,107 +39,104 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var PeopleValidator_1 = __importDefault(require("../validator/PeopleValidator"));
+var countryMiddleware_1 = __importDefault(require("./countryMiddleware"));
 var PeopleModel_1 = __importDefault(require("../model/PeopleModel"));
-var PeopleController = (function () {
-    function PeopleController() {
+var PeopleMiddleware = (function () {
+    function PeopleMiddleware() {
     }
-    PeopleController.prototype.getIndex = function (req, res, next) {
-        res.render("people/index", {
-            peoples: req.peoples
-        });
-    };
-    PeopleController.prototype.getPeople = function (req, res, next) {
-        res.render("people/people", {
-            people: req.people
-        });
-    };
-    PeopleController.prototype.getNew = function (req, res, next) {
-        res.render("people/new");
-    };
-    PeopleController.prototype.postNew = function (req, res, next) {
+    PeopleMiddleware.prototype.getPeoples = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = req;
+                        return [4, PeopleModel_1.default.find({ user: req.current_user, deleted: false }).sort("firstName").populate("from")];
+                    case 1:
+                        _a.peoples = (_b.sent());
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
+    PeopleMiddleware.prototype.getPeople = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ok, _a, error_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        ok = true;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        _a = req;
+                        return [4, PeopleModel_1.default.findById(req.params.id).populate("from")];
+                    case 2:
+                        _a.people = (_b.sent());
+                        return [3, 4];
+                    case 3:
+                        error_1 = _b.sent();
+                        ok = false;
+                        return [3, 4];
+                    case 4:
+                        if (!ok || !req.people) {
+                            req.flash("error", req.t("people.flash.error.not_found"));
+                            return [2, res.redirect("/people")];
+                        }
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
+    PeopleMiddleware.prototype.validNew = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var validator;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        req.body.user = req.current_user;
-                        return [4, PeopleModel_1.default.create(req.body)];
+                        validator = new PeopleValidator_1.default(req.body);
+                        if (!!validator.validNew()) return [3, 2];
+                        return [4, countryMiddleware_1.default.getForSelect(req, res)];
                     case 1:
                         _a.sent();
-                        req.flash("success", req.t("people.flash.created"));
-                        res.redirect("/people");
+                        return [2, res.render("people/new", {
+                                people: req.body,
+                                errors: validator.errors
+                            })];
+                    case 2:
+                        next();
                         return [2];
                 }
             });
         });
     };
-    PeopleController.prototype.getEdit = function (req, res, next) {
-        res.render("people/edit", {
-            people: req.people
-        });
-    };
-    PeopleController.prototype.postEdit = function (req, res, next) {
+    PeopleMiddleware.prototype.validEdit = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
+            var validator;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        Object.assign(req.people, req.body);
-                        return [4, req.people.save()];
+                        validator = new PeopleValidator_1.default(req.body);
+                        if (!!validator.validEdit()) return [3, 2];
+                        return [4, countryMiddleware_1.default.getForSelect(req, res)];
                     case 1:
                         _a.sent();
-                        req.flash("success", req.t("people.flash.edited"));
-                        res.redirect(req.referer);
+                        return [2, res.render("people/edit", {
+                                people: req.body,
+                                old: req.people,
+                                errors: validator.errors
+                            })];
+                    case 2:
+                        next();
                         return [2];
                 }
             });
         });
     };
-    PeopleController.prototype.deleteDelete = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        req.people.deleted = true;
-                        return [4, req.people.save()];
-                    case 1:
-                        _a.sent();
-                        req.flash("success", req.t("people.flash.deleted"));
-                        res.json({ success: true, redirect: req.headers.referer });
-                        return [2];
-                }
-            });
-        });
-    };
-    PeopleController.prototype.getRecover = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        req.people.deleted = false;
-                        return [4, req.people.save()];
-                    case 1:
-                        _a.sent();
-                        req.flash("success", req.t("people.flash.recovered"));
-                        res.redirect(req.headers.referer);
-                        return [2];
-                }
-            });
-        });
-    };
-    PeopleController.prototype.deleteRemove = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, PeopleModel_1.default.deleteOne({ _id: req.people._id })];
-                    case 1:
-                        _a.sent();
-                        req.flash("success", req.t("people.flash.removed"));
-                        res.json({ success: true, redirect: "/people" });
-                        return [2];
-                }
-            });
-        });
-    };
-    return PeopleController;
+    return PeopleMiddleware;
 }());
-var peopleController = new PeopleController();
-exports.default = peopleController;
+var peopleMiddleware = new PeopleMiddleware();
+exports.default = peopleMiddleware;

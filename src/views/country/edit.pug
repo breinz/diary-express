@@ -1,0 +1,12 @@
+extends ../layout/layout
+
+
+block content
+    
+    -old = old || country
+    -title = `Edit ${old.name}`
+    
+    .container
+        .row
+            .col
+                include form

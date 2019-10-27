@@ -1,0 +1,14 @@
+extends ../layout/layout
+
+block content
+    
+    -old = old || people
+
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    h1=old.firstName+" "+old.lastName
+
+                    include form
+        

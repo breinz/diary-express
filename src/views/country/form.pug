@@ -1,0 +1,16 @@
+-country = country || {}
+-errors = errors || {}
+
+.alert.alert-hollow
+    
+    +alert-error("country")
+
+    h1=title 
+
+    form(method="post") 
+        .form-group
+            label(for="name")=t("country.model.name")
+            input#name.form-control(type="text", name="name" autofocus value=country.name class=errors.name?"is-invalid":false)
+            +form-error(t(`country.error.name.${errors.name}`), errors.name)
+        
+        input.btn.btn-success(type="submit", value=t("action.save"))
