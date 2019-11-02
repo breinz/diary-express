@@ -321,10 +321,12 @@ var ExpenseMiddleware = (function () {
                                             expense: "$_id",
                                             date: "$date"
                                         },
-                                        pipeline: [{
+                                        pipeline: [
+                                            {
                                                 $match: {
                                                     $expr: {
-                                                        $and: [{
+                                                        $and: [
+                                                            {
                                                                 $eq: ["$category", "$$expense"]
                                                             },
                                                             {
@@ -336,7 +338,8 @@ var ExpenseMiddleware = (function () {
                                                         ]
                                                     }
                                                 }
-                                            }],
+                                            }
+                                        ],
                                         as: 'expenses'
                                     }
                                 }, {

@@ -3,8 +3,11 @@ import { Router } from "express";
 import pageController from "../controller/pageController";
 import pageMiddleware from "../middleware/pageMiddleware";
 import refererMiddleware from "../middleware/RefererMiddleware";
+import userMiddleware from "../middleware/userMiddleware";
 
 const router = Router();
+
+router.use(userMiddleware.adminShield);
 
 router.get("/",
     pageMiddleware.getPages,

@@ -214,22 +214,25 @@ class ExpenseMiddleware {
                         expense: "$_id",
                         date: "$date"
                     },
-                    pipeline: [{
-                        $match: {
-                            $expr: {
-                                $and: [{
-                                    $eq: ["$category", "$$expense"]
-                                },
-                                {
-                                    $gte: ["$date", bop]
-                                },
-                                {
-                                    $lte: ["$date", eop]
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $eq: ["$category", "$$expense"]
+                                        },
+                                        {
+                                            $gte: ["$date", bop]
+                                        },
+                                        {
+                                            $lte: ["$date", eop]
+                                        }
+                                    ]
                                 }
-                                ]
                             }
                         }
-                    }],
+                    ],
                     as: 'expenses'
                 }
             }, {
