@@ -167,10 +167,10 @@ class ExpenseMiddleware {
                 }
             }, {
                 $lookup: {
-                    from: 'expensecategories',
-                    localField: 'category',
-                    foreignField: '_id',
-                    as: 'category'
+                    from: "expensecategories",
+                    localField: "category",
+                    foreignField: "_id",
+                    as: "category"
                 }
             }, {
                 $unwind: {
@@ -209,7 +209,7 @@ class ExpenseMiddleware {
                 }
             }, {
                 $lookup: {
-                    from: 'expenses',
+                    from: "expenses",
                     let: {
                         expense: "$_id",
                         date: "$date"

@@ -268,10 +268,10 @@ var ExpenseMiddleware = (function () {
                                     }
                                 }, {
                                     $lookup: {
-                                        from: 'expensecategories',
-                                        localField: 'category',
-                                        foreignField: '_id',
-                                        as: 'category'
+                                        from: "expensecategories",
+                                        localField: "category",
+                                        foreignField: "_id",
+                                        as: "category"
                                     }
                                 }, {
                                     $unwind: {
@@ -316,7 +316,7 @@ var ExpenseMiddleware = (function () {
                                     }
                                 }, {
                                     $lookup: {
-                                        from: 'expenses',
+                                        from: "expenses",
                                         let: {
                                             expense: "$_id",
                                             date: "$date"
