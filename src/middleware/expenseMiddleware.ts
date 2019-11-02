@@ -4,6 +4,7 @@ import ExpenseValidator from "../validator/ExpenseValidator";
 import Expense, { ExpenseModel } from "../model/ExpenseModel";
 import Util from "../helper/Util";
 import ExpenseCategory, { ExpenseCategoryModel } from "../model/ExpenseCategoryModel";
+import { UserModel } from "../model/UserModel";
 
 class ExpenseMiddleware {
 
@@ -42,17 +43,21 @@ class ExpenseMiddleware {
     }
 
     public async getExpenses(req: Request, res: Response, next: NextFunction) {
-        req.expenses = await Expense.find().sort("-date -amount").populate("category") as ExpenseModel[];
+        let [bop, eop] = expenseMiddleware.getPeriod(req);
+
+        req.expenses = await Expense.find({ date: { $gte: bop, $lte: eop } }).sort("-date -amount").populate("category") as ExpenseModel[];
 
         next();
     }
 
     public async getReport(req: Request, res: Response, next: NextFunction) {
 
+        let [bop, eop] = expenseMiddleware.getPeriod(req);
+
         let [total, categories, reports] = await Promise.all([
-            expenseMiddleware.getReport_total(),
-            expenseMiddleware.getReport_categories(),
-            expenseMiddleware.getReport_report(req)
+            expenseMiddleware.getReport_total(bop, eop),
+            expenseMiddleware.getReport_categories(bop, eop),
+            expenseMiddleware.getReport_report(req.current_user, bop, eop)
         ]);
 
         req.expenseReport = {
@@ -97,15 +102,29 @@ class ExpenseMiddleware {
         next();
     }
 
-    private async getReport_total() {
+    private getPeriod(req: Request): [Date, Date] {
+        let bop: Date, eop: Date;
+
+        if (req.params.year && req.params.month) {
+            bop = new Date(parseInt(req.params.year), parseInt(req.params.month) - 1, 1);
+            eop = new Date(parseInt(req.params.year), parseInt(req.params.month), 1);
+        } else {
+            bop = req.util.bom();
+            eop = req.util.bonm();
+        }
+
+        return [bop, eop];
+    }
+
+    private async getReport_total(bop: Date, eop: Date) {
         const util = new Util();
 
         let total = await Expense.aggregate([
             {
                 $match: {
                     date: {
-                        $gte: util.bom(),
-                        $lte: util.bonm()
+                        $gte: bop,
+                        $lte: eop
                     }
                 }
             }, {
@@ -118,18 +137,22 @@ class ExpenseMiddleware {
             }
         ]);
 
-        return total[0].total;
+        if (total[0]) {
+            return total[0].total;
+        }
+
+        return 0;
     }
 
-    private async getReport_categories(): Promise<[{ total: number, category: ExpenseCategoryModel }]> {
+    private async getReport_categories(bop: Date, eop: Date): Promise<[{ total: number, category: ExpenseCategoryModel }]> {
         const util = new Util();
 
         const report = await Expense.aggregate([
             {
                 $match: {
                     date: {
-                        $gte: util.bom(),
-                        $lte: util.bonm()
+                        $gte: bop,
+                        $lte: eop
                     }
                 }
             }, {
@@ -164,13 +187,25 @@ class ExpenseMiddleware {
         return <any>report;
     }
 
-    private async getReport_report(req: Request): Promise<any> {
+    private async getReport_report(user: UserModel, bop: Date, eop: Date): Promise<any> {
+
+        let daysIn: number;
+        let d = new Date();
+        d.setDate(1);
+        d.setHours(0, 0, 0, 0);
+        if (d.getTime() == bop.getTime()) {
+            daysIn = new Date().getDate();
+        } else {
+            d = eop;
+            d.setDate(d.getDate() - 1);
+            daysIn = d.getDate();
+        }
 
         const report = await ExpenseCategory.aggregate([
             {
                 $match: {
                     "report.active": true,
-                    "user": req.current_user._id
+                    "user": user._id
                 }
             }, {
                 $lookup: {
@@ -186,10 +221,10 @@ class ExpenseMiddleware {
                                     $eq: ["$category", "$$expense"]
                                 },
                                 {
-                                    $gte: ["$date", req.util.bom()]
+                                    $gte: ["$date", bop]
                                 },
                                 {
-                                    $lte: ["$date", req.util.bonm()]
+                                    $lte: ["$date", eop]
                                 }
                                 ]
                             }
@@ -210,7 +245,7 @@ class ExpenseMiddleware {
                                         if: {
                                             $eq: ["$report.period", "day"]
                                         },
-                                        then: new Date().getDate()/* req.util.daysInMonth()*/,
+                                        then: daysIn/* new Date().getDate()/* req.util.daysInMonth()*/,
                                         else: 20
                                     }
                                 }
@@ -223,6 +258,18 @@ class ExpenseMiddleware {
         ]);
 
         return report;
+    }
+
+    public getMonth(req: Request, res: Response, next: NextFunction) {
+        if (req.params.month && req.params.year) {
+            if (parseInt(req.params.month) <= 0) {
+                return res.redirect(`/expense/${parseInt(req.params.year) - 1}-12`);
+            }
+            if (parseInt(req.params.month) >= 13) {
+                return res.redirect(`/expense/${parseInt(req.params.year) + 1}-1`);
+            }
+        }
+        next();
     }
 }
 

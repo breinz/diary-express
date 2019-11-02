@@ -1,0 +1,31 @@
+extends ../layout/layout
+
+mixin line(page)
+    tr
+        td(data-link=`/page/${page.id}`)=page.id
+        td(data-link=`/page/${page.id}`)=page.title
+        td.actions
+            .btn-group
+                +edit_btn(`/page/${page._id}/edit`, "", "", "a")
+                +delete_btn(`/page/${page._id}/delete`, "", "", "a")
+
+block content
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    .h1-actions
+                        +new_btn("/page/new", t("page.btn.new"))
+                    h1=t("page.title.index")
+
+                    if pages.length
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th Id
+                                    th Title
+                                    th
+                            for page in pages
+                                +line(page)
+                    else
+                        +no-data()

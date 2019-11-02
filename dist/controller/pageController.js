@@ -39,100 +39,68 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ExpenseModel_1 = __importDefault(require("../model/ExpenseModel"));
-var ExpenseController = (function () {
-    function ExpenseController() {
+var PageModel_1 = __importDefault(require("../model/PageModel"));
+var PageController = (function () {
+    function PageController() {
     }
-    ExpenseController.prototype.getIndex = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                res.render("expense/index", {
-                    expenses: req.expenses,
-                    report: req.expenseReport
-                });
-                return [2];
-            });
+    PageController.prototype.getIndex = function (req, res, next) {
+        res.render("page/index", {
+            pages: req.pages
         });
     };
-    ExpenseController.prototype.getExpense = function (req, res, next) {
-        res.render("expense/expense", {
-            expense: req.expense
-        });
+    PageController.prototype.getNew = function (req, res, next) {
+        res.render("page/new");
     };
-    ExpenseController.prototype.getNew = function (req, res, next) {
-        res.render("expense/new", {
-            categories: req.expenseCategories
-        });
-    };
-    ExpenseController.prototype.postNew = function (req, res, next) {
+    PageController.prototype.postNew = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, ExpenseModel_1.default.create(req.body)];
+                    case 0: return [4, PageModel_1.default.create(req.body)];
                     case 1:
                         _a.sent();
-                        req.flash("success", req.t("expense.flash.created"));
-                        res.redirect("/expense");
-                        next();
+                        req.flash("success", req.t("page.flash.created"));
+                        res.redirect("/page");
                         return [2];
                 }
             });
         });
     };
-    ExpenseController.prototype.getEdit = function (req, res, next) {
-        res.render("expense/edit", {
-            expense: req.expense,
-            categories: req.expenseCategories
+    PageController.prototype.getEdit = function (req, res, next) {
+        res.render("page/edit", {
+            page: req.page
         });
     };
-    ExpenseController.prototype.postEdit = function (req, res, next) {
+    PageController.prototype.postEdit = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        Object.assign(req.expense, req.body);
-                        return [4, req.expense.save()];
+                        Object.assign(req.page, req.body);
+                        return [4, req.page.save()];
                     case 1:
                         _a.sent();
-                        req.flash("success", req.t("expense.flash.edited"));
+                        req.flash("success", req.t("page.flash.edited"));
                         res.redirect(req.referer);
-                        next();
                         return [2];
                 }
             });
         });
     };
-    ExpenseController.prototype.deleteDelete = function (req, res, next) {
+    PageController.prototype.deleteDelete = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4, ExpenseModel_1.default.deleteOne({ _id: req.expense._id })];
+                    case 0: return [4, PageModel_1.default.deleteOne({ _id: req.page._id })];
                     case 1:
                         _a.sent();
-                        return [3, 3];
-                    case 2:
-                        error_1 = _a.sent();
-                        req.flash("error", req.t("flash.error.unknown"));
-                        return [2, res.json({ success: true, redirect: "/expense" })];
-                    case 3:
-                        req.flash("success", req.t("expense.flash.deleted"));
-                        return [2, res.json({ success: true, redirect: "/expense" })];
+                        req.flash("success", req.t("page.flash.deleted"));
+                        res.json({ success: true, redirect: req.headers.referer });
+                        return [2];
                 }
             });
         });
     };
-    ExpenseController.prototype.getMonth = function (req, res, next) {
-        res.render("expense/index", {
-            expenses: req.expenses,
-            report: req.expenseReport,
-            month: req.params.month,
-            year: req.params.year
-        });
-    };
-    return ExpenseController;
+    return PageController;
 }());
-var expenseController = new ExpenseController();
-exports.default = expenseController;
+var pageController = new PageController();
+exports.default = pageController;

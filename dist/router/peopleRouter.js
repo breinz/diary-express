@@ -8,7 +8,9 @@ var peopleController_1 = __importDefault(require("../controller/peopleController
 var peopleMiddleware_1 = __importDefault(require("../middleware/peopleMiddleware"));
 var countryMiddleware_1 = __importDefault(require("../middleware/countryMiddleware"));
 var RefererMiddleware_1 = __importDefault(require("../middleware/RefererMiddleware"));
+var userMiddleware_1 = __importDefault(require("../middleware/userMiddleware"));
 var router = express_1.Router();
+router.use(userMiddleware_1.default.adminShield);
 router.get("/", peopleMiddleware_1.default.getPeoples, peopleController_1.default.getIndex);
 router.get("/new", countryMiddleware_1.default.getForSelect, peopleController_1.default.getNew);
 router.post("/new", peopleMiddleware_1.default.validNew, peopleController_1.default.postNew);

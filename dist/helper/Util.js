@@ -34,6 +34,17 @@ var Util = (function () {
         d.setDate(d.getDate() - 1);
         return d.getDate();
     };
+    Util.prototype.prevMonth_url = function () {
+        var d = new Date();
+        d.setMonth(d.getMonth());
+        return d.getFullYear() + "-" + (this.zero(d.getMonth()));
+    };
+    Util.prototype.zero = function (value) {
+        if (value <= 9) {
+            return "0" + value;
+        }
+        return value.toString();
+    };
     return Util;
 }());
 exports.default = Util;

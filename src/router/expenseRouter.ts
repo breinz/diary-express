@@ -49,6 +49,13 @@ router.delete("/:id/delete",
     expenseController.deleteDelete
 );
 
+router.get("/:year-:month",
+    expenseMiddleware.getMonth,
+    expenseMiddleware.getExpenses,
+    expenseMiddleware.getReport,
+    expenseController.getMonth
+);
+
 router.get("/:id",
     expenseMiddleware.getExpensePopulated,
     expenseController.getExpense

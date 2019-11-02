@@ -66,6 +66,15 @@ class ExpenseController {
 
         next();
     }
+
+    public getMonth(req: Request, res: Response, next: NextFunction) {
+        res.render("expense/index", {
+            expenses: req.expenses,
+            report: req.expenseReport,
+            month: req.params.month,
+            year: req.params.year
+        });
+    }
 }
 
 const expenseController = new ExpenseController();

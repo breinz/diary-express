@@ -16,8 +16,28 @@ mixin line(expense)
                 +delete_btn(`/expense/${expense._id}/delete`, "", t("action.delete"), "a")
 
 block content
+
+    -d=new Date()
+    -month = month || d.getMonth()+1
+    -month = parseInt(month)
+    -year = year || d.getFullYear()
+    -year = parseInt(year)
+
     .container
         .row
+            .col-sm-12
+                .h1-actions
+                    .btn-group
+                        a.btn.btn-sm.btn-outline-secondary(href=`/expense/${year}-${month-1}`)
+                            i.fa.fa-angle-left
+                            |&nbsp;
+                            =t(`month.${month-1<=0?11:month-2}.long`)+(month-1<=0?" "+(year-1):"")
+                        a.btn.btn-sm.btn-outline-secondary(href="") All
+                        a.btn.btn-sm.btn-outline-secondary(href=`/expense/${year}-${month+1}`) 
+                            =t(`month.${month+1>=13?0:month}.long`)+(month+1>=13?" "+(year+1):"")
+                            |&nbsp;
+                            i.fa.fa-angle-right
+                h1=t(`month.${month-1}.long`)+" "+year
             .col-lg-3.col-md-4.col-sm-6
                 .row
                     .col
@@ -27,40 +47,42 @@ block content
                                     =Math.ceil(report.total)
                                     |&nbsp;&euro;
                                 =t("expense.report.spent.this_month")
-                        .alert.alert-hollowz
-                            .row
-                                for item in report.categories
-                                    .col-8.text-overflow.no-wrap(style=`background-color:${item.category?item.category.color:t("expenseCategory.none.color")};padding-top:5px;padding-bottom:5px;`)
-                                        i.fa.fa-fw(class=`fa-${item.category?item.category.icon:"question"}`)
-                                        |&nbsp;
-                                        =item.category ? item.category.name : t("expenseCategory.none.name")
-                                    .col-4.text-right(style=`background-color:${item.category?item.category.color:t("expenseCategory.none.color")};padding-top:5px;padding-bottom:5px;`)
-                                        strong=item.total.toFixed(2)
+                        if report.total>0
+                            .alert.alert-hollowz
+                                .row
+                                    for item in report.categories
+                                        .col-8.text-overflow.no-wrap(style=`background-color:${item.category?item.category.color:t("expenseCategory.none.color")};padding-top:5px;padding-bottom:5px;`)
+                                            i.fa.fa-fw(class=`fa-${item.category?item.category.icon:"question"}`)
+                                            |&nbsp;
+                                            =item.category ? item.category.name : t("expenseCategory.none.name")
+                                        .col-4.text-right(style=`background-color:${item.category?item.category.color:t("expenseCategory.none.color")};padding-top:5px;padding-bottom:5px;`)
+                                            strong=item.total.toFixed(2)
 
-
-            .col-lg-9.col-md-8.col-sm-6
-                .row(style="height:100%;min-height:300px")
-                    .col-md-6
-                        script.
-                            let data={
-                                labels: [#{report.categories.map(item=>item.category?"'"+item.category.name+"'":"'No category'")}],
-                                series:[#{report.categories.map(item=>item.total)}],
-                                colors:[#{report.categories.map(item=>item.category?"'"+item.category.color+"'":"'"+t("expenseCategory.none.color")+"'")}]
-                            }
-                        .ch-chart#chart-report-month-categories
+            if report.total > 0
+                .col-lg-9.col-md-8.col-sm-6
+                    .row(style="height:100%;min-height:300px")
+                        .col-md-6
+                            script.
+                                let data={
+                                    labels: [#{report.categories.map(item=>item.category?"'"+item.category.name+"'":"'No category'")}],
+                                    series:[#{report.categories.map(item=>item.total)}],
+                                    colors:[#{report.categories.map(item=>item.category?"'"+item.category.color+"'":"'"+t("expenseCategory.none.color")+"'")}]
+                                }
+                            .ch-chart#chart-report-month-categories
                      
 
-            .col-12
-                .row
-                    for category in report.reports
-                        .col-lg-3.col-md-4.col-sm-6
-                            .alert.alert-hollow.text-center
-                                .big
-                                    i.fa.fa-fw.icon-shadow(class=`fa-${category.icon}` style=`color:${category.color};`)
-                                    |&nbsp;
-                                    =category.report.value.toFixed(2)
-                                |per&nbsp;
-                                =category.report.per
+                .col-12
+                    .row
+                        for category in report.reports
+                            if category.report.value > 0
+                                .col-lg-3.col-md-4.col-sm-6
+                                    .alert.alert-hollow.text-center
+                                        .big
+                                            i.fa.fa-fw.icon-shadow(class=`fa-${category.icon}` style=`color:${category.color};`)
+                                            |&nbsp;
+                                            =category.report.value.toFixed(2)
+                                        |per&nbsp;
+                                        =category.report.per
 
 
             .col-12

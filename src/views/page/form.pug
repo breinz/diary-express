@@ -1,0 +1,28 @@
+-page = page || {}
+-errors = errors || {}
+
+form(method="post")
+
+    +alert-error("page")
+
+    .form-group
+        label(for="title")=t("page.model.title")
+        input#title.form-control(type="text", name="title" autofocus value=page.title class=errors.title?"is-invalid":false)
+        +form-error(t(`page.error.title.${errors.title}`))
+    
+    .form-group
+        label(for="content")=t("page.model.content")
+        textarea#content.form-control(name="content" rows="10")
+            =page.content
+    
+    .form-group
+        label(for="url")=t("page.model.url")
+        input#url.form-control(type="text", name="url" value=page.url class=errors.url?"is-invalid":false)
+        +form-error(t(`page.error.url.${errors.url}`))
+    
+    .form-group
+        label(for="id")=t("page.model.id")
+        input#id.form-control(type="text", name="id" value=page.id class=errors.id?"is-invalid":false)
+        +form-error(t(`page.error.id.${errors.id}`))
+
+    input.btn.btn-success(type="submit", value=t("action.save"))

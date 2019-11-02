@@ -5,6 +5,7 @@ import { ExpenseModel } from "../model/ExpenseModel";
 import Util from "../helper/Util";
 import { CountryModel } from "../model/CountryModel";
 import { PeopleModel } from "../model/PeopleModel";
+import { PageModel } from "../model/PageModel";
 
 declare global {
     namespace Express {
@@ -26,6 +27,9 @@ declare global {
 
             country: CountryModel,
             countries: CountryModel[],
+
+            page: PageModel,
+            pages: PageModel[],
 
             referer: string,
 

@@ -1,8 +1,9 @@
 extends layout/layout
-    
+
 block content
     .container
         .row
             .col
-                h1 Index
-                .ct-chart
+                if page
+                    h1=page.title
+                    p=page.content

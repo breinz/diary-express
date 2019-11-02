@@ -1,5 +1,58 @@
 {
     "today": "Today",
+    "month": [
+        {
+            "long": "January",
+            "short": "jan"
+        },
+        {
+            "long": "February",
+            "short": "feb"
+        },
+        {
+            "long": "March",
+            "short": "mar"
+        },
+        {
+            "long": "April",
+            "short": "apr"
+        },
+        {
+            "long": "Mai",
+            "short": "mai"
+        },
+        {
+            "long": "June",
+            "short": "jun"
+        },
+        {
+            "long": "July",
+            "short": "jul"
+        },
+        {
+            "long": "August",
+            "short": "aug"
+        },
+        {
+            "long": "September",
+            "short": "sept"
+        },
+        {
+            "long": "October",
+            "short": "oct"
+        },
+        {
+            "long": "November",
+            "short": "nov"
+        },
+        {
+            "long": "December",
+            "short": "dec"
+        },
+        {
+            "long": "*Long"
+        }
+    ],
     "action": {
         "save": "Save",
         "edit": "Edit",
@@ -168,6 +221,37 @@
         },
         "title": {
             "new": "New country"
+        }
+    },
+    "page": {
+        "title": {
+            "index": "Pages",
+            "new": "New page"
+        },
+        "btn": {
+            "new": "New page"
+        },
+        "model": {
+            "title": "Title",
+            "content": "Content",
+            "url": "Url",
+            "id": "Id"
+        },
+        "flash": {
+            "created": "Page has been created",
+            "deleted": "Page has been deleted",
+            "edited": "Page has been edited"
+        },
+        "error": {
+            "title": {
+                "required": "The title is required"
+            },
+            "url": {
+                "required": "The url is required"
+            },
+            "id": {
+                "required": "The id is required"
+            }
         }
     }
 }

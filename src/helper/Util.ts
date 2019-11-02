@@ -50,4 +50,18 @@ export default class Util {
         d.setDate(d.getDate() - 1);
         return d.getDate();
     }
+
+    public prevMonth_url(): string {
+        let d = new Date();
+        d.setMonth(d.getMonth());
+        return d.getFullYear() + "-" + (this.zero(d.getMonth()));
+    }
+
+    private zero(value: number): string {
+        if (value <= 9) {
+            return "0" + value;
+        }
+
+        return value.toString();
+    }
 }

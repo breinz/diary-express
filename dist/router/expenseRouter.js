@@ -19,5 +19,6 @@ router.post('/new', expenseMiddleware_1.default.validNew, expenseController_1.de
 router.get("/:id/edit", expenseCategoryMiddleware_1.default.getCategories, expenseMiddleware_1.default.getExpense, RefererMiddleware_1.default.save, expenseController_1.default.getEdit);
 router.post("/:id/edit", expenseMiddleware_1.default.getExpense, expenseMiddleware_1.default.validEdit, RefererMiddleware_1.default.retrieve, expenseController_1.default.postEdit);
 router.delete("/:id/delete", expenseMiddleware_1.default.getExpense, expenseController_1.default.deleteDelete);
+router.get("/:year-:month", expenseMiddleware_1.default.getMonth, expenseMiddleware_1.default.getExpenses, expenseMiddleware_1.default.getReport, expenseController_1.default.getMonth);
 router.get("/:id", expenseMiddleware_1.default.getExpensePopulated, expenseController_1.default.getExpense);
 exports.default = router;

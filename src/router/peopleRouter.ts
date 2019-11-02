@@ -4,8 +4,11 @@ import peopleController from "../controller/peopleController";
 import peopleMiddleware from "../middleware/peopleMiddleware";
 import countryMiddleware from "../middleware/countryMiddleware";
 import refererMiddleware from "../middleware/RefererMiddleware";
+import userMiddleware from "../middleware/userMiddleware";
 
 const router = Router();
+
+router.use(userMiddleware.adminShield);
 
 router.get("/",
     peopleMiddleware.getPeoples,

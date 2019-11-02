@@ -7,6 +7,7 @@ import signinRouter from "./signinRouter";
 import expenseRouter from "./expenseRouter";
 import peopleRouter from "./peopleRouter";
 import countryRouter from "./countryRouter";
+import pageRouter from "./pageRouter";
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.use("/signin", signinRouter);
 router.use("/login", loginRouter);
 router.use("/logout", logoutRouter);
 
+router.use("/page", pageRouter);
 router.use("/expense", expenseRouter);
 router.use("/people", peopleRouter);
 router.use("/country", countryRouter);

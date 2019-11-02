@@ -109,14 +109,15 @@ var ExpenseMiddleware = (function () {
     };
     ExpenseMiddleware.prototype.getExpenses = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var _a, bop, eop, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
-                        _a = req;
-                        return [4, ExpenseModel_1.default.find().sort("-date -amount").populate("category")];
+                        _a = expenseMiddleware.getPeriod(req), bop = _a[0], eop = _a[1];
+                        _b = req;
+                        return [4, ExpenseModel_1.default.find({ date: { $gte: bop, $lte: eop } }).sort("-date -amount").populate("category")];
                     case 1:
-                        _a.expenses = (_b.sent());
+                        _b.expenses = (_c.sent());
                         next();
                         return [2];
                 }
@@ -125,16 +126,18 @@ var ExpenseMiddleware = (function () {
     };
     ExpenseMiddleware.prototype.getReport = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, total, categories, reports;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0: return [4, Promise.all([
-                            expenseMiddleware.getReport_total(),
-                            expenseMiddleware.getReport_categories(),
-                            expenseMiddleware.getReport_report(req)
-                        ])];
+            var _a, bop, eop, _b, total, categories, reports;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _a = expenseMiddleware.getPeriod(req), bop = _a[0], eop = _a[1];
+                        return [4, Promise.all([
+                                expenseMiddleware.getReport_total(bop, eop),
+                                expenseMiddleware.getReport_categories(bop, eop),
+                                expenseMiddleware.getReport_report(req.current_user, bop, eop)
+                            ])];
                     case 1:
-                        _a = _b.sent(), total = _a[0], categories = _a[1], reports = _a[2];
+                        _b = _c.sent(), total = _b[0], categories = _b[1], reports = _b[2];
                         req.expenseReport = {
                             total: total,
                             categories: categories,
@@ -192,7 +195,19 @@ var ExpenseMiddleware = (function () {
             });
         });
     };
-    ExpenseMiddleware.prototype.getReport_total = function () {
+    ExpenseMiddleware.prototype.getPeriod = function (req) {
+        var bop, eop;
+        if (req.params.year && req.params.month) {
+            bop = new Date(parseInt(req.params.year), parseInt(req.params.month) - 1, 1);
+            eop = new Date(parseInt(req.params.year), parseInt(req.params.month), 1);
+        }
+        else {
+            bop = req.util.bom();
+            eop = req.util.bonm();
+        }
+        return [bop, eop];
+    };
+    ExpenseMiddleware.prototype.getReport_total = function (bop, eop) {
         return __awaiter(this, void 0, void 0, function () {
             var util, total;
             return __generator(this, function (_a) {
@@ -203,8 +218,8 @@ var ExpenseMiddleware = (function () {
                                 {
                                     $match: {
                                         date: {
-                                            $gte: util.bom(),
-                                            $lte: util.bonm()
+                                            $gte: bop,
+                                            $lte: eop
                                         }
                                     }
                                 }, {
@@ -218,12 +233,15 @@ var ExpenseMiddleware = (function () {
                             ])];
                     case 1:
                         total = _a.sent();
-                        return [2, total[0].total];
+                        if (total[0]) {
+                            return [2, total[0].total];
+                        }
+                        return [2, 0];
                 }
             });
         });
     };
-    ExpenseMiddleware.prototype.getReport_categories = function () {
+    ExpenseMiddleware.prototype.getReport_categories = function (bop, eop) {
         return __awaiter(this, void 0, void 0, function () {
             var util, report;
             return __generator(this, function (_a) {
@@ -234,8 +252,8 @@ var ExpenseMiddleware = (function () {
                                 {
                                     $match: {
                                         date: {
-                                            $gte: util.bom(),
-                                            $lte: util.bonm()
+                                            $gte: bop,
+                                            $lte: eop
                                         }
                                     }
                                 }, {
@@ -273,71 +291,94 @@ var ExpenseMiddleware = (function () {
             });
         });
     };
-    ExpenseMiddleware.prototype.getReport_report = function (req) {
+    ExpenseMiddleware.prototype.getReport_report = function (user, bop, eop) {
         return __awaiter(this, void 0, void 0, function () {
-            var report;
+            var daysIn, d, report;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, ExpenseCategoryModel_1.default.aggregate([
-                            {
-                                $match: {
-                                    "report.active": true,
-                                    "user": req.current_user._id
-                                }
-                            }, {
-                                $lookup: {
-                                    from: 'expenses',
-                                    let: {
-                                        expense: "$_id",
-                                        date: "$date"
-                                    },
-                                    pipeline: [{
-                                            $match: {
-                                                $expr: {
-                                                    $and: [{
-                                                            $eq: ["$category", "$$expense"]
-                                                        },
+                    case 0:
+                        d = new Date();
+                        d.setDate(1);
+                        d.setHours(0, 0, 0, 0);
+                        if (d.getTime() == bop.getTime()) {
+                            daysIn = new Date().getDate();
+                        }
+                        else {
+                            d = eop;
+                            d.setDate(d.getDate() - 1);
+                            daysIn = d.getDate();
+                        }
+                        return [4, ExpenseCategoryModel_1.default.aggregate([
+                                {
+                                    $match: {
+                                        "report.active": true,
+                                        "user": user._id
+                                    }
+                                }, {
+                                    $lookup: {
+                                        from: 'expenses',
+                                        let: {
+                                            expense: "$_id",
+                                            date: "$date"
+                                        },
+                                        pipeline: [{
+                                                $match: {
+                                                    $expr: {
+                                                        $and: [{
+                                                                $eq: ["$category", "$$expense"]
+                                                            },
+                                                            {
+                                                                $gte: ["$date", bop]
+                                                            },
+                                                            {
+                                                                $lte: ["$date", eop]
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            }],
+                                        as: 'expenses'
+                                    }
+                                }, {
+                                    $addFields: {
+                                        "report.value": {
+                                            $divide: [{
+                                                    $sum: "$expenses.amount"
+                                                }, {
+                                                    $multiply: [
+                                                        "$report.times",
                                                         {
-                                                            $gte: ["$date", req.util.bom()]
-                                                        },
-                                                        {
-                                                            $lte: ["$date", req.util.bonm()]
+                                                            $cond: {
+                                                                if: {
+                                                                    $eq: ["$report.period", "day"]
+                                                                },
+                                                                then: daysIn,
+                                                                else: 20
+                                                            }
                                                         }
                                                     ]
-                                                }
-                                            }
-                                        }],
-                                    as: 'expenses'
-                                }
-                            }, {
-                                $addFields: {
-                                    "report.value": {
-                                        $divide: [{
-                                                $sum: "$expenses.amount"
-                                            }, {
-                                                $multiply: [
-                                                    "$report.times",
-                                                    {
-                                                        $cond: {
-                                                            if: {
-                                                                $eq: ["$report.period", "day"]
-                                                            },
-                                                            then: new Date().getDate(),
-                                                            else: 20
-                                                        }
-                                                    }
-                                                ]
-                                            }]
+                                                }]
+                                        }
                                     }
                                 }
-                            }
-                        ])];
+                            ])];
                     case 1:
                         report = _a.sent();
                         return [2, report];
                 }
             });
         });
+    };
+    ExpenseMiddleware.prototype.getMonth = function (req, res, next) {
+        if (req.params.month && req.params.year) {
+            if (parseInt(req.params.month) <= 0) {
+                return res.redirect("/expense/" + (parseInt(req.params.year) - 1) + "-12");
+            }
+            if (parseInt(req.params.month) >= 13) {
+                return res.redirect("/expense/" + (parseInt(req.params.year) + 1) + "-1");
+            }
+        }
+        next();
     };
     return ExpenseMiddleware;
 }());
