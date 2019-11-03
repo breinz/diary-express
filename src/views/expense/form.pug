@@ -16,6 +16,9 @@ form(method="post")
             .form-group
                 label(for="date")=t("expense.model.date")
                 input#date.form-control(type="date", name="date" value=(new Date(expense.date||Date.now())).toISOString().substr(0,10))
+    .form-group
+        label(for="description")=t("expense.model.description")
+        input#description.form-control(type="text", name="description" value=expense.description)
     
     .form-group
         =t("expense.model.category")

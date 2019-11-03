@@ -48,9 +48,6 @@
         {
             "long": "December",
             "short": "dec"
-        },
-        {
-            "long": "*Long"
         }
     ],
     "action": {
@@ -100,7 +97,8 @@
         "model": {
             "amount": "Amount",
             "date": "Date",
-            "category": "Category"
+            "category": "Category",
+            "description": "Description"
         },
         "error": {
             "amount": {
@@ -120,7 +118,8 @@
         },
         "report": {
             "spent": {
-                "this_month": "Spent this month"
+                "this_month": "Spent this month",
+                "this_year": "Spend this year"
             }
         }
     },

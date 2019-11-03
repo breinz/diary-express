@@ -41,27 +41,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ExpenseModel_1 = __importDefault(require("../model/ExpenseModel"));
 var ExpenseCategoryModel_1 = __importDefault(require("../model/ExpenseCategoryModel"));
-var expenseMiddleware_1 = __importDefault(require("./expenseMiddleware"));
 var ExpenseReportMiddleware = (function () {
     function ExpenseReportMiddleware() {
     }
     ExpenseReportMiddleware.prototype.getMonth = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, bop, eop, _b, total, categories, reports;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var _a, total, categories, reports;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         expenseReportMiddleware.req = req;
-                        _a = expenseMiddleware_1.default.getPeriod(req), bop = _a[0], eop = _a[1];
-                        expenseReportMiddleware.bop = bop;
-                        expenseReportMiddleware.eop = eop;
                         return [4, Promise.all([
                                 expenseReportMiddleware.getTotal(),
                                 expenseReportMiddleware.getCategories(),
                                 expenseReportMiddleware.getReport()
                             ])];
                     case 1:
-                        _b = _c.sent(), total = _b[0], categories = _b[1], reports = _b[2];
+                        _a = _b.sent(), total = _a[0], categories = _a[1], reports = _a[2];
+                        req.expenseReport = {
+                            total: total,
+                            categories: categories,
+                            reports: reports
+                        };
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
+    ExpenseReportMiddleware.prototype.getYear = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, total, categories, reports;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        expenseReportMiddleware.req = req;
+                        return [4, Promise.all([
+                                expenseReportMiddleware.getTotal(),
+                                expenseReportMiddleware.getCategories(),
+                                expenseReportMiddleware.getReport()
+                            ])];
+                    case 1:
+                        _a = _b.sent(), total = _a[0], categories = _a[1], reports = _a[2];
                         req.expenseReport = {
                             total: total,
                             categories: categories,
@@ -82,8 +103,8 @@ var ExpenseReportMiddleware = (function () {
                             {
                                 $match: {
                                     date: {
-                                        $gte: this.bop,
-                                        $lt: this.eop
+                                        $gte: this.req.bop,
+                                        $lt: this.req.eop
                                     }
                                 }
                             }, {
@@ -115,8 +136,8 @@ var ExpenseReportMiddleware = (function () {
                             {
                                 $match: {
                                     date: {
-                                        $gte: this.bop,
-                                        $lte: this.eop
+                                        $gte: this.req.bop,
+                                        $lte: this.req.eop
                                     }
                                 }
                             }, {
@@ -156,20 +177,31 @@ var ExpenseReportMiddleware = (function () {
     };
     ExpenseReportMiddleware.prototype.getReport = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var daysIn, d, report;
+            var daysIn, d, now, start, diff, oneDay, report;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        d = new Date();
-                        d.setDate(1);
-                        d.setHours(0, 0, 0, 0);
-                        if (d.getTime() == this.bop.getTime()) {
-                            daysIn = new Date().getDate();
-                        }
-                        else {
-                            d = this.eop;
-                            d.setDate(d.getDate() - 1);
-                            daysIn = d.getDate();
+                        if (this.req.params.year) {
+                            if (this.req.params.month) {
+                                d = new Date();
+                                d.setDate(1);
+                                d.setHours(0, 0, 0, 0);
+                                if (d.getTime() == this.req.bop.getTime()) {
+                                    daysIn = new Date().getDate();
+                                }
+                                else {
+                                    d = this.req.eop;
+                                    d.setDate(d.getDate() - 1);
+                                    daysIn = d.getDate();
+                                }
+                            }
+                            else {
+                                now = new Date();
+                                start = new Date(now.getFullYear(), 0, 0);
+                                diff = (now.getTime() - start.getTime()) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+                                oneDay = 1000 * 60 * 60 * 24;
+                                daysIn = Math.floor(diff / oneDay);
+                            }
                         }
                         return [4, ExpenseCategoryModel_1.default.aggregate([
                                 {
@@ -193,10 +225,10 @@ var ExpenseReportMiddleware = (function () {
                                                                 $eq: ["$category", "$$expense"]
                                                             },
                                                             {
-                                                                $gte: ["$date", this.bop]
+                                                                $gte: ["$date", this.req.bop]
                                                             },
                                                             {
-                                                                $lte: ["$date", this.eop]
+                                                                $lte: ["$date", this.req.eop]
                                                             }
                                                         ]
                                                     }

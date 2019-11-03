@@ -8,16 +8,9 @@ class ExpenseReportMiddleware {
 
     private req: Request;
 
-    private bop: Date;
-    private eop: Date;
 
     public async getMonth(req: Request, res: Response, next: NextFunction) {
         expenseReportMiddleware.req = req;
-
-        let [bop, eop] = expenseMiddleware.getPeriod(req);
-
-        expenseReportMiddleware.bop = bop;
-        expenseReportMiddleware.eop = eop;
 
         let [total, categories, reports] = await Promise.all([
             expenseReportMiddleware.getTotal(),
@@ -35,6 +28,24 @@ class ExpenseReportMiddleware {
 
     }
 
+    public async getYear(req: Request, res: Response, next: NextFunction) {
+        expenseReportMiddleware.req = req;
+
+        let [total, categories, reports] = await Promise.all([
+            expenseReportMiddleware.getTotal(),
+            expenseReportMiddleware.getCategories(),
+            expenseReportMiddleware.getReport()
+        ]);
+
+        req.expenseReport = {
+            total,
+            categories,
+            reports
+        };
+
+        next();
+    }
+
     /**
      * Get total expenses for a given period
      */
@@ -44,8 +55,8 @@ class ExpenseReportMiddleware {
             {
                 $match: {
                     date: {
-                        $gte: this.bop,
-                        $lt: this.eop
+                        $gte: this.req.bop,
+                        $lt: this.req.eop
                     }
                 }
             }, {
@@ -72,8 +83,8 @@ class ExpenseReportMiddleware {
             {
                 $match: {
                     date: {
-                        $gte: this.bop,
-                        $lte: this.eop
+                        $gte: this.req.bop,
+                        $lte: this.req.eop
                     }
                 }
             }, {
@@ -111,15 +122,33 @@ class ExpenseReportMiddleware {
     private async getReport(): Promise<any> {
 
         let daysIn: number;
-        let d = new Date();
-        d.setDate(1);
-        d.setHours(0, 0, 0, 0);
-        if (d.getTime() == this.bop.getTime()) {
-            daysIn = new Date().getDate();
-        } else {
-            d = this.eop;
-            d.setDate(d.getDate() - 1);
-            daysIn = d.getDate();
+
+        if (this.req.params.year) {
+
+            if (this.req.params.month) {
+
+                let d = new Date();
+                d.setDate(1);
+                d.setHours(0, 0, 0, 0);
+
+                // Day in month (1-31)
+                if (d.getTime() == this.req.bop.getTime()) {
+                    // Current month (getDate)
+                    daysIn = new Date().getDate();
+                } else {
+                    // Not current month (how many days in this month)
+                    d = this.req.eop;
+                    d.setDate(d.getDate() - 1);
+                    daysIn = d.getDate();
+                }
+            } else {
+                // Day in year (1-366)
+                let now = new Date();
+                let start = new Date(now.getFullYear(), 0, 0);
+                let diff = (now.getTime() - start.getTime()) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+                let oneDay = 1000 * 60 * 60 * 24;
+                daysIn = Math.floor(diff / oneDay);
+            }
         }
 
         const report = await ExpenseCategory.aggregate([
@@ -144,10 +173,10 @@ class ExpenseReportMiddleware {
                                             $eq: ["$category", "$$expense"]
                                         },
                                         {
-                                            $gte: ["$date", this.bop]
+                                            $gte: ["$date", this.req.bop]
                                         },
                                         {
-                                            $lte: ["$date", this.eop]
+                                            $lte: ["$date", this.req.eop]
                                         }
                                     ]
                                 }
@@ -169,8 +198,8 @@ class ExpenseReportMiddleware {
                                         if: {
                                             $eq: ["$report.period", "day"]
                                         },
-                                        then: daysIn/* new Date().getDate()/* req.util.daysInMonth()*/,
-                                        else: 20
+                                        then: daysIn,
+                                        else: 20 // TODO: Report not by day
                                     }
                                 }
 

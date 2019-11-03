@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 
 import { db } from "../db"
 import config from "../config";
-import { ExpenseCategoryModel } from "./ExpenseCategoryModel";
 
 /**
  * Model

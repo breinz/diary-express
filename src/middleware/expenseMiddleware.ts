@@ -43,9 +43,9 @@ class ExpenseMiddleware {
     }
 
     public async getExpenses(req: Request, res: Response, next: NextFunction) {
-        let [bop, eop] = expenseMiddleware.getPeriod(req);
+        expenseMiddleware.getPeriod(req);
 
-        req.expenses = await Expense.find({ date: { $gte: bop, $lte: eop } }).sort("-date -amount").populate("category") as ExpenseModel[];
+        req.expenses = await Expense.find({ date: { $gte: req.bop, $lte: req.eop } }).sort("-date -amount").populate("category") as ExpenseModel[];
 
         next();
     }
@@ -94,22 +94,27 @@ class ExpenseMiddleware {
         next();
     }
 
+    public async getYear(req: Request, res: Response, next: NextFunction) {
+        next();
+    }
+
     /**
      * Guess the period viewed
      * @param req 
      */
-    public getPeriod(req: Request): [Date, Date] {
-        let bop: Date, eop: Date;
-
-        if (req.params.year && req.params.month) {
-            bop = new Date(parseInt(req.params.year), parseInt(req.params.month) - 1, 1);
-            eop = new Date(parseInt(req.params.year), parseInt(req.params.month), 1);
+    public getPeriod(req: Request) {
+        if (req.params.year) {
+            if (req.params.month) {
+                req.bop = new Date(parseInt(req.params.year), parseInt(req.params.month) - 1, 1);
+                req.eop = new Date(parseInt(req.params.year), parseInt(req.params.month), 1);
+            } else {
+                req.bop = new Date(parseInt(req.params.year), 0, 1);
+                req.eop = new Date(parseInt(req.params.year) + 1, 0, 1);
+            }
         } else {
-            bop = req.util.bom();
-            eop = req.util.bonm();
+            req.bop = req.util.bom();
+            req.eop = req.util.bonm();
         }
-
-        return [bop, eop];
     }
 }
 

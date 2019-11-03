@@ -107,15 +107,15 @@ var ExpenseMiddleware = (function () {
     };
     ExpenseMiddleware.prototype.getExpenses = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, bop, eop, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _a = expenseMiddleware.getPeriod(req), bop = _a[0], eop = _a[1];
-                        _b = req;
-                        return [4, ExpenseModel_1.default.find({ date: { $gte: bop, $lte: eop } }).sort("-date -amount").populate("category")];
+                        expenseMiddleware.getPeriod(req);
+                        _a = req;
+                        return [4, ExpenseModel_1.default.find({ date: { $gte: req.bop, $lte: req.eop } }).sort("-date -amount").populate("category")];
                     case 1:
-                        _b.expenses = (_c.sent());
+                        _a.expenses = (_b.sent());
                         next();
                         return [2];
                 }
@@ -179,17 +179,29 @@ var ExpenseMiddleware = (function () {
         }
         next();
     };
+    ExpenseMiddleware.prototype.getYear = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                next();
+                return [2];
+            });
+        });
+    };
     ExpenseMiddleware.prototype.getPeriod = function (req) {
-        var bop, eop;
-        if (req.params.year && req.params.month) {
-            bop = new Date(parseInt(req.params.year), parseInt(req.params.month) - 1, 1);
-            eop = new Date(parseInt(req.params.year), parseInt(req.params.month), 1);
+        if (req.params.year) {
+            if (req.params.month) {
+                req.bop = new Date(parseInt(req.params.year), parseInt(req.params.month) - 1, 1);
+                req.eop = new Date(parseInt(req.params.year), parseInt(req.params.month), 1);
+            }
+            else {
+                req.bop = new Date(parseInt(req.params.year), 0, 1);
+                req.eop = new Date(parseInt(req.params.year) + 1, 0, 1);
+            }
         }
         else {
-            bop = req.util.bom();
-            eop = req.util.bonm();
+            req.bop = req.util.bom();
+            req.eop = req.util.bonm();
         }
-        return [bop, eop];
     };
     return ExpenseMiddleware;
 }());

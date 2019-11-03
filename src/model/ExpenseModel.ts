@@ -10,6 +10,7 @@ export type ExpenseModel = Document & {
     amount: number,
     date: Date,
     category: Types.ObjectId | string | ExpenseCategoryModel,
+    description: string
 }
 
 /**
@@ -19,6 +20,7 @@ const expenseSchema = new Schema({
     amount: Number,
     date: Date,
     category: { type: Schema.Types.ObjectId, ref: "expenseCategory" },
+    description: String
 });
 
 const Expense = db.model("expense", expenseSchema) as Model<Document> & ExpenseModel;

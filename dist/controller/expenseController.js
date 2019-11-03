@@ -75,7 +75,7 @@ var ExpenseController = (function () {
                     case 1:
                         _a.expense = (_b.sent());
                         req.flash("success", req.t("expense.flash.created"));
-                        res.redirect("/expense");
+                        res.redirect(req.referer);
                         next();
                         return [2];
                 }
@@ -132,6 +132,12 @@ var ExpenseController = (function () {
             expenses: req.expenses,
             report: req.expenseReport,
             month: req.params.month,
+            year: req.params.year
+        });
+    };
+    ExpenseController.prototype.getYear = function (req, res, next) {
+        res.render("expense/year", {
+            report: req.expenseReport,
             year: req.params.year
         });
     };

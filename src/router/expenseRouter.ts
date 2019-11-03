@@ -23,11 +23,13 @@ router.get("/",
 
 router.get("/new",
     expenseCategoryMiddleware.getCategories,
+    refererMiddleware.save,
     expenseController.getNew
 );
 
 router.post('/new',
     expenseMiddleware.validNew,
+    refererMiddleware.retrieve,
     expenseController.postNew,
 );
 
@@ -50,11 +52,17 @@ router.delete("/:id/delete",
     expenseController.deleteDelete
 );
 
-router.get("/:year-:month",
+router.get("/:year(\\d{4})-:month(\\d{1,2})/",
     expenseMiddleware.getMonth,
     expenseMiddleware.getExpenses,
     expenseReportMiddleware.getMonth,
     expenseController.getMonth
+);
+
+router.get("/:year(\\d{4})/",
+    expenseMiddleware.getExpenses,
+    expenseReportMiddleware.getYear,
+    expenseController.getYear
 );
 
 router.get("/:id",

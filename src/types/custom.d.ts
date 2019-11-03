@@ -14,6 +14,8 @@ declare global {
             user: UserModel,
             current_user: UserModel,
             lang: string,
+            bop: Date, // Begining Of Period 
+            eop: Date,// End Of Period
 
             expense: ExpenseModel,
             expenses: ExpenseModel[],

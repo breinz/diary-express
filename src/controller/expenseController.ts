@@ -27,7 +27,7 @@ class ExpenseController {
 
         req.flash("success", req.t("expense.flash.created"));
 
-        res.redirect("/expense");
+        res.redirect(req.referer);
 
         next();
     }
@@ -72,6 +72,13 @@ class ExpenseController {
             expenses: req.expenses,
             report: req.expenseReport,
             month: req.params.month,
+            year: req.params.year
+        });
+    }
+
+    public getYear(req: Request, res: Response, next: NextFunction) {
+        res.render("expense/year", {
+            report: req.expenseReport,
             year: req.params.year
         });
     }
