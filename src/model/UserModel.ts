@@ -18,22 +18,6 @@ export type UserModel = Document & {
     session: string,
     admin: boolean,
     lang: string,
-    expense: {
-        month: {
-            total: [{
-                date: Date,
-                total: number,
-                dirty: boolean
-            }],
-            categories: [{
-                date: Date,
-                categories: [{
-                    total: number,
-                    category: Types.ObjectId | ExpenseCategoryModel
-                }]
-            }]
-        }
-    }
 
     validatePassword: (pwd: string) => Promise<boolean>
 }
@@ -49,25 +33,6 @@ const userSchema = new Schema({
     session: String,
     admin: Boolean,
     lang: String,
-    expense: {
-        month: {
-            total: [{
-                date: Date,
-                total: Number,
-                dirty: Boolean,
-                _id: false
-            }],
-            categories: [{
-                date: Date,
-                categories: [{
-                    total: Number,
-                    category: { type: Schema.Types.ObjectId, ref: "expensecategories" },
-                    _id: false
-                }],
-                _id: false
-            }]
-        }
-    }
 });
 
 userSchema.pre("save", async function (next) {

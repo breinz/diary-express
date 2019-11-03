@@ -14,12 +14,12 @@ var expenseReportMiddleware_1 = __importDefault(require("../middleware/expenseRe
 var router = express_1.Router();
 router.use(userMiddleware_1.default.adminShield);
 router.use("/category", expenseCategoryRouter_1.default);
-router.get("/", expenseMiddleware_1.default.getExpenses, expenseReportMiddleware_1.default.getReport, expenseController_1.default.getIndex);
+router.get("/", expenseMiddleware_1.default.getExpenses, expenseReportMiddleware_1.default.getMonth, expenseController_1.default.getIndex);
 router.get("/new", expenseCategoryMiddleware_1.default.getCategories, expenseController_1.default.getNew);
-router.post('/new', expenseMiddleware_1.default.validNew, expenseController_1.default.postNew, expenseReportMiddleware_1.default.setDirty);
+router.post('/new', expenseMiddleware_1.default.validNew, expenseController_1.default.postNew);
 router.get("/:id/edit", expenseCategoryMiddleware_1.default.getCategories, expenseMiddleware_1.default.getExpense, RefererMiddleware_1.default.save, expenseController_1.default.getEdit);
-router.post("/:id/edit", expenseMiddleware_1.default.getExpense, expenseMiddleware_1.default.validEdit, RefererMiddleware_1.default.retrieve, expenseController_1.default.postEdit, expenseReportMiddleware_1.default.setDirty);
-router.delete("/:id/delete", expenseMiddleware_1.default.getExpense, expenseController_1.default.deleteDelete, expenseReportMiddleware_1.default.setDirty);
-router.get("/:year-:month", expenseMiddleware_1.default.getMonth, expenseMiddleware_1.default.getExpenses, expenseReportMiddleware_1.default.getReport, expenseController_1.default.getMonth);
+router.post("/:id/edit", expenseMiddleware_1.default.getExpense, expenseMiddleware_1.default.validEdit, RefererMiddleware_1.default.retrieve, expenseController_1.default.postEdit);
+router.delete("/:id/delete", expenseMiddleware_1.default.getExpense, expenseController_1.default.deleteDelete);
+router.get("/:year-:month", expenseMiddleware_1.default.getMonth, expenseMiddleware_1.default.getExpenses, expenseReportMiddleware_1.default.getMonth, expenseController_1.default.getMonth);
 router.get("/:id", expenseMiddleware_1.default.getExpensePopulated, expenseController_1.default.getExpense);
 exports.default = router;

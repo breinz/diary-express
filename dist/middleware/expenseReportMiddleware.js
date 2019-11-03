@@ -45,7 +45,7 @@ var expenseMiddleware_1 = __importDefault(require("./expenseMiddleware"));
 var ExpenseReportMiddleware = (function () {
     function ExpenseReportMiddleware() {
     }
-    ExpenseReportMiddleware.prototype.getReport = function (req, res, next) {
+    ExpenseReportMiddleware.prototype.getMonth = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, bop, eop, _b, total, categories, reports;
             return __generator(this, function (_c) {
@@ -58,7 +58,7 @@ var ExpenseReportMiddleware = (function () {
                         return [4, Promise.all([
                                 expenseReportMiddleware.getTotal(),
                                 expenseReportMiddleware.getCategories(),
-                                expenseReportMiddleware.getReport_report(req.current_user, bop, eop)
+                                expenseReportMiddleware.getReport()
                             ])];
                     case 1:
                         _b = _c.sent(), total = _b[0], categories = _b[1], reports = _b[2];
@@ -75,76 +75,33 @@ var ExpenseReportMiddleware = (function () {
     };
     ExpenseReportMiddleware.prototype.getTotal = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var total, total_query;
+            var total_query, total;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        total = this.getTotalSaved();
-                        if (!isNaN(total)) {
-                            return [2, total];
-                        }
-                        return [4, ExpenseModel_1.default.aggregate([
-                                {
-                                    $match: {
-                                        date: {
-                                            $gte: this.bop,
-                                            $lt: this.eop
-                                        }
-                                    }
-                                }, {
-                                    $group: {
-                                        _id: null,
-                                        total: {
-                                            $sum: "$amount"
-                                        }
+                    case 0: return [4, ExpenseModel_1.default.aggregate([
+                            {
+                                $match: {
+                                    date: {
+                                        $gte: this.bop,
+                                        $lt: this.eop
                                     }
                                 }
-                            ])];
+                            }, {
+                                $group: {
+                                    _id: null,
+                                    total: {
+                                        $sum: "$amount"
+                                    }
+                                }
+                            }
+                        ])];
                     case 1:
                         total_query = _a.sent();
                         total = 0;
                         if (total_query[0]) {
                             total = total_query[0].total;
                         }
-                        return [4, this.saveTotal(total)];
-                    case 2:
-                        _a.sent();
                         return [2, total];
-                }
-            });
-        });
-    };
-    ExpenseReportMiddleware.prototype.getTotalSaved = function () {
-        for (var i = 0; i < this.req.current_user.expense.month.total.length; i++) {
-            var total_save = this.req.current_user.expense.month.total[i];
-            if (total_save.date.getTime() == this.bop.getTime() && !total_save.dirty) {
-                return total_save.total;
-            }
-        }
-        ;
-        return NaN;
-    };
-    ExpenseReportMiddleware.prototype.saveTotal = function (total) {
-        return __awaiter(this, void 0, void 0, function () {
-            var i, old;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        for (i = this.req.current_user.expense.month.total.length - 1; i >= 0; i--) {
-                            old = this.req.current_user.expense.month.total[i];
-                            if (old.date.getTime() == this.bop.getTime()) {
-                                this.req.current_user.expense.month.total.splice(i, 1);
-                            }
-                        }
-                        this.req.current_user.expense.month.total.push({
-                            date: this.bop,
-                            total: total,
-                            dirty: false
-                        });
-                        return [4, this.req.current_user.save()];
-                    case 1:
-                        _a.sent();
-                        return [2];
                 }
             });
         });
@@ -192,39 +149,12 @@ var ExpenseReportMiddleware = (function () {
                         ])];
                     case 1:
                         report = _a.sent();
-                        return [4, this.saveCategories(report)];
-                    case 2:
-                        _a.sent();
                         return [2, report];
                 }
             });
         });
     };
-    ExpenseReportMiddleware.prototype.saveCategories = function (categories) {
-        return __awaiter(this, void 0, void 0, function () {
-            var i, old;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        for (i = this.req.current_user.expense.month.categories.length - 1; i >= 0; i--) {
-                            old = this.req.current_user.expense.month.categories[i];
-                            if (old.date.getTime() == this.bop.getTime()) {
-                                this.req.current_user.expense.month.categories.splice(i, 1);
-                            }
-                        }
-                        this.req.current_user.expense.month.categories.push({
-                            date: this.bop,
-                            categories: categories
-                        });
-                        return [4, this.req.current_user.save()];
-                    case 1:
-                        _a.sent();
-                        return [2];
-                }
-            });
-        });
-    };
-    ExpenseReportMiddleware.prototype.getReport_report = function (user, bop, eop) {
+    ExpenseReportMiddleware.prototype.getReport = function () {
         return __awaiter(this, void 0, void 0, function () {
             var daysIn, d, report;
             return __generator(this, function (_a) {
@@ -233,11 +163,11 @@ var ExpenseReportMiddleware = (function () {
                         d = new Date();
                         d.setDate(1);
                         d.setHours(0, 0, 0, 0);
-                        if (d.getTime() == bop.getTime()) {
+                        if (d.getTime() == this.bop.getTime()) {
                             daysIn = new Date().getDate();
                         }
                         else {
-                            d = eop;
+                            d = this.eop;
                             d.setDate(d.getDate() - 1);
                             daysIn = d.getDate();
                         }
@@ -245,7 +175,7 @@ var ExpenseReportMiddleware = (function () {
                                 {
                                     $match: {
                                         "report.active": true,
-                                        "user": user._id
+                                        "user": this.req.current_user._id
                                     }
                                 }, {
                                     $lookup: {
@@ -263,10 +193,10 @@ var ExpenseReportMiddleware = (function () {
                                                                 $eq: ["$category", "$$expense"]
                                                             },
                                                             {
-                                                                $gte: ["$date", bop]
+                                                                $gte: ["$date", this.bop]
                                                             },
                                                             {
-                                                                $lte: ["$date", eop]
+                                                                $lte: ["$date", this.eop]
                                                             }
                                                         ]
                                                     }
@@ -301,32 +231,6 @@ var ExpenseReportMiddleware = (function () {
                     case 1:
                         report = _a.sent();
                         return [2, report];
-                }
-            });
-        });
-    };
-    ExpenseReportMiddleware.prototype.setDirty = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            var bop, i, total;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!req.expense) {
-                            throw new Error("An expense (req.expense) is required to set a report dirty");
-                        }
-                        bop = req.expense.date;
-                        bop.setDate(1);
-                        bop.setHours(0, 0, 0, 0);
-                        for (i = 0; i < req.current_user.expense.month.total.length; i++) {
-                            total = req.current_user.expense.month.total[i];
-                            if (total.date.getTime() == bop.getTime()) {
-                                total.dirty = true;
-                            }
-                        }
-                        return [4, req.current_user.save()];
-                    case 1:
-                        _a.sent();
-                        return [2];
                 }
             });
         });

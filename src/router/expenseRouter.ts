@@ -17,7 +17,7 @@ router.use("/category", expenseCategoryRouter);
 
 router.get("/",
     expenseMiddleware.getExpenses,
-    expenseReportMiddleware.getReport,
+    expenseReportMiddleware.getMonth,
     expenseController.getIndex
 );
 
@@ -29,7 +29,6 @@ router.get("/new",
 router.post('/new',
     expenseMiddleware.validNew,
     expenseController.postNew,
-    expenseReportMiddleware.setDirty
 );
 
 router.get("/:id/edit",
@@ -44,19 +43,17 @@ router.post("/:id/edit",
     expenseMiddleware.validEdit,
     refererMiddleware.retrieve,
     expenseController.postEdit,
-    expenseReportMiddleware.setDirty
 );
 
 router.delete("/:id/delete",
     expenseMiddleware.getExpense,
-    expenseController.deleteDelete,
-    expenseReportMiddleware.setDirty
+    expenseController.deleteDelete
 );
 
 router.get("/:year-:month",
     expenseMiddleware.getMonth,
     expenseMiddleware.getExpenses,
-    expenseReportMiddleware.getReport,
+    expenseReportMiddleware.getMonth,
     expenseController.getMonth
 );
 

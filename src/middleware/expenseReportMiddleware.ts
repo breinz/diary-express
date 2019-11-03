@@ -11,7 +11,7 @@ class ExpenseReportMiddleware {
     private bop: Date;
     private eop: Date;
 
-    public async getReport(req: Request, res: Response, next: NextFunction) {
+    public async getMonth(req: Request, res: Response, next: NextFunction) {
         expenseReportMiddleware.req = req;
 
         let [bop, eop] = expenseMiddleware.getPeriod(req);
@@ -22,7 +22,7 @@ class ExpenseReportMiddleware {
         let [total, categories, reports] = await Promise.all([
             expenseReportMiddleware.getTotal(),
             expenseReportMiddleware.getCategories(),
-            expenseReportMiddleware.getReport_report(req.current_user, bop, eop)
+            expenseReportMiddleware.getReport()
         ]);
 
         req.expenseReport = {
@@ -39,12 +39,6 @@ class ExpenseReportMiddleware {
      * Get total expenses for a given period
      */
     private async getTotal() {
-
-        // Get saved value || NaN
-        let total = this.getTotalSaved();
-        if (!isNaN(total)) {
-            return total;
-        }
 
         let total_query = await Expense.aggregate([
             {
@@ -64,54 +58,12 @@ class ExpenseReportMiddleware {
             }
         ]);
 
-        total = 0;
+        let total = 0;
         if (total_query[0]) {
             total = total_query[0].total;
         }
 
-        // Save it for further use
-        await this.saveTotal(total);
-
         return total;
-    }
-
-    /**
-     * Check if this total has been saved (skip the calculation)
-     */
-    private getTotalSaved(): number {
-
-        for (let i = 0; i < this.req.current_user.expense.month.total.length; i++) {
-            const total_save = this.req.current_user.expense.month.total[i];
-
-            if (total_save.date.getTime() == this.bop.getTime() && !total_save.dirty) {
-                return total_save.total;
-            }
-        };
-
-        return NaN;
-    }
-
-    /**
-     * Save the report total so this shortcut can be used next time needed 
-     * instead of making the calculation
-     */
-    private async saveTotal(total: number) {
-        // Remove last saved values
-        for (let i = this.req.current_user.expense.month.total.length - 1; i >= 0; i--) {
-            const old = this.req.current_user.expense.month.total[i];
-            if (old.date.getTime() == this.bop.getTime()) {
-                this.req.current_user.expense.month.total.splice(i, 1);
-            }
-        }
-
-        // Add this value
-        this.req.current_user.expense.month.total.push({
-            date: this.bop,
-            total: total,
-            dirty: false
-        });
-
-        await this.req.current_user.save();
     }
 
     private async getCategories(): Promise<[{ total: number, category: ExpenseCategoryModel }]> {
@@ -153,38 +105,19 @@ class ExpenseReportMiddleware {
             }
         ]);
 
-        await this.saveCategories(<any>report);
-
         return <any>report;
     }
 
-    private async saveCategories(categories: [{ total: number, category: ExpenseCategoryModel }]) {
-        // Remove last saved values
-        for (let i = this.req.current_user.expense.month.categories.length - 1; i >= 0; i--) {
-            const old = this.req.current_user.expense.month.categories[i];
-            if (old.date.getTime() == this.bop.getTime()) {
-                this.req.current_user.expense.month.categories.splice(i, 1);
-            }
-        }
-
-        this.req.current_user.expense.month.categories.push({
-            date: this.bop,
-            categories
-        });
-
-        await this.req.current_user.save();
-    }
-
-    private async getReport_report(user: UserModel, bop: Date, eop: Date): Promise<any> {
+    private async getReport(): Promise<any> {
 
         let daysIn: number;
         let d = new Date();
         d.setDate(1);
         d.setHours(0, 0, 0, 0);
-        if (d.getTime() == bop.getTime()) {
+        if (d.getTime() == this.bop.getTime()) {
             daysIn = new Date().getDate();
         } else {
-            d = eop;
+            d = this.eop;
             d.setDate(d.getDate() - 1);
             daysIn = d.getDate();
         }
@@ -193,7 +126,7 @@ class ExpenseReportMiddleware {
             {
                 $match: {
                     "report.active": true,
-                    "user": user._id
+                    "user": this.req.current_user._id
                 }
             }, {
                 $lookup: {
@@ -211,10 +144,10 @@ class ExpenseReportMiddleware {
                                             $eq: ["$category", "$$expense"]
                                         },
                                         {
-                                            $gte: ["$date", bop]
+                                            $gte: ["$date", this.bop]
                                         },
                                         {
-                                            $lte: ["$date", eop]
+                                            $lte: ["$date", this.eop]
                                         }
                                     ]
                                 }
@@ -251,25 +184,6 @@ class ExpenseReportMiddleware {
         return report;
     }
 
-    public async setDirty(req: Request, res: Response, next: NextFunction) {
-        if (!req.expense) {
-            throw new Error("An expense (req.expense) is required to set a report dirty");
-        }
-
-        let bop = req.expense.date;
-        bop.setDate(1);
-        bop.setHours(0, 0, 0, 0);
-
-        for (let i = 0; i < req.current_user.expense.month.total.length; i++) {
-            const total = req.current_user.expense.month.total[i];
-            if (total.date.getTime() == bop.getTime()) {
-                total.dirty = true;
-            }
-        }
-
-        await req.current_user.save();
-
-    }
 }
 
 const expenseReportMiddleware = new ExpenseReportMiddleware();
