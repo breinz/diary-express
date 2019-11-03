@@ -66,11 +66,14 @@ var ExpenseController = (function () {
     };
     ExpenseController.prototype.postNew = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, ExpenseModel_1.default.create(req.body)];
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = req;
+                        return [4, ExpenseModel_1.default.create(req.body)];
                     case 1:
-                        _a.sent();
+                        _a.expense = (_b.sent());
                         req.flash("success", req.t("expense.flash.created"));
                         res.redirect("/expense");
                         next();

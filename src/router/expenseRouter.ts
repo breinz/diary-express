@@ -6,6 +6,7 @@ import userMiddleware from "../middleware/userMiddleware";
 import expenseCategoryMiddleware from "../middleware/expenseCategoryMiddleware";
 import expenseMiddleware from "../middleware/expenseMiddleware";
 import refererMiddleware from "../middleware/RefererMiddleware";
+import expenseReportMiddleware from "../middleware/expenseReportMiddleware";
 
 const router = Router();
 
@@ -16,7 +17,7 @@ router.use("/category", expenseCategoryRouter);
 
 router.get("/",
     expenseMiddleware.getExpenses,
-    expenseMiddleware.getReport,
+    expenseReportMiddleware.getReport,
     expenseController.getIndex
 );
 
@@ -27,7 +28,8 @@ router.get("/new",
 
 router.post('/new',
     expenseMiddleware.validNew,
-    expenseController.postNew
+    expenseController.postNew,
+    expenseReportMiddleware.setDirty
 );
 
 router.get("/:id/edit",
@@ -41,18 +43,20 @@ router.post("/:id/edit",
     expenseMiddleware.getExpense,
     expenseMiddleware.validEdit,
     refererMiddleware.retrieve,
-    expenseController.postEdit
+    expenseController.postEdit,
+    expenseReportMiddleware.setDirty
 );
 
 router.delete("/:id/delete",
     expenseMiddleware.getExpense,
-    expenseController.deleteDelete
+    expenseController.deleteDelete,
+    expenseReportMiddleware.setDirty
 );
 
 router.get("/:year-:month",
     expenseMiddleware.getMonth,
     expenseMiddleware.getExpenses,
-    expenseMiddleware.getReport,
+    expenseReportMiddleware.getReport,
     expenseController.getMonth
 );
 

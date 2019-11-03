@@ -50,7 +50,26 @@ var userSchema = new mongoose_1.Schema({
     password: String,
     session: String,
     admin: Boolean,
-    lang: String
+    lang: String,
+    expense: {
+        month: {
+            total: [{
+                    date: Date,
+                    total: Number,
+                    dirty: Boolean,
+                    _id: false
+                }],
+            categories: [{
+                    date: Date,
+                    categories: [{
+                            total: Number,
+                            category: { type: mongoose_1.Schema.Types.ObjectId, ref: "expensecategories" },
+                            _id: false
+                        }],
+                    _id: false
+                }]
+        }
+    }
 });
 userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function () {

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Expense from "../model/ExpenseModel";
+import Expense, { ExpenseModel } from "../model/ExpenseModel";
 
 class ExpenseController {
 
@@ -23,7 +23,7 @@ class ExpenseController {
     }
 
     public async postNew(req: Request, res: Response, next: NextFunction) {
-        await Expense.create(req.body);
+        req.expense = await Expense.create(req.body) as ExpenseModel;
 
         req.flash("success", req.t("expense.flash.created"));
 
