@@ -67,7 +67,8 @@ var CountryController = (function () {
     };
     CountryController.prototype.getEdit = function (req, res, next) {
         res.render("country/edit", {
-            country: req.country
+            country: req.country,
+            cache: false
         });
     };
     CountryController.prototype.postEdit = function (req, res, next) {

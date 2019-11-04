@@ -35,7 +35,8 @@ class ExpenseController {
     public getEdit(req: Request, res: Response, next: NextFunction) {
         res.render("expense/edit", {
             expense: req.expense,
-            categories: req.expenseCategories
+            categories: req.expenseCategories,
+            cache: false
         })
     }
 

@@ -22,7 +22,8 @@ class CountryController {
 
     public getEdit(req: Request, res: Response, next: NextFunction) {
         res.render("country/edit", {
-            country: req.country
+            country: req.country,
+            cache: false
         });
     }
 

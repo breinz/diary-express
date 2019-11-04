@@ -74,7 +74,8 @@ var ExpenseCategoryController = (function () {
     };
     ExpenseCategoryController.prototype.getEdit = function (req, res, next) {
         res.render("expense/category/edit", {
-            category: req.expenseCategory
+            category: req.expenseCategory,
+            cache: false
         });
     };
     ExpenseCategoryController.prototype.postEdit = function (req, res, next) {

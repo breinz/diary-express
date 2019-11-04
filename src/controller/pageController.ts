@@ -23,7 +23,8 @@ class PageController {
 
     public getEdit(req: Request, res: Response, next: NextFunction) {
         res.render("page/edit", {
-            page: req.page
+            page: req.page,
+            cache: false
         });
     }
 

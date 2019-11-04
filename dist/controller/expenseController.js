@@ -85,7 +85,8 @@ var ExpenseController = (function () {
     ExpenseController.prototype.getEdit = function (req, res, next) {
         res.render("expense/edit", {
             expense: req.expense,
-            categories: req.expenseCategories
+            categories: req.expenseCategories,
+            cache: false
         });
     };
     ExpenseController.prototype.postEdit = function (req, res, next) {

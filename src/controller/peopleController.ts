@@ -30,7 +30,8 @@ class PeopleController {
 
     public getEdit(req: Request, res: Response, next: NextFunction) {
         res.render("people/edit", {
-            people: req.people
+            people: req.people,
+            cache: false
         });
     }
 

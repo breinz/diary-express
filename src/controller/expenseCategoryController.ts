@@ -30,7 +30,8 @@ class ExpenseCategoryController {
 
     public getEdit(req: Request, res: Response, next: NextFunction) {
         res.render("expense/category/edit", {
-            category: req.expenseCategory
+            category: req.expenseCategory,
+            cache: false
         });
     }
 

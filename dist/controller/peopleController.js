@@ -74,7 +74,8 @@ var PeopleController = (function () {
     };
     PeopleController.prototype.getEdit = function (req, res, next) {
         res.render("people/edit", {
-            people: req.people
+            people: req.people,
+            cache: false
         });
     };
     PeopleController.prototype.postEdit = function (req, res, next) {

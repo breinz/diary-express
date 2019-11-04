@@ -67,7 +67,8 @@ var PageController = (function () {
     };
     PageController.prototype.getEdit = function (req, res, next) {
         res.render("page/edit", {
-            page: req.page
+            page: req.page,
+            cache: false
         });
     };
     PageController.prototype.postEdit = function (req, res, next) {
