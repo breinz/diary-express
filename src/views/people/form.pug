@@ -23,6 +23,11 @@ form(method="post")
                 select#from.form-control(name="from")
                     for country in countries
                         option(value=country._id selected=country._id.equals(people.from))=country.name
+        
+        .col-sm-6
+            .form-group
+                label(for="met_at")=t("people.model.met_at")
+                input#met_at.form-control(type="date" name="met_at" value=util.dateToInput(people.met_at||Date.now()))
     
     .row
         .col-6.col-sm-3

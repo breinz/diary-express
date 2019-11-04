@@ -182,7 +182,8 @@
             "age": "Age",
             "metIn": "Met in",
             "from": "From",
-            "name": "Name"
+            "name": "Name",
+            "met_at": "Met"
         },
         "error": {
             "firstName": {
@@ -193,7 +194,7 @@
             }
         },
         "flash": {
-            "created": "People has been reated",
+            "created": "People has been created",
             "edited": "People has been edited",
             "deleted": "People has been deleted",
             "recovered": "People has been recovered",

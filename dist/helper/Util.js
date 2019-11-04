@@ -14,6 +14,9 @@ var Util = (function () {
         }
         return date_format_1.default("dd/MM/yy", date);
     };
+    Util.prototype.dateToInput = function (date) {
+        return new Date(date).toISOString().substr(0, 10);
+    };
     Util.prototype.bom = function () {
         var d = new Date();
         d.setHours(0, 0, 0, 0);

@@ -8,6 +8,7 @@ var peopleSchema = new mongoose_1.Schema({
     sexe: Boolean,
     age: Number,
     metIn: String,
+    met_at: Date,
     user: { type: mongoose_1.Schema.Types.ObjectId, ref: "user" },
     from: { type: mongoose_1.Schema.Types.ObjectId, ref: "country" },
     deleted: { type: Boolean, default: false }

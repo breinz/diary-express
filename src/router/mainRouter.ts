@@ -8,6 +8,7 @@ import expenseRouter from "./expenseRouter";
 import peopleRouter from "./peopleRouter";
 import countryRouter from "./countryRouter";
 import pageRouter from "./pageRouter";
+import adminRouter from "./adminRouter";
 
 const router = Router();
 
@@ -23,5 +24,6 @@ router.use("/page", pageRouter);
 router.use("/expense", expenseRouter);
 router.use("/people", peopleRouter);
 router.use("/country", countryRouter);
+router.use("/admin", adminRouter);
 
 export default router;

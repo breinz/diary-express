@@ -19,6 +19,10 @@ export default class Util {
         return format("dd/MM/yy", date);
     }
 
+    public dateToInput(date: Date | string): string {
+        return new Date(date).toISOString().substr(0, 10);
+    }
+
     /**
      * Begining of month
      */
