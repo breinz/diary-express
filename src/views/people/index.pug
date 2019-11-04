@@ -2,9 +2,19 @@ extends ../layout/layout
 
 mixin line(people)
     tr
-        td(data-link=`/people/${people._id}`)=people.firstName+" "+people.lastName
-        td(data-link=`/people/${people._id}`)=people.from.name
+        td(data-link=`/people/${people._id}`)
+            =people.firstName+" "+people.lastName
+            small.text-muted
+                |&nbsp;
+                =people.from.name
+        td(data-link=`/people/${people._id}`)
+            =people.metIn
+            |&nbsp;
+            =util.todayOrDate(people.met_at)
         td.actions
+            a.btn.btn-outline-secondary.btn-sm(href=`/people/${people._id}/note/new` title=t('people.note.btn.new'))
+                i.fa.fa-sticky-note.fa-fw
+            |&nbsp;
             .btn-group
                 +edit_btn(`/people/${people._id}/edit`, "", t("action.edit"), "a")
                 +delete_btn(`/people/${people._id}/delete`, "", t("action.delete"), "a")
@@ -35,7 +45,7 @@ block content
                             thead
                                 tr
                                     th=t("people.model.name")
-                                    th=t("people.model.from")
+                                    th=t("people.model.metIn")
                                     th.actions
                             for people in peoples
                                 +line(people)

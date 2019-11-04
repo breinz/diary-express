@@ -16,6 +16,7 @@ export type PeopleModel = Document & {
     met_at: Date,
     user: Types.ObjectId | string | UserModel,
     from: Types.ObjectId | string | CountryModel,
+    note: [string],
     deleted: boolean
 }
 
@@ -31,6 +32,7 @@ const peopleSchema = new Schema({
     met_at: Date,
     user: { type: Schema.Types.ObjectId, ref: "user" },
     from: { type: Schema.Types.ObjectId, ref: "country" },
+    note: [String],
     deleted: { type: Boolean, default: false }
 });
 

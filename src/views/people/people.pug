@@ -10,6 +10,11 @@ block content
                     h1
                         if !people.deleted
                             .h1-actions
+                                a.btn.btn-outline-secondary.btn-sm(href=`/people/${people._id}/note/new` data-sameWidth="a")
+                                    i.fa.fa-sticky-note.fa-fw
+                                    br
+                                    =t('people.note.btn.new')
+                                |&nbsp;
                                 .btn-group
                                     +edit_btn(`/people/${people._id}/edit`, t("action.edit"), "", "a")
                                     +delete_btn(`/people/${people._id}/delete`, t("action.delete"), "", "a")
@@ -31,3 +36,17 @@ block content
                         dt=t("people.model.from")
                         dd
                             a(href=`/country/${people.from._id}`)=people.from.name
+
+                if people.note.length
+                    .alert.alert-hollow
+                        h2 
+                            i.fa.fa-sticky-note.text-muted
+                            |&nbsp;Notes
+                        for note, index in people.note
+                            .h1-actions
+                                .btn-group
+                                    +edit_btn(`/people/${people._id}/note/${index}/edit`, "", t("action.edit"))
+                                    +delete_btn(`/people/${people._id}/note/${index}/delete`, "", t("action.delete"))
+                            p!=note
+                            if index < people.note.length-1
+                                hr

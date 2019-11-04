@@ -5,10 +5,16 @@ import peopleMiddleware from "../middleware/peopleMiddleware";
 import countryMiddleware from "../middleware/countryMiddleware";
 import refererMiddleware from "../middleware/RefererMiddleware";
 import userMiddleware from "../middleware/userMiddleware";
+import peopleNoteRouter from "./peopleNoteRouter";
 
 const router = Router();
 
 router.use(userMiddleware.adminShield);
+
+router.use("/:id/note",
+    peopleMiddleware.getPeople,
+    peopleNoteRouter
+);
 
 router.get("/",
     peopleMiddleware.getPeoples,

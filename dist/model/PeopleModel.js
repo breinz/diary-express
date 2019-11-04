@@ -11,6 +11,7 @@ var peopleSchema = new mongoose_1.Schema({
     met_at: Date,
     user: { type: mongoose_1.Schema.Types.ObjectId, ref: "user" },
     from: { type: mongoose_1.Schema.Types.ObjectId, ref: "country" },
+    note: [String],
     deleted: { type: Boolean, default: false }
 });
 var People = db_1.db.model("people", peopleSchema);

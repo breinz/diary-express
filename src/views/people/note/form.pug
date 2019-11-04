@@ -1,0 +1,11 @@
+.alert.alert-hollow
+        
+    form(method="post")
+
+        .form-group
+            label(for="content")=t("people.note.model.content")
+            textarea#content.form-control(name="content" rows="10" autofocus)
+                if index
+                    =people.note[index]
+        
+        input.btn.btn-success(type="submit", value=t("action.save"))

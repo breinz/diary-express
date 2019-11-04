@@ -199,6 +199,28 @@
             "deleted": "People has been deleted",
             "recovered": "People has been recovered",
             "removed": "People has been removed"
+        },
+        "note": {
+            "btn": {
+                "new": "New note"
+            },
+            "title": {
+                "new": "New note on %s",
+                "edit": "Edit note on %s"
+            },
+            "model": {
+                "content": "Note"
+            },
+            "flash": {
+                "created": "Note has been created",
+                "deleted": "Note has been deleted",
+                "edited": "Note has been edited"
+            }
+        }
+    },
+    "note": {
+        "btn": {
+            "add": "Add note"
         }
     },
     "country": {

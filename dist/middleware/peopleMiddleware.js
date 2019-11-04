@@ -85,6 +85,7 @@ var PeopleMiddleware = (function () {
                             req.flash("error", req.t("people.flash.error.not_found"));
                             return [2, res.redirect("/people")];
                         }
+                        res.locals.people = req.people;
                         next();
                         return [2];
                 }

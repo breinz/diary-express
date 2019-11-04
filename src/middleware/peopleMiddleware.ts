@@ -26,6 +26,8 @@ class PeopleMiddleware {
             return res.redirect("/people");
         }
 
+        res.locals.people = req.people;
+
         next();
     }
 
