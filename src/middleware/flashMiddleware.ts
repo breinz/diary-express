@@ -19,6 +19,7 @@ class FlashMiddleware {
         // Pass the flash message to res and delete it
         if (req.session && req.session.flash) {
             res.locals.flash = req.session.flash;
+            res.locals.cache = false;
             delete req.session.flash;
         }
 

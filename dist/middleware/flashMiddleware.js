@@ -12,6 +12,7 @@ var FlashMiddleware = (function () {
         };
         if (req.session && req.session.flash) {
             res.locals.flash = req.session.flash;
+            res.locals.cache = false;
             delete req.session.flash;
         }
         next();
