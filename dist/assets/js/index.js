@@ -17835,6 +17835,7 @@ var Table = (function () {
     }
     Table.prototype.init = function () {
         this.convertToLink();
+        this.showHover();
     };
     Table.prototype.convertToLink = function () {
         jquery_1.default("[data-link]").each(function () {
@@ -17842,6 +17843,18 @@ var Table = (function () {
             jquery_1.default(this).css("cursor", "pointer");
             jquery_1.default(this).on("click", function () {
                 window.location.href = link;
+            });
+        });
+    };
+    Table.prototype.showHover = function () {
+        jquery_1.default("[data-show-hover]").each(function () {
+            var content = jquery_1.default("." + jquery_1.default(this).attr("data-show-hover"));
+            content.hide();
+            jquery_1.default(this).on("mouseover", function () {
+                content.show();
+            });
+            jquery_1.default(this).on("mouseout", function () {
+                content.hide();
             });
         });
     };

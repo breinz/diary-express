@@ -12198,7 +12198,29 @@ ul.margin li {
 
 .actions {
   width: 1px;
-  white-space: nowrap; }
+  white-space: nowrap;
+  text-align: right; }
+
+.table th {
+  border-top: none; }
+
+.table-hover-cells > tbody > tr > th:hover:not(.no-hover),
+.table-hover-cells > tbody > tr > td:hover:not(.no-hover) {
+  background-color: #f5f5f5; }
+
+.table-hover-cells > tbody > tr > th.active:hover:not(.no-hover),
+.table-hover-cells > tbody > tr > td.active:hover:not(.no-hover),
+.table-hover-cells > tbody > tr.active > th:hover:not(.no-hover),
+.table-hover-cells > tbody > tr.active > td:hover:not(.no-hover) {
+  background-color: #e8e8e8; }
+
+.table-hover.table-hover-cells > tbody > tr:hover > th:hover:not(.no-hover),
+.table-hover.table-hover-cells > tbody > tr:hover > td:hover:not(.no-hover) {
+  background-color: #e8e8e8; }
+
+.table-hover.table-hover-cells > tbody > tr.active:hover > th:hover:not(.no-hover),
+.table-hover.table-hover-cells > tbody > tr.active:hover > td:hover:not(.no-hover) {
+  background-color: #d8d8d8; }
 
 .btn-default {
   color: #212529;

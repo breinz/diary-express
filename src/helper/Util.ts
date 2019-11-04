@@ -47,8 +47,8 @@ export default class Util {
     /**
      * How many days in this month
      */
-    public daysInMonth(): number {
-        let d = new Date();
+    public daysInMonth(date?: Date): number {
+        let d = date || new Date();
         d.setDate(1);
         d.setMonth(d.getMonth() + 1);
         d.setDate(d.getDate() - 1);

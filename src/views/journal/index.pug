@@ -1,0 +1,66 @@
+extends ../layout/layout
+
+
+mixin line()
+    tr
+        -d=0
+        while d++ < 7
+            if first>cell++ || last<n
+                td.no-hover &nbsp;
+            else
+                td(data-link="/" data-show-hover=`cell${n}-content` style="width:5%;border:1px solid #DEE2E6")
+                    +cell(n++)
+
+mixin cell(day)
+    div(style="min-height:80px")
+        a.btn.text-success.btn-sm(href="/journal/new" style="float:right" title=t("journal.button.new") class=`cell${day}-content`)
+            i.fa.fa-plus
+        b=day
+        br
+        if Math.random()>.9
+            i.fa.fa-fw.fa-dollar-sign.text-danger
+        if Math.random()>.9
+            i.fa.fa-fw.fa-user.text-success
+        if Math.random()>.9
+            i.fa.fa-fw.fa-sticky-note.text-primary
+
+block content
+    
+    -month=new Date()
+    -month.setMonth(month.getMonth())
+    
+    -first = new Date(month) // First day of month
+    -first.setDate(1)
+    -first = (first.getDay()||7) -1
+
+    -last = new Date(month) // last day of month
+    -last.setDate(1)
+    -last.setMonth(last.getMonth()+1)
+    -last.setDate(last.getDate()-1)
+    -last = last.getDate()
+    
+    -n = 1 // cursor day
+    -cell = 0 // cursor cell
+    
+    .container
+        .row
+            .col
+                .h1-actions
+                    +new_btn("/journal/new", t("journal.button.new"))
+                h1=t(`month.${month.getMonth()}.long`)
+                .alert.alert-hollow
+                    table.table.table-hover-cells
+                        thead
+                            tr
+                                th(style="width:5%")=t("day.0.short")
+                                th(style="width:5%")=t("day.1.short")
+                                th(style="width:5%")=t("day.2.short")
+                                th(style="width:5%")=t("day.3.short")
+                                th(style="width:5%")=t("day.4.short")
+                                th(style="width:5%")=t("day.5.short")
+                                th(style="width:5%")=t("day.6.short")
+                        -l = 0
+                        while l < Math.ceil((first+last)/7)
+                            +line()
+                            -l++
+                    

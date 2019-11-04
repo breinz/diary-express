@@ -50,6 +50,29 @@
             "short": "dec"
         }
     ],
+    "day": [
+        {
+            "short": "Mon"
+        },
+        {
+            "short": "Tue"
+        },
+        {
+            "short": "Wed"
+        },
+        {
+            "short": "Thu"
+        },
+        {
+            "short": "Fri"
+        },
+        {
+            "short": "Sat"
+        },
+        {
+            "short": "Sun"
+        }
+    ],
     "action": {
         "save": "Save",
         "edit": "Edit",
@@ -274,6 +297,11 @@
             "id": {
                 "required": "The id is required"
             }
+        }
+    },
+    "journal": {
+        "button": {
+            "new": "New entry"
         }
     }
 }

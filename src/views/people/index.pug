@@ -12,8 +12,10 @@ mixin line(people)
             |&nbsp;
             =util.todayOrDate(people.met_at)
         td.actions
-            a.btn.btn-outline-secondary.btn-sm(href=`/people/${people._id}/note/new` title=t('people.note.btn.new'))
+            a.btn.btn-outline-secondary.btn-sm(href=`/people/${people._id}/note/new` title=t('people.note.btn.new') style="line-height:1")
                 i.fa.fa-sticky-note.fa-fw
+                if people.note.length
+                    =people.note.length
             |&nbsp;
             .btn-group
                 +edit_btn(`/people/${people._id}/edit`, "", t("action.edit"), "a")

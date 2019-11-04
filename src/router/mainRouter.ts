@@ -9,6 +9,7 @@ import peopleRouter from "./peopleRouter";
 import countryRouter from "./countryRouter";
 import pageRouter from "./pageRouter";
 import adminRouter from "./adminRouter";
+import journalRouter from "./journalRouter";
 
 const router = Router();
 
@@ -25,5 +26,6 @@ router.use("/expense", expenseRouter);
 router.use("/people", peopleRouter);
 router.use("/country", countryRouter);
 router.use("/admin", adminRouter);
+router.use("/journal", journalRouter);
 
 export default router;
