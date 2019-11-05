@@ -48,6 +48,9 @@
         {
             "long": "December",
             "short": "dec"
+        },
+        {
+            "long": "*Long"
         }
     ],
     "day": [

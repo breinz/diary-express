@@ -7,6 +7,7 @@ import expenseCategoryMiddleware from "../middleware/expenseCategoryMiddleware";
 import expenseMiddleware from "../middleware/expenseMiddleware";
 import refererMiddleware from "../middleware/RefererMiddleware";
 import expenseReportMiddleware from "../middleware/expenseReportMiddleware";
+import dateMiddleware from "../middleware/dateMiddleware";
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.use(userMiddleware.adminShield);
 router.use("/category", expenseCategoryRouter);
 
 router.get("/",
+    dateMiddleware.getPeriod,
     expenseMiddleware.getExpenses,
     expenseReportMiddleware.getMonth,
     expenseController.getIndex
@@ -53,7 +55,8 @@ router.delete("/:id/delete",
 );
 
 router.get("/:year(\\d{4})-:month(\\d{1,2})/",
-    expenseMiddleware.getMonth,
+    expenseMiddleware.validMonth,
+    dateMiddleware.getPeriod,
     expenseMiddleware.getExpenses,
     expenseReportMiddleware.getMonth,
     expenseController.getMonth

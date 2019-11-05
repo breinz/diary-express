@@ -2,9 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import expenseCategoryMiddleware from "./expenseCategoryMiddleware";
 import ExpenseValidator from "../validator/ExpenseValidator";
 import Expense, { ExpenseModel } from "../model/ExpenseModel";
-import Util from "../helper/Util";
-import ExpenseCategory, { ExpenseCategoryModel } from "../model/ExpenseCategoryModel";
-import { UserModel } from "../model/UserModel";
 
 class ExpenseMiddleware {
 
@@ -43,7 +40,7 @@ class ExpenseMiddleware {
     }
 
     public async getExpenses(req: Request, res: Response, next: NextFunction) {
-        expenseMiddleware.getPeriod(req);
+        //expenseMiddleware.getPeriod(req);
 
         req.expenses = await Expense.find({ date: { $gte: req.bop, $lte: req.eop } }).sort("-date -amount").populate("category") as ExpenseModel[];
 
@@ -82,7 +79,7 @@ class ExpenseMiddleware {
         next();
     }
 
-    public getMonth(req: Request, res: Response, next: NextFunction) {
+    public validMonth(req: Request, res: Response, next: NextFunction) {
         if (req.params.month && req.params.year) {
             if (parseInt(req.params.month) <= 0) {
                 return res.redirect(`/expense/${parseInt(req.params.year) - 1}-12`);
@@ -101,21 +98,35 @@ class ExpenseMiddleware {
     /**
      * Guess the period viewed
      * @param req 
+     * @deprecated
+     * @see dateMiddleware.getPeriod
      */
-    public getPeriod(req: Request) {
+    /*public getPeriod(req: Request) {
         if (req.params.year) {
+            
+            const year = parseInt(req.params.year);
+            
             if (req.params.month) {
-                req.bop = new Date(parseInt(req.params.year), parseInt(req.params.month) - 1, 1);
-                req.eop = new Date(parseInt(req.params.year), parseInt(req.params.month), 1);
+
+                const month = parseInt(req.params.month);
+                
+                req.bop = new Date(year, month - 1, 1);
+                req.eop = new Date(year, month, 1);
+
             } else {
-                req.bop = new Date(parseInt(req.params.year), 0, 1);
-                req.eop = new Date(parseInt(req.params.year) + 1, 0, 1);
+
+                req.bop = new Date(year, 0, 1);
+                req.eop = new Date(year + 1, 0, 1);
+
             }
+
         } else {
+
             req.bop = req.util.bom();
             req.eop = req.util.bonm();
+
         }
-    }
+    }*/
 }
 
 const expenseMiddleware = new ExpenseMiddleware();

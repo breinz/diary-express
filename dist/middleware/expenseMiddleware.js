@@ -111,7 +111,6 @@ var ExpenseMiddleware = (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        expenseMiddleware.getPeriod(req);
                         _a = req;
                         return [4, ExpenseModel_1.default.find({ date: { $gte: req.bop, $lte: req.eop } }).sort("-date -amount").populate("category")];
                     case 1:
@@ -168,7 +167,7 @@ var ExpenseMiddleware = (function () {
             });
         });
     };
-    ExpenseMiddleware.prototype.getMonth = function (req, res, next) {
+    ExpenseMiddleware.prototype.validMonth = function (req, res, next) {
         if (req.params.month && req.params.year) {
             if (parseInt(req.params.month) <= 0) {
                 return res.redirect("/expense/" + (parseInt(req.params.year) - 1) + "-12");
@@ -186,22 +185,6 @@ var ExpenseMiddleware = (function () {
                 return [2];
             });
         });
-    };
-    ExpenseMiddleware.prototype.getPeriod = function (req) {
-        if (req.params.year) {
-            if (req.params.month) {
-                req.bop = new Date(parseInt(req.params.year), parseInt(req.params.month) - 1, 1);
-                req.eop = new Date(parseInt(req.params.year), parseInt(req.params.month), 1);
-            }
-            else {
-                req.bop = new Date(parseInt(req.params.year), 0, 1);
-                req.eop = new Date(parseInt(req.params.year) + 1, 0, 1);
-            }
-        }
-        else {
-            req.bop = req.util.bom();
-            req.eop = req.util.bonm();
-        }
     };
     return ExpenseMiddleware;
 }());
