@@ -17745,8 +17745,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jquery_1 = __importDefault(require("jquery"));
+var Form = (function () {
+    function Form() {
+    }
+    Form.prototype.init = function () {
+        this.step();
+    };
+    Form.prototype.step = function () {
+        jquery_1.default("[data-form-step]").click(function (e) {
+            var form = jquery_1.default(this).parents("form");
+            var step_input = jquery_1.default('<input type="text"/>');
+            step_input.attr("name", "step");
+            step_input.attr("value", jquery_1.default(this).data("form-step"));
+            form.append(step_input);
+            var stepName_input = jquery_1.default('<input type="text"/>');
+            stepName_input.attr("name", "stepName");
+            stepName_input.attr("value", jquery_1.default(this).data("form-step-name"));
+            form.append(stepName_input);
+            form.submit();
+            e.preventDefault();
+        });
+    };
+    return Form;
+}());
+var form = new Form();
+exports.default = form;
+
+},{"jquery":5}],15:[function(require,module,exports){
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var jquery_1 = __importDefault(require("jquery"));
 var sameWidth_1 = __importDefault(require("./sameWidth"));
 var table_1 = __importDefault(require("./table"));
+var form_1 = __importDefault(require("./form"));
 var link_1 = __importDefault(require("./link"));
 var expenseCategory_1 = __importDefault(require("./expenseCategory"));
 var chart_1 = __importDefault(require("./chart"));
@@ -17758,11 +17792,12 @@ jquery_1.default(document).ready(function () {
     expenseCategory_1.default.init();
     chart_1.default.init();
     toggle_1.default.init();
+    form_1.default.init();
     window.jQuery = jquery_1.default;
     require("bootstrap-toggle");
 });
 
-},{"./chart":12,"./expenseCategory":13,"./link":15,"./sameWidth":16,"./table":17,"./toggle":18,"bootstrap-toggle":1,"jquery":5}],15:[function(require,module,exports){
+},{"./chart":12,"./expenseCategory":13,"./form":14,"./link":16,"./sameWidth":17,"./table":18,"./toggle":19,"bootstrap-toggle":1,"jquery":5}],16:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17798,7 +17833,7 @@ var Link = (function () {
 }());
 exports.default = new Link();
 
-},{"jquery":5,"superagent":7}],16:[function(require,module,exports){
+},{"jquery":5,"superagent":7}],17:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17823,7 +17858,7 @@ var SameWidth = (function () {
 }());
 exports.default = new SameWidth();
 
-},{"jquery":5}],17:[function(require,module,exports){
+},{"jquery":5}],18:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17862,7 +17897,7 @@ var Table = (function () {
 }());
 exports.default = new Table();
 
-},{"jquery":5}],18:[function(require,module,exports){
+},{"jquery":5}],19:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17896,4 +17931,4 @@ var Toggle = (function () {
 var toggle = new Toggle();
 exports.default = toggle;
 
-},{"jquery":5}]},{},[14]);
+},{"jquery":5}]},{},[15]);

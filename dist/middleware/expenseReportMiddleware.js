@@ -203,6 +203,9 @@ var ExpenseReportMiddleware = (function () {
                                 daysIn = Math.floor(diff / oneDay);
                             }
                         }
+                        else {
+                            daysIn = new Date().getDate();
+                        }
                         return [4, ExpenseCategoryModel_1.default.aggregate([
                                 {
                                     $match: {

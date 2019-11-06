@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var PeopleValidator = (function () {
     function PeopleValidator(data) {
         this.data = data;
+        this.data.sexe = this.data.sexe == "on";
         this.errors = {};
     }
     PeopleValidator.prototype.validNew = function () {

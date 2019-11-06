@@ -21,9 +21,14 @@ form(method="post")
         .col-sm-6
             .form-group
                 label(for="from")=t("people.model.from")
-                select#from.form-control(name="from")
-                    for country in countries
-                        option(value=country._id selected=country._id.equals(people.from._id))=country.name
+                .input-group
+                    select#from.form-control(name="from")
+                        for country in countries
+                            option(value=country._id selected=country._id.equals(people.from._id||people.from))=country.name
+                    .input-group-append
+                    
+                        a.btn.input-group-text(href="#" title=t("country.btn.new") data-form-step="/country/new" data-form-step-name="country")
+                            i.fa.fa-plus
         
         .col-sm-6
             .form-group

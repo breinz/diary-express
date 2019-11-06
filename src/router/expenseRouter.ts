@@ -14,6 +14,11 @@ const router = Router();
 
 router.use(userMiddleware.adminShield);
 
+router.use((req, res, next) => {
+    res.locals.menuItem = "expense";
+    next();
+});
+
 router.use("/category", expenseCategoryRouter);
 
 router.get("/",

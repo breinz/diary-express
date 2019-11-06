@@ -149,6 +149,9 @@ class ExpenseReportMiddleware {
                 let oneDay = 1000 * 60 * 60 * 24;
                 daysIn = Math.floor(diff / oneDay);
             }
+        } else {
+            // No year or month = Current month 
+            daysIn = new Date().getDate();
         }
 
         const report = await ExpenseCategory.aggregate([

@@ -8,12 +8,12 @@ mixin line()
             if first>cell++ || last<n
                 td.no-hover &nbsp;
             else
-                td(data-link="/" data-show-hover=`cell${n}-content` style="width:5%;border:1px solid #DEE2E6")
+                td(data-link="/" data-show-hover=`cell${n}-content` style=`width:5%;border:1px solid #DEE2E6;background-color:${d>5?"#F7F7F7":"transparent"}`)
                     +cell(n++)
 
 mixin cell(day)
     div(style="min-height:80px")
-        a.btn.text-success.btn-sm(href="/journal/new" style="float:right" title=t("journal.button.new") class=`cell${day}-content`)
+        a.btn.btn-sm.btn-outline-success(href="/journal/new" style="float:right" title=t("journal.button.new") class=`cell${day}-content`)
             i.fa.fa-plus
         b=day
         br
@@ -23,12 +23,17 @@ mixin cell(day)
                     i.fa.fa-fw.fa-euro-sign
                     small
                         b=expense.amount.toFixed(2)
+
         for people in journalData.people
             if people.date.getDate() == day
                 .text-success
                     i.fa.fa-fw.fa-user
                     small
-                        b=people.firstName[0]
+                        b
+                            =people.firstName[0]
+                            if people.firstName.length-1
+                                |&nbsp;+&nbsp;
+                                =people.firstName.length-1
 
         if Math.random()>.9
             .text-primary

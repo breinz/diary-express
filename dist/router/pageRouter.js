@@ -10,6 +10,10 @@ var RefererMiddleware_1 = __importDefault(require("../middleware/RefererMiddlewa
 var userMiddleware_1 = __importDefault(require("../middleware/userMiddleware"));
 var router = express_1.Router();
 router.use(userMiddleware_1.default.adminShield);
+router.use(function (req, res, next) {
+    res.locals.menuItem = "page";
+    next();
+});
 router.get("/", pageMiddleware_1.default.getPages, pageController_1.default.getIndex);
 router.get("/new", pageController_1.default.getNew);
 router.post("/new", pageMiddleware_1.default.validNew, pageController_1.default.postNew);

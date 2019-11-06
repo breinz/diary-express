@@ -54,7 +54,15 @@ var PeopleController = (function () {
         });
     };
     PeopleController.prototype.getNew = function (req, res, next) {
-        res.render("people/new");
+        var people = {};
+        if (req.cookies.step_country) {
+            Object.assign(people, req.cookies.step_country.data);
+            people.from = req.cookies.step_country.country;
+            res.clearCookie("step_country");
+        }
+        res.render("people/new", {
+            people: people
+        });
     };
     PeopleController.prototype.postNew = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {

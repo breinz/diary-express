@@ -9,6 +9,11 @@ const router = Router();
 
 router.use(userMiddleware.adminShield);
 
+router.use((req, res, next) => {
+    res.locals.menuItem = "page";
+    next();
+});
+
 router.get("/",
     pageMiddleware.getPages,
     pageController.getIndex

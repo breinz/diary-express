@@ -14,6 +14,10 @@ var expenseReportMiddleware_1 = __importDefault(require("../middleware/expenseRe
 var dateMiddleware_1 = __importDefault(require("../middleware/dateMiddleware"));
 var router = express_1.Router();
 router.use(userMiddleware_1.default.adminShield);
+router.use(function (req, res, next) {
+    res.locals.menuItem = "expense";
+    next();
+});
 router.use("/category", expenseCategoryRouter_1.default);
 router.get("/", dateMiddleware_1.default.getPeriod, expenseMiddleware_1.default.getExpenses, expenseReportMiddleware_1.default.getMonth, expenseController_1.default.getIndex);
 router.get("/new", expenseCategoryMiddleware_1.default.getCategories, RefererMiddleware_1.default.save, expenseController_1.default.getNew);

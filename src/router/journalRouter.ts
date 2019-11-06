@@ -9,6 +9,11 @@ const router = Router();
 
 router.use(userMiddleware.adminShield);
 
+router.use((req, res, next) => {
+    res.locals.menuItem = "journal";
+    next();
+});
+
 router.get("/",
     dateMiddleware.getPeriod,
     journalMiddleware.getElements,

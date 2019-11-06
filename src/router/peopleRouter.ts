@@ -6,10 +6,16 @@ import countryMiddleware from "../middleware/countryMiddleware";
 import refererMiddleware from "../middleware/RefererMiddleware";
 import userMiddleware from "../middleware/userMiddleware";
 import peopleNoteRouter from "./peopleNoteRouter";
+import stepMiddleware from "../middleware/stepMiddleware";
 
 const router = Router();
 
 router.use(userMiddleware.adminShield);
+
+router.use((req, res, next) => {
+    res.locals.menuItem = "people";
+    next();
+});
 
 router.use("/:id/note",
     peopleMiddleware.getPeople,
@@ -27,6 +33,7 @@ router.get("/new",
 );
 
 router.post("/new",
+    stepMiddleware.saveStep,
     peopleMiddleware.validNew,
     peopleController.postNew
 );

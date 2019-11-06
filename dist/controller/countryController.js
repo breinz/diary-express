@@ -53,13 +53,22 @@ var CountryController = (function () {
     };
     CountryController.prototype.postNew = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, CountryModel_1.default.create(req.body)];
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = req;
+                        return [4, CountryModel_1.default.create(req.body)];
                     case 1:
-                        _a.sent();
-                        req.flash("success", req.t("country.flash.created"));
-                        res.redirect("/country");
+                        _a.country = (_b.sent());
+                        if (req.cookies.step_country) {
+                            res.cookie("step_country", Object.assign(req.cookies.step_country, { country: req.country }));
+                            res.redirect(req.cookies.step_country.referer);
+                        }
+                        else {
+                            req.flash("success", req.t("country.flash.created"));
+                            res.redirect("/country");
+                        }
                         return [2];
                 }
             });

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Country from "../model/CountryModel";
+import Country, { CountryModel } from "../model/CountryModel";
 
 class CountryController {
     public getIndex(req: Request, res: Response, next: NextFunction) {
@@ -13,11 +13,17 @@ class CountryController {
     }
 
     public async postNew(req: Request, res: Response, next: NextFunction) {
-        await Country.create(req.body);
+        req.country = await Country.create(req.body) as CountryModel;
 
-        req.flash("success", req.t("country.flash.created"));
+        if (req.cookies.step_country) {
+            res.cookie("step_country", Object.assign(req.cookies.step_country, { country: req.country }));
+            res.redirect(req.cookies.step_country.referer);
+        } else {
 
-        res.redirect("/country");
+            req.flash("success", req.t("country.flash.created"));
+
+            res.redirect("/country");
+        }
     }
 
     public getEdit(req: Request, res: Response, next: NextFunction) {

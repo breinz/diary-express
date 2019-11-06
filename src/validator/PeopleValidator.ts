@@ -8,6 +8,8 @@ export default class PeopleValidator {
 
     constructor(data: PeopleModel) {
         this.data = data;
+
+        this.data.sexe = <any>this.data.sexe == "on";
         this.errors = {};
     }
 

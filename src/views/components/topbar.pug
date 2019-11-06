@@ -9,22 +9,32 @@
                     if current_user
                         if current_user.admin
                             li
-                                a(href="/journal") Journal
+                                a(href="/journal" class=menuItem=="journal"?false:"text-muted") 
+                                    i.fa.fa-fw.fa-sticky-note
+                                    |&nbsp;Journal
                             li
-                                a(href="/expense") Expenses
+                                a(href="/expense" class=menuItem=="expense"?false:"text-muted") 
+                                    i.fa.fa-fw.fa-euro-sign
+                                    |&nbsp;Expenses
                             li
-                                a(href="/people") People
+                                a(href="/people" class=menuItem=="people"?false:"text-muted") 
+                                    i.fa.fa-fw.fa-user
+                                    |&nbsp;People
                             li
-                                a(href="#") Places
+                                a(href="#" class=menuItem=="place"?false:"text-muted") 
+                                    i.fa.fa-fw.fa-globe-americas
+                                    |&nbsp;Places
                             li
-                                a(href="/page") Pages
+                                a(href="/page" class=menuItem=="page"?false:"text-muted") 
+                                    i.fa.fa-fw.fa-file-alt
+                                    |&nbsp;Pages
             .col-sm-4.text-right
                 ul.inline.margin
                     if current_user
                         li
-                            a.btn(href="/logout")
+                            a.btn.text-muted(href="/logout")
                                 i.fa.fa-sign-out-alt
                     else
                         li
-                            a.btn(href="/login")
+                            a.btn.text-muted(href="/login")
                                 i.fa.fa-sign-in-alt

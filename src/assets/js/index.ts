@@ -2,6 +2,7 @@ import $ from "jquery";
 
 import sameWidth from "./sameWidth";
 import table from "./table";
+import form from "./form";
 import link from "./link";
 import expenseCategory from "./expenseCategory";
 import chart from "./chart";
@@ -15,6 +16,7 @@ $(document).ready(function () {
     expenseCategory.init();
     chart.init();
     toggle.init();
+    form.init();
 
     (<any>window).jQuery = $;
     require("bootstrap-toggle");

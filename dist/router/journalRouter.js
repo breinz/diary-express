@@ -10,6 +10,10 @@ var journalMiddleware_1 = __importDefault(require("../middleware/journalMiddlewa
 var dateMiddleware_1 = __importDefault(require("../middleware/dateMiddleware"));
 var router = express_1.Router();
 router.use(userMiddleware_1.default.adminShield);
+router.use(function (req, res, next) {
+    res.locals.menuItem = "journal";
+    next();
+});
 router.get("/", dateMiddleware_1.default.getPeriod, journalMiddleware_1.default.getElements, journalController_1.default.getIndex);
 router.get("/:year(\\d{4})-:month(\\d{1,2})/", journalMiddleware_1.default.validMonth, dateMiddleware_1.default.getPeriod, journalMiddleware_1.default.getElements, journalController_1.default.getIndex);
 exports.default = router;

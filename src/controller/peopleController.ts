@@ -15,7 +15,17 @@ class PeopleController {
     }
 
     public getNew(req: Request, res: Response, next: NextFunction) {
-        res.render("people/new");
+        let people: any = {};
+
+        if (req.cookies.step_country) {
+            Object.assign(people, req.cookies.step_country.data);
+            people.from = req.cookies.step_country.country;
+            res.clearCookie("step_country");
+        }
+
+        res.render("people/new", {
+            people: people
+        });
     }
 
     public async postNew(req: Request, res: Response, next: NextFunction) {
