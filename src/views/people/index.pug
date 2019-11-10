@@ -9,8 +9,9 @@ mixin line(people)
                 =people.from.name
         td(data-link=`/people/${people._id}`)
             =people.metIn
-            |&nbsp;
-            =util.todayOrDate(people.met_at)
+            small.text-muted
+                |&nbsp;
+                =util.todayOrDate(people.met_at)
         td.actions
             a.btn.btn-outline-secondary.btn-sm(href=`/people/${people._id}/note/new` title=t('people.note.btn.new') style="line-height:1")
                 i.fa.fa-sticky-note.fa-fw

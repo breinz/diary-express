@@ -1,28 +1,27 @@
 -category = category || {}
--category.report = category.report || {}
 -errors = errors || {}
 
-+alert-error("expenseCategory")
++alert-error("eventCategory")
 
 form(method="post")
 
     .form-group
-        label(for="name")=t("expenseCategory.model.name")
+        label(for="name")=t("eventCategory.model.name")
         input.form-control#name(type="text", name="name" value=category.name autofocus class=errors.name?"is-invalid":false)
-        +form-error(t(`expenseCategory.error.name.${errors.name}`), errors.name)
+        +form-error(t(`eventCategory.error.name.${errors.name}`), errors.name)
     
     .form-group
-        label(for="icon")=t("expenseCategory.model.icon")
+        label(for="icon")=t("eventCategory.model.icon")
         input#icon.form-control(type="text", name="icon" value=category.icon class=errors.icon?"is-invalid":false)
-        +form-text(t("expenseCategory.instruction.icon"), t(`expenseCategory.error.icon.${errors.icon}`), errors.icon)
+        +form-text(t("eventCategory.instruction.icon"), t(`eventCategory.error.icon.${errors.icon}`), errors.icon)
     
     .form-group
-        label(for="color")=t("expenseCategory.model.color")
+        label(for="color")=t("eventCategory.model.color")
         input#color.form-control(type="text", name="color" value=category.color class=errors.color?"is-invalid":false)
-        +form-text(t("expenseCategory.instruction.color"), t(`expenseCategory.error.color.${errors.color}`), errors.color)
+        +form-text(t("eventCategory.instruction.color"), t(`eventCategory.error.color.${errors.color}`), errors.color)
 
-    .form-group
-        label(for="report")=t("expenseCategory.model.report")
+    //.form-group
+        label(for="report")=t("eventCategory.model.report")
         br
         input#report(type="checkbox" data-toggle="toggle" data-onstyle="info" data-toggle-reveal=".report-data" name="report.active" checked=category.report.active)
         span.report-data
@@ -35,6 +34,6 @@ form(method="post")
                     option(value=period selected=category.report.period==period)=period
             |&nbsp;=&nbsp;
             input.form-control(type="text" style="width:100px;display:inline" placeholder="per" name="report.per" value=category.report.per)
-        +form-text("For example <b>3</b> times a <b>day</b> is a <b>meal</b> (for food), 1 time a day is a night (for accomodation)", t(`expenseCategory.error.report.${errors.report}`), errors.report)(class="report-data")
+        +form-text("For example <b>3</b> times a <b>day</b> is a <b>meal</b> (for food), 1 time a day is a night (for accomodation)", t(`eventCategory.error.report.${errors.report}`), errors.report)(class="report-data")
     
     input.btn.btn-success(type="submit", value=t("action.save"))

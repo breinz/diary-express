@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ExpenseModel_1 = __importDefault(require("../model/ExpenseModel"));
 var ExpenseCategoryModel_1 = __importDefault(require("../model/ExpenseCategoryModel"));
+var config_1 = __importDefault(require("../config"));
 var ExpenseReportMiddleware = (function () {
     function ExpenseReportMiddleware() {
     }
@@ -206,6 +207,7 @@ var ExpenseReportMiddleware = (function () {
                         else {
                             daysIn = new Date().getDate();
                         }
+                        if (!(config_1.default.MONGO_VERSION >= 4)) return [3, 2];
                         return [4, ExpenseCategoryModel_1.default.aggregate([
                                 {
                                     $match: {
@@ -265,7 +267,74 @@ var ExpenseReportMiddleware = (function () {
                             ])];
                     case 1:
                         report = _a.sent();
-                        return [2, report];
+                        return [3, 4];
+                    case 2: return [4, ExpenseCategoryModel_1.default.aggregate([{
+                                $match: {
+                                    "report.active": true,
+                                    user: this.req.current_user._id
+                                }
+                            }, {
+                                $lookup: {
+                                    from: 'expenses',
+                                    localField: '_id',
+                                    foreignField: 'category',
+                                    as: 'expenses'
+                                }
+                            }, {
+                                $project: {
+                                    _id: "$_id",
+                                    expenses: {
+                                        $filter: {
+                                            input: "$expenses",
+                                            as: "expense",
+                                            cond: {
+                                                $and: [
+                                                    {
+                                                        $gte: [
+                                                            "$$expense.date",
+                                                            this.req.bop
+                                                        ]
+                                                    },
+                                                    {
+                                                        $lte: [
+                                                            "$$expense.date",
+                                                            this.req.eop
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    icon: "$icon",
+                                    color: "$color",
+                                    report: "$report"
+                                }
+                            }, {
+                                $addFields: {
+                                    "report.value": {
+                                        $divide: [{
+                                                $sum: "$expenses.amount"
+                                            }, {
+                                                $multiply: [
+                                                    "$report.times",
+                                                    {
+                                                        $cond: {
+                                                            if: {
+                                                                $eq: ["$report.period", "day"]
+                                                            },
+                                                            then: daysIn,
+                                                            else: 20
+                                                        }
+                                                    }
+                                                ]
+                                            }]
+                                    }
+                                }
+                            }])];
+                    case 3:
+                        report = _a.sent();
+                        _a.label = 4;
+                    case 4: return [2, report];
                 }
             });
         });

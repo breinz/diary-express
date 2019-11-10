@@ -3,6 +3,7 @@ import Expense from "../model/ExpenseModel";
 import ExpenseCategory, { ExpenseCategoryModel } from "../model/ExpenseCategoryModel";
 import { UserModel } from "../model/UserModel";
 import expenseMiddleware from "./expenseMiddleware";
+import config from "../config";
 
 class ExpenseReportMiddleware {
 
@@ -154,39 +155,109 @@ class ExpenseReportMiddleware {
             daysIn = new Date().getDate();
         }
 
-        const report = await ExpenseCategory.aggregate([
-            {
+        let report: any[]
+
+        if (config.MONGO_VERSION >= 4) {
+            report = await ExpenseCategory.aggregate([
+                {
+                    $match: {
+                        "report.active": true,
+                        "user": this.req.current_user._id
+                    }
+                }, {
+                    $lookup: {
+                        from: "expenses",
+                        let: {
+                            expense: "$_id",
+                            date: "$date"
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: ["$category", "$$expense"]
+                                            },
+                                            {
+                                                $gte: ["$date", this.req.bop]
+                                            },
+                                            {
+                                                $lte: ["$date", this.req.eop]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ],
+                        as: 'expenses'
+                    }
+                }, {
+                    $addFields: {
+                        "report.value": {
+                            $divide: [{
+                                $sum: "$expenses.amount"
+                            }, {
+                                $multiply: [
+                                    "$report.times",
+                                    {
+                                        $cond: {
+                                            if: {
+                                                $eq: ["$report.period", "day"]
+                                            },
+                                            then: daysIn,
+                                            else: 20 // TODO: Report not by day
+                                        }
+                                    }
+
+                                ]
+                            }]
+                        }
+                    }
+                }
+            ]);
+        } else {
+            report = await ExpenseCategory.aggregate([{
                 $match: {
                     "report.active": true,
-                    "user": this.req.current_user._id
+                    user: this.req.current_user._id
                 }
             }, {
                 $lookup: {
-                    from: "expenses",
-                    let: {
-                        expense: "$_id",
-                        date: "$date"
-                    },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: {
-                                    $and: [
-                                        {
-                                            $eq: ["$category", "$$expense"]
-                                        },
-                                        {
-                                            $gte: ["$date", this.req.bop]
-                                        },
-                                        {
-                                            $lte: ["$date", this.req.eop]
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    ],
+                    from: 'expenses',
+                    localField: '_id',
+                    foreignField: 'category',
                     as: 'expenses'
+                }
+            }, {
+                $project: {
+                    _id: "$_id",
+                    expenses: {
+                        $filter: {
+                            input: "$expenses",
+                            as: "expense",
+                            cond: {
+                                $and: [
+                                    {
+                                        $gte: [
+                                            "$$expense.date",
+                                            this.req.bop
+                                        ]
+                                    },
+                                    {
+                                        $lte: [
+                                            "$$expense.date",
+                                            this.req.eop
+                                        ]
+                                    }
+                                ]
+                            }
+
+                        }
+                    },
+                    icon: "$icon",
+                    color: "$color",
+                    report: "$report"
                 }
             }, {
                 $addFields: {
@@ -202,7 +273,7 @@ class ExpenseReportMiddleware {
                                             $eq: ["$report.period", "day"]
                                         },
                                         then: daysIn,
-                                        else: 20 // TODO: Report not by day
+                                        else: 20
                                     }
                                 }
 
@@ -210,8 +281,8 @@ class ExpenseReportMiddleware {
                         }]
                     }
                 }
-            }
-        ]);
+            }]);
+        }
 
         return report;
     }

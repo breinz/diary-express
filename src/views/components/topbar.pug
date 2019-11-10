@@ -10,7 +10,7 @@
                         if current_user.admin
                             li
                                 a(href="/journal" class=menuItem=="journal"?false:"text-muted") 
-                                    i.fa.fa-fw.fa-sticky-note
+                                    i.fa.fa-fw(class=menuItem=="journal"?"fa-book-open":"fa-book")
                                     |&nbsp;Journal
                             li
                                 a(href="/expense" class=menuItem=="expense"?false:"text-muted") 
@@ -24,6 +24,11 @@
                                 a(href="#" class=menuItem=="place"?false:"text-muted") 
                                     i.fa.fa-fw.fa-globe-americas
                                     |&nbsp;Places
+                            li
+                                a(href="/event" class=menuItem=="event"?false:"text-muted") 
+                                    i.fa.fa-fw.fa-calendar-alt
+                                    |&nbsp;
+                                    =t("event.menu.item")
                             li
                                 a(href="/page" class=menuItem=="page"?false:"text-muted") 
                                     i.fa.fa-fw.fa-file-alt

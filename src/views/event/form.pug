@@ -1,0 +1,40 @@
+-event = event || {}
+-errors = errors || {}
+
++alert-error("event")
+
+form(method="post")
+
+    .row
+            
+        .col-md-6
+            .form-group
+                label(for="date")=t("event.model.date")
+                input#date.form-control(type="date", name="date" value=(new Date(event.date||Date.now())).toISOString().substr(0,10))
+    .form-group
+        label(for="title")=t("event.model.title")
+        input#title.form-control(type="text", name="title" value=event.title class=errors.title?"is-invalid":false)
+        +form-error(t(`event.error.title.${errors.title}`), errors.title)
+
+    .form-group
+        label(for="description")=t("event.model.description")
+        input#description.form-control(type="text", name="description" value=event.description)
+    
+    .form-group
+        =t("event.model.category")
+        br
+        label.category-select(for=`category_none` data-color=t("eventCategory.none.color"))
+            .btn(data-sameWidth="c")
+                i.big.fa.fa-fw.fa-question
+                br
+                =t("eventCategory.none.name")
+            input(type="radio", name="category" value="null" id="category_none" checked=event.category==null)
+        for category in categories
+            label.category-select(for=`category_${category._id}` data-color=category.color)
+                .btn(data-sameWidth="c")
+                    i.big.fa.fa-fw(class=`fa-${category.icon}`)
+                    br
+                    =category.name
+                input(type="radio", name="category" value=category._id id=`category_${category._id}` checked=category._id.equals(event.category))
+    
+    input.btn.btn-success(type="submit", value=t("action.save"))

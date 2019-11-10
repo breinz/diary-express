@@ -1,0 +1,22 @@
+extends ../../layout/layout
+
+block content
+    .container
+        .row
+            .col
+                
+                if category.deleted
+                    +deleted-alert(`/event/category/${category._id}/remove`, `/event/category/${category._id}/recover`)
+
+                .alert.alert-hollow
+                    .h1-actions
+                        .btn-group
+                            if !category.deleted
+                                +edit_btn(`/event/category/${category._id}/edit`, t("action.edit"), "", "a")
+                                +delete_btn(`/event/category/${category._id}/delete`, t("action.delete"), "", "a")
+                    h1=category.name
+
+                    dl
+                        dt Icon
+                        dd.huge
+                            i.fa.fa-fw(class=`fa-${category.icon}`)

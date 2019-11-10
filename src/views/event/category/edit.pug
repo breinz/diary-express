@@ -1,0 +1,11 @@
+extends ../../layout/layout
+
+block content
+    -old = category || {}
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    h1=old.name
+
+                    include form

@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ExpenseModel_1 = __importDefault(require("../model/ExpenseModel"));
 var PeopleModel_1 = __importDefault(require("../model/PeopleModel"));
+var EventModel_1 = __importDefault(require("../model/EventModel"));
 var JournalMiddleware = (function () {
     function JournalMiddleware() {
     }
@@ -59,7 +60,7 @@ var JournalMiddleware = (function () {
     };
     JournalMiddleware.prototype.getElements = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var expenses, people;
+            var expenses, people, events;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, ExpenseModel_1.default.aggregate([
@@ -120,9 +121,44 @@ var JournalMiddleware = (function () {
                             ])];
                     case 2:
                         people = _a.sent();
+                        return [4, EventModel_1.default.aggregate([
+                                {
+                                    $match: {
+                                        user: req.current_user._id,
+                                        date: {
+                                            $gte: req.bop,
+                                            $lte: req.eop
+                                        }
+                                    }
+                                }, {
+                                    $group: {
+                                        _id: "$date",
+                                        categories: {
+                                            $push: "$category"
+                                        }
+                                    }
+                                }, {
+                                    $addFields: {
+                                        total: {
+                                            $size: "$categories"
+                                        },
+                                        date: "$_id"
+                                    }
+                                }, {
+                                    $lookup: {
+                                        from: 'eventcategories',
+                                        localField: 'categories',
+                                        foreignField: '_id',
+                                        as: 'categories'
+                                    }
+                                }
+                            ])];
+                    case 3:
+                        events = _a.sent();
                         res.locals.journalData = {
                             expenses: expenses,
-                            people: people
+                            people: people,
+                            events: events
                         };
                         res.locals.month = req.params.month;
                         res.locals.year = req.params.year;

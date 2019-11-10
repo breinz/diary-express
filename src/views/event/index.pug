@@ -1,0 +1,44 @@
+extends ../layout/layout
+
+mixin line(event)
+    tr
+        td(data-link=`/event/${event._id}`)
+            =util.todayOrDate(event.date)
+        td(data-link=`/event/${event._id}`)
+            i.fa.fa-fw(class=`fa-${event.category?event.category.icon:"question"}`)
+            |&nbsp;
+            =event.title
+        td.actions
+            .btn-group
+                +edit_btn(`/events/${event._id}/edit`, "", t("action.edit"))
+                +delete_btn(`/events/${event._id}/delete`, "", t("action.edit"))
+
+block content
+
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    .h1-actions
+                        .btn-group
+                            a.btn.btn-outline-success(href="/event/new" data-sameWidth="b")
+                                i.fa.fa-plus
+                                br
+                                =t("event.button.new")
+                            a.btn.btn-outline-secondary(href="/event/category" data-sameWidth="b")
+                                i.fa.fa-list
+                                br
+                                =t("event.button.categories.manage")
+                    h1=t("event.title.index")
+                    if events && events.length
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th Date
+                                    th Event
+                                    th
+                            for event in events
+                                +line(event)
+                    else
+                        +no-data
+                    

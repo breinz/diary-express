@@ -6,6 +6,9 @@ var JournalController = (function () {
     JournalController.prototype.getIndex = function (req, res, next) {
         res.render("journal/index");
     };
+    JournalController.prototype.getDay = function (req, res, next) {
+        res.render("journal/day");
+    };
     return JournalController;
 }());
 var journalController = new JournalController();

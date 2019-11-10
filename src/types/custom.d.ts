@@ -6,6 +6,8 @@ import Util from "../helper/Util";
 import { CountryModel } from "../model/CountryModel";
 import { PeopleModel } from "../model/PeopleModel";
 import { PageModel } from "../model/PageModel";
+import { EventCategoryModel } from "../model/EventCategoryModel";
+import { EventModel } from "../model/EventModel";
 
 declare global {
     namespace Express {
@@ -32,6 +34,12 @@ declare global {
 
             page: PageModel,
             pages: PageModel[],
+
+            event: EventModel,
+            events: EventModel[],
+
+            eventCategories: EventCategoryModel[],
+            eventCategory: EventCategoryModel,
 
             referer: string,
 

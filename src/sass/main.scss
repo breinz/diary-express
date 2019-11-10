@@ -104,6 +104,14 @@ ul {
   border-top: none;
 }
 
+td.isWeekEnd {
+  background-color: #f8f8f8;
+}
+
+td.isToday {
+  background-color: theme-color-level("info", -10); // #d1ecf1; //#EEE
+}
+
 .table-hover-cells > tbody > tr > th:hover:not(.no-hover),
 .table-hover-cells > tbody > tr > td:hover:not(.no-hover) {
   background-color: #f5f5f5;

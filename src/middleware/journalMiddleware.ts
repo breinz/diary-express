@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Expense from "../model/ExpenseModel";
 import People from "../model/PeopleModel";
+import Event from "../model/EventModel";
 
 class JournalMiddleware {
 
@@ -75,9 +76,43 @@ class JournalMiddleware {
             }
         ]);
 
+        const events = await Event.aggregate([
+            {
+                $match: {
+                    user: req.current_user._id,
+                    date: {
+                        $gte: req.bop,
+                        $lte: req.eop
+                    }
+                }
+            }, {
+                $group: {
+                    _id: "$date",
+                    categories: {
+                        $push: "$category"
+                    }
+                }
+            }, {
+                $addFields: {
+                    total: {
+                        $size: "$categories"
+                    },
+                    date: "$_id"
+                }
+            }, {
+                $lookup: {
+                    from: 'eventcategories',
+                    localField: 'categories',
+                    foreignField: '_id',
+                    as: 'categories'
+                }
+            }
+        ]);
+
         res.locals.journalData = {
             expenses,
-            people
+            people,
+            events
         }
 
         res.locals.month = req.params.month;

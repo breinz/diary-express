@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var eventCategoryController_1 = __importDefault(require("../controller/eventCategoryController"));
+var eventCategoryMiddleware_1 = __importDefault(require("../middleware/eventCategoryMiddleware"));
+var RefererMiddleware_1 = __importDefault(require("../middleware/RefererMiddleware"));
+var router = express_1.Router();
+router.get("/", eventCategoryMiddleware_1.default.getCategories, eventCategoryController_1.default.getIndex);
+router.get("/new", eventCategoryController_1.default.getNew);
+router.post("/new", eventCategoryMiddleware_1.default.validNew, eventCategoryController_1.default.postNew);
+router.get("/:id/edit", RefererMiddleware_1.default.save, eventCategoryMiddleware_1.default.getCategory, eventCategoryController_1.default.getEdit);
+router.post("/:id/edit", eventCategoryMiddleware_1.default.getCategory, eventCategoryMiddleware_1.default.validEdit, RefererMiddleware_1.default.retrieve, eventCategoryController_1.default.postEdit);
+router.delete("/:id/delete", eventCategoryMiddleware_1.default.getCategory, eventCategoryController_1.default.deleteDelete);
+router.get("/:id/recover", eventCategoryMiddleware_1.default.getCategory, eventCategoryController_1.default.getRecover);
+router.delete("/:id/remove", eventCategoryMiddleware_1.default.getCategory, eventCategoryController_1.default.deleteRemove);
+router.get("/:id", eventCategoryMiddleware_1.default.getCategory, eventCategoryController_1.default.getCategory);
+exports.default = router;

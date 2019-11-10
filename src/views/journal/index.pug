@@ -8,14 +8,24 @@ mixin line()
             if first>cell++ || last<n
                 td.no-hover &nbsp;
             else
-                td(data-link="/" data-show-hover=`cell${n}-content` style=`width:5%;border:1px solid #DEE2E6;background-color:${d>5?"#F7F7F7":"transparent"}`)
+                -isToday = today.getDate() == n && today.getFullYear() == year && today.getMonth() == month
+                -isWeekEnd = d > 5
+                -klass = ""
+                if isToday
+                    -klass = "isToday"
+                if isWeekEnd
+                    -klass += " isWeekEnd"
+                td(data-link=`/journal/${year}-${month+1}-${n}` data-show-hover=`cell${n}-content` class=klass style=`width:5%;border:1px solid #DEE2E6`)
                     +cell(n++)
 
 mixin cell(day)
-    div(style="min-height:80px")
+    div(style="min-height:80px;")
         a.btn.btn-sm.btn-outline-success(href="/journal/new" style="float:right" title=t("journal.button.new") class=`cell${day}-content`)
             i.fa.fa-plus
-        b=day
+        if today.getDate() == day && today.getFullYear() == year && today.getMonth() == month
+            b.text-info=day
+        else
+            b=day
         br
         for expense in journalData.expenses
             if expense.date.getDate() == day
@@ -34,6 +44,22 @@ mixin cell(day)
                             if people.firstName.length-1
                                 |&nbsp;+&nbsp;
                                 =people.firstName.length-1
+        
+        for event in journalData.events
+            if event.date.getDate() == day
+                .text-info
+                    for category in event.categories
+                        i.fa.fa-fw(class=`fa-${category.icon}`)
+                    if event.total - event.categories.length >= 1
+                        small
+                            b
+                                -minus = 0
+                                if event.categories.length == 0
+                                    i.fa.fa-fw(class=`fa-calendar-alt`)
+                                    -minus = 1
+                                if event.total - event.categories.length - minus > 0
+                                    |&nbsp;+&nbsp;
+                                    =event.total - event.categories.length - minus
 
         if Math.random()>.9
             .text-primary
@@ -61,6 +87,8 @@ block content
     
     -n = 1 // cursor day
     -cell = 0 // cursor cell
+
+    -today = new Date()
 
     .container
         .row

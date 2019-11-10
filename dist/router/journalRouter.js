@@ -16,4 +16,5 @@ router.use(function (req, res, next) {
 });
 router.get("/", dateMiddleware_1.default.getPeriod, journalMiddleware_1.default.getElements, journalController_1.default.getIndex);
 router.get("/:year(\\d{4})-:month(\\d{1,2})/", journalMiddleware_1.default.validMonth, dateMiddleware_1.default.getPeriod, journalMiddleware_1.default.getElements, journalController_1.default.getIndex);
+router.get("/:year(\\d{4})-:month(\\d{1,2})-:day(\\d{1,2})/", journalController_1.default.getDay);
 exports.default = router;

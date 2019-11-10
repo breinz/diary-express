@@ -11,7 +11,6 @@ import dateMiddleware from "../middleware/dateMiddleware";
 
 const router = Router();
 
-
 router.use(userMiddleware.adminShield);
 
 router.use((req, res, next) => {

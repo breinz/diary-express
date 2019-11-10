@@ -10,6 +10,7 @@ import countryRouter from "./countryRouter";
 import pageRouter from "./pageRouter";
 import adminRouter from "./adminRouter";
 import journalRouter from "./journalRouter";
+import eventRouter from "./eventRouter";
 
 const router = Router();
 
@@ -27,5 +28,6 @@ router.use("/people", peopleRouter);
 router.use("/country", countryRouter);
 router.use("/admin", adminRouter);
 router.use("/journal", journalRouter);
+router.use("/event", eventRouter);
 
 export default router;
