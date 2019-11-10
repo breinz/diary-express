@@ -255,11 +255,38 @@ class ExpenseReportMiddleware {
 
                         }
                     },
-                    icon: "$icon",
-                    color: "$color",
+                    icon: 1,
+                    color: 1,
                     report: "$report"
                 }
             }, {
+                $project: {
+                    icon: 1, color: 1,
+                    report: {
+                        per: 1,
+                        value: {
+                            $divide: [{
+                                $sum: "$expenses.amount"
+                            }, {
+                                $multiply: [
+                                    "$report.times",
+                                    {
+                                        $cond: {
+                                            if: {
+                                                $eq: ["$report.period", "day"]
+                                            },
+                                            then: daysIn,
+                                            else: 20
+                                        }
+                                    }
+
+                                ]
+                            }]
+                        }
+                    }
+                }
+            }    /*,
+            {
                 $addFields: {
                     "report.value": {
                         $divide: [{
@@ -281,9 +308,9 @@ class ExpenseReportMiddleware {
                         }]
                     }
                 }
-            }]);
+            }*/]);
         }
-
+        console.log(JSON.stringify(report));
         return report;
     }
 
