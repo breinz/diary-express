@@ -90,7 +90,8 @@ var JournalMiddleware = (function () {
                                     }
                                 }
                             }, {
-                                $addFields: {
+                                $project: {
+                                    amount: 1,
                                     date: "$_id"
                                 }
                             }
@@ -114,7 +115,8 @@ var JournalMiddleware = (function () {
                                         }
                                     }
                                 }, {
-                                    $addFields: {
+                                    $project: {
+                                        firstName: 1,
                                         date: "$_id"
                                     }
                                 }
@@ -138,13 +140,15 @@ var JournalMiddleware = (function () {
                                         }
                                     }
                                 }, {
-                                    $addFields: {
+                                    $project: {
+                                        categories: 1,
                                         total: {
                                             $size: "$categories"
                                         },
                                         date: "$_id"
                                     }
-                                }, {
+                                },
+                                {
                                     $lookup: {
                                         from: 'eventcategories',
                                         localField: 'categories',
@@ -155,6 +159,7 @@ var JournalMiddleware = (function () {
                             ])];
                     case 3:
                         events = _a.sent();
+                        console.log(JSON.stringify(events));
                         res.locals.journalData = {
                             expenses: expenses,
                             people: people,

@@ -268,7 +268,8 @@ var ExpenseReportMiddleware = (function () {
                     case 1:
                         report = _a.sent();
                         return [3, 4];
-                    case 2: return [4, ExpenseCategoryModel_1.default.aggregate([{
+                    case 2: return [4, ExpenseCategoryModel_1.default.aggregate([
+                            {
                                 $match: {
                                     "report.active": true,
                                     user: this.req.current_user._id
@@ -339,9 +340,7 @@ var ExpenseReportMiddleware = (function () {
                     case 3:
                         report = _a.sent();
                         _a.label = 4;
-                    case 4:
-                        console.log(JSON.stringify(report));
-                        return [2, report];
+                    case 4: return [2, report];
                 }
             });
         });

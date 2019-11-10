@@ -217,100 +217,79 @@ class ExpenseReportMiddleware {
                 }
             ]);
         } else {
-            report = await ExpenseCategory.aggregate([{
-                $match: {
-                    "report.active": true,
-                    user: this.req.current_user._id
-                }
-            }, {
-                $lookup: {
-                    from: 'expenses',
-                    localField: '_id',
-                    foreignField: 'category',
-                    as: 'expenses'
-                }
-            }, {
-                $project: {
-                    _id: "$_id",
-                    expenses: {
-                        $filter: {
-                            input: "$expenses",
-                            as: "expense",
-                            cond: {
-                                $and: [
-                                    {
-                                        $gte: [
-                                            "$$expense.date",
-                                            this.req.bop
-                                        ]
-                                    },
-                                    {
-                                        $lte: [
-                                            "$$expense.date",
-                                            this.req.eop
-                                        ]
-                                    }
-                                ]
-                            }
-
-                        }
-                    },
-                    icon: 1,
-                    color: 1,
-                    report: "$report"
-                }
-            }, {
-                $project: {
-                    icon: 1, color: 1,
-                    report: {
-                        per: 1,
-                        value: {
-                            $divide: [{
-                                $sum: "$expenses.amount"
-                            }, {
-                                $multiply: [
-                                    "$report.times",
-                                    {
-                                        $cond: {
-                                            if: {
-                                                $eq: ["$report.period", "day"]
-                                            },
-                                            then: daysIn,
-                                            else: 20
-                                        }
-                                    }
-
-                                ]
-                            }]
-                        }
+            report = await ExpenseCategory.aggregate([
+                {
+                    $match: {
+                        "report.active": true,
+                        user: this.req.current_user._id
                     }
-                }
-            }    /*,
-            {
-                $addFields: {
-                    "report.value": {
-                        $divide: [{
-                            $sum: "$expenses.amount"
-                        }, {
-                            $multiply: [
-                                "$report.times",
-                                {
-                                    $cond: {
-                                        if: {
-                                            $eq: ["$report.period", "day"]
+                }, {
+                    $lookup: {
+                        from: 'expenses',
+                        localField: '_id',
+                        foreignField: 'category',
+                        as: 'expenses'
+                    }
+                }, {
+                    $project: {
+                        _id: "$_id",
+                        expenses: {
+                            $filter: {
+                                input: "$expenses",
+                                as: "expense",
+                                cond: {
+                                    $and: [
+                                        {
+                                            $gte: [
+                                                "$$expense.date",
+                                                this.req.bop
+                                            ]
                                         },
-                                        then: daysIn,
-                                        else: 20
-                                    }
+                                        {
+                                            $lte: [
+                                                "$$expense.date",
+                                                this.req.eop
+                                            ]
+                                        }
+                                    ]
                                 }
 
-                            ]
-                        }]
+                            }
+                        },
+                        icon: 1,
+                        color: 1,
+                        report: "$report"
+                    }
+                }, {
+                    $project: {
+                        icon: 1, color: 1,
+                        report: {
+                            per: 1,
+                            value: {
+                                $divide: [{
+                                    $sum: "$expenses.amount"
+                                }, {
+                                    $multiply: [
+                                        "$report.times",
+                                        {
+                                            $cond: {
+                                                if: {
+                                                    $eq: ["$report.period", "day"]
+                                                },
+                                                then: daysIn,
+                                                else: 20
+                                            }
+                                        }
+
+                                    ]
+                                }]
+                            }
+                        }
                     }
                 }
-            }*/]);
+            ]);
         }
-        console.log(JSON.stringify(report));
+
         return report;
     }
 

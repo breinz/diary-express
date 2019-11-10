@@ -47,10 +47,17 @@ class JournalMiddleware {
                     }
                 }
             }, {
-                $addFields: {
+                $project: {
+                    amount: 1,
                     date: "$_id"
                 }
             }
+            // MONGO 4
+            /*{
+                $addFields: {
+                    date: "$_id"
+                }
+            }*/
         ]);
 
         let people = await People.aggregate([
@@ -70,10 +77,17 @@ class JournalMiddleware {
                     }
                 }
             }, {
-                $addFields: {
+                $project: {
+                    firstName: 1,
                     date: "$_id"
                 }
             }
+            // MONGO 4
+            /*,{
+                $addFields: {
+                    date: "$_id"
+                }
+            }*/
         ]);
 
         const events = await Event.aggregate([
@@ -93,13 +107,23 @@ class JournalMiddleware {
                     }
                 }
             }, {
+                $project: {
+                    categories: 1,
+                    total: {
+                        $size: "$categories"
+                    },
+                    date: "$_id"
+                }
+            }
+            // MONGO 4
+            /*{
                 $addFields: {
                     total: {
                         $size: "$categories"
                     },
                     date: "$_id"
                 }
-            }, {
+            }*/, {
                 $lookup: {
                     from: 'eventcategories',
                     localField: 'categories',
@@ -108,6 +132,8 @@ class JournalMiddleware {
                 }
             }
         ]);
+
+        console.log(JSON.stringify(events));
 
         res.locals.journalData = {
             expenses,
