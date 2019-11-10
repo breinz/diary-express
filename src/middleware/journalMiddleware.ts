@@ -106,14 +106,6 @@ class JournalMiddleware {
                         $push: "$category"
                     }
                 }
-            }, {
-                $project: {
-                    categories: 1,
-                    total: {
-                        $size: "$categories"
-                    },
-                    date: "$_id"
-                }
             }
             // MONGO 4
             /*{
@@ -124,11 +116,42 @@ class JournalMiddleware {
                     date: "$_id"
                 }
             }*/, {
+                $unwind: {
+                    path: "$categories",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
                 $lookup: {
                     from: 'eventcategories',
                     localField: 'categories',
                     foreignField: '_id',
                     as: 'categories'
+                }
+            }, {
+                $unwind: {
+                    path: "$categories",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    categories: {
+                        $push: "$categories"
+                    },
+                    total: {
+                        $sum: 1
+                    }
+                }
+            }, {
+                $project: {
+                    categories: 1,
+                    total: 1,
+                    /*total: {
+                        $size: "$categories"
+                    },*/
+                    date: "$_id"
                 }
             }
         ]);

@@ -139,13 +139,11 @@ var JournalMiddleware = (function () {
                                             $push: "$category"
                                         }
                                     }
-                                }, {
-                                    $project: {
-                                        categories: 1,
-                                        total: {
-                                            $size: "$categories"
-                                        },
-                                        date: "$_id"
+                                },
+                                {
+                                    $unwind: {
+                                        path: "$categories",
+                                        preserveNullAndEmptyArrays: true
                                     }
                                 },
                                 {
@@ -154,6 +152,28 @@ var JournalMiddleware = (function () {
                                         localField: 'categories',
                                         foreignField: '_id',
                                         as: 'categories'
+                                    }
+                                }, {
+                                    $unwind: {
+                                        path: "$categories",
+                                        preserveNullAndEmptyArrays: true
+                                    }
+                                },
+                                {
+                                    $group: {
+                                        _id: "$_id",
+                                        categories: {
+                                            $push: "$categories"
+                                        },
+                                        total: {
+                                            $sum: 1
+                                        }
+                                    }
+                                }, {
+                                    $project: {
+                                        categories: 1,
+                                        total: 1,
+                                        date: "$_id"
                                     }
                                 }
                             ])];
