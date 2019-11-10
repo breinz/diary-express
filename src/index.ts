@@ -64,6 +64,8 @@ app.use(async (req, res, next) => {
     req.util = util;
     res.locals.util = util;
 
+    res.locals.cache = false;
+
     next();
 });
 

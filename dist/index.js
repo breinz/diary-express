@@ -90,6 +90,7 @@ app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, fun
                 util = new Util_1.default(t);
                 req.util = util;
                 res.locals.util = util;
+                res.locals.cache = false;
                 next();
                 return [2];
         }
