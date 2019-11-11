@@ -11,13 +11,20 @@ export default class Util {
 
     public todayOrDate(date: Date) {
 
-        if (date.getTime() > new Date().setHours(0, 0, 0, 0)) {
+        let d = new Date();
+
+        if (date.getTime() > d.setHours(0, 0, 0, 0)) {
             return this.t.t("today");
             //return format("hh:mm", date);
-        }
+        } else {
+            d.setDate(d.getDate() - 1);
+            d.setHours(0, 0, 0, 0);
+            if (date.getTime() > d.getTime()) {
+                return this.t.t("yesterday");
+            }
 
-        return format("dd/MM/yy", date);
-    }
+            return format("dd/MM/yy", date);
+        }
 
     public dateToInput(date: Date | string): string {
         return new Date(date).toISOString().substr(0, 10);

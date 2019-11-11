@@ -9,10 +9,18 @@ var Util = (function () {
         this.t = t;
     }
     Util.prototype.todayOrDate = function (date) {
-        if (date.getTime() > new Date().setHours(0, 0, 0, 0)) {
+        var d = new Date();
+        if (date.getTime() > d.setHours(0, 0, 0, 0)) {
             return this.t.t("today");
         }
-        return date_format_1.default("dd/MM/yy", date);
+        else {
+            d.setDate(d.getDate() - 1);
+            d.setHours(0, 0, 0, 0);
+            if (date.getTime() > d.getTime()) {
+                return this.t.t("yesterday");
+            }
+            return date_format_1.default("dd/MM/yy", date);
+        }
     };
     Util.prototype.dateToInput = function (date) {
         return new Date(date).toISOString().substr(0, 10);
