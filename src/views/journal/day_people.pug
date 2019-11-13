@@ -1,0 +1,27 @@
+.alert.alert-hollow
+   
+    .alert-icon
+        +icon(null, "people", "#CCC6")
+    
+    table.table.table-hover.table-no-head.mb-0
+        for people in journalData.peoples
+            tr(data-show-hover=`people_show_hover${people._id}`)
+                td(data-link=`/people/${people._id}`)
+                    +female(people.sexe)
+                    //+icon(people.category, "people")
+                    b
+                        |&nbsp;
+                        =`${people.firstName} ${people.lastName}`
+                    br
+                    small.text-muted
+                        =people.note.length
+                        |&nbsp;
+                        =p("people.note.phrase")
+                        |&nbsp;
+                td.actions
+                    .btn-group(class=`people_show_hover${people._id}`)
+                        +edit_btn(`/people/${people._id}/edit`, null, t("action.edit"))
+                        +delete_btn(`/people/${people._id}/delete`, null, t("action.delete"))
+    
+    .text-right
+        +new_btn(`/people/new?met_at=${year}-${month}-${day}`, t("people.button.new"), "", "", true)

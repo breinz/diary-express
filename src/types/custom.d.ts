@@ -10,6 +10,7 @@ import { EventCategoryModel } from "../model/EventCategoryModel";
 import { EventModel } from "../model/EventModel";
 
 declare global {
+
     namespace Express {
         export interface Request {
             t: (phrase: string, ...args: (string | number)[]) => string,

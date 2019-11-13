@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var expenseCategoryMiddleware_1 = __importDefault(require("./expenseCategoryMiddleware"));
 var ExpenseValidator_1 = __importDefault(require("../validator/ExpenseValidator"));
 var ExpenseModel_1 = __importDefault(require("../model/ExpenseModel"));
+var FormHelper_1 = __importDefault(require("../helper/FormHelper"));
 var ExpenseMiddleware = (function () {
     function ExpenseMiddleware() {
     }
@@ -120,6 +121,12 @@ var ExpenseMiddleware = (function () {
                 }
             });
         });
+    };
+    ExpenseMiddleware.prototype.initForm = function (req, res, next) {
+        res.locals.expense = {};
+        var formHelper = new FormHelper_1.default(req.query, res.locals.expense);
+        formHelper.extractDate("date");
+        next();
     };
     ExpenseMiddleware.prototype.validNew = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {

@@ -1,7 +1,10 @@
 .alert.alert-hollow
-    h3=t("expense.title.journal")
+    //h3=t("expenses.title.journal")
+    
+    .alert-icon
+        +icon(null, "expense", "#CCC6")
 
-    table.table.table-hover
+    table.table.table-hover.table-no-head.mb-0
         for expense in journalData.expenses
             tr(data-show-hover=`expense_show_hover${expense._id}`)
                 td(data-link=`/expense/${expense._id}`)
@@ -18,3 +21,5 @@
                     .btn-group(class=`expense_show_hover${expense._id}`)
                         +edit_btn(`/expense/${expense._id}/edit`, null, t("action.edit"))
                         +delete_btn(`/expense/${expense._id}/delete`, null, t("action.delete"))
+    .text-right
+        +new_btn(`/expense/new?date=${year}-${month}-${day}`, t("expense.button.new"), "", "", true)

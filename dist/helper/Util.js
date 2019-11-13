@@ -65,6 +65,8 @@ var Util = (function () {
                 case "expenseCategory":
                 case "expense":
                     return "fa-euro-sign";
+                case "people":
+                    return "fa-user";
                 default:
                     return "fa-question";
             }

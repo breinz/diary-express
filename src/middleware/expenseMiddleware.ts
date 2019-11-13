@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import expenseCategoryMiddleware from "./expenseCategoryMiddleware";
 import ExpenseValidator from "../validator/ExpenseValidator";
 import Expense, { ExpenseModel } from "../model/ExpenseModel";
+import FormHelper from "../helper/FormHelper";
 
 class ExpenseMiddleware {
 
@@ -43,6 +44,16 @@ class ExpenseMiddleware {
         //expenseMiddleware.getPeriod(req);
 
         req.expenses = await Expense.find({ date: { $gte: req.bop, $lte: req.eop } }).sort("-date -amount").populate("category") as ExpenseModel[];
+
+        next();
+    }
+
+    public initForm(req: Request, res: Response, next: NextFunction) {
+        res.locals.expense = {};
+
+        const formHelper = new FormHelper(req.query, res.locals.expense);
+
+        formHelper.extractDate("date");
 
         next();
     }

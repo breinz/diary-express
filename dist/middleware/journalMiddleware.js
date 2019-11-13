@@ -130,7 +130,8 @@ var JournalMiddleware = (function () {
                                         date: {
                                             $gte: req.bop,
                                             $lte: req.eop
-                                        }
+                                        },
+                                        deleted: false
                                     }
                                 }, {
                                     $group: {
@@ -195,20 +196,19 @@ var JournalMiddleware = (function () {
     };
     JournalMiddleware.prototype.getDayElements = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var events, expenses;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, ExpenseModel_1.default.updateMany({}, { user: req.current_user })];
+            var _a, events, expenses, peoples;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4, Promise.all([
+                            EventModel_1.default.find({ user: req.current_user, date: req.bop, deleted: false }).populate("category"),
+                            ExpenseModel_1.default.find({ user: req.current_user, date: req.bop }).populate("category").sort("-amount"),
+                            PeopleModel_1.default.find({ user: req.current_user, met_at: req.bop, deleted: false }).populate("from")
+                        ])];
                     case 1:
-                        _a.sent();
-                        return [4, EventModel_1.default.find({ user: req.current_user, date: req.bop, deleted: false }).populate("category")];
-                    case 2:
-                        events = _a.sent();
-                        return [4, ExpenseModel_1.default.find({ user: req.current_user, date: req.bop }).populate("category").sort("-amount")];
-                    case 3:
-                        expenses = _a.sent();
+                        _a = _b.sent(), events = _a[0], expenses = _a[1], peoples = _a[2];
                         res.locals.journalData = {
                             expenses: expenses,
+                            peoples: peoples,
                             events: events
                         };
                         res.locals.month = req.params.month;

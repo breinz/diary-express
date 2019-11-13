@@ -12175,7 +12175,16 @@ body {
 .alert-hollow {
   border: 1px solid #ced4da;
   background-color: #fff;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14); }
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+  overflow: hidden; }
+
+.alert-icon {
+  position: absolute;
+  right: 5;
+  top: 5;
+  pointer-events: none;
+  font-size: 8rem;
+  font-weight: bold; }
 
 .h1-actions {
   float: right;
@@ -12200,6 +12209,9 @@ ul.margin li {
   width: 1px;
   white-space: nowrap;
   text-align: right; }
+
+.table-no-head tr:first-child td {
+  border-top: none; }
 
 .table th {
   border-top: none; }

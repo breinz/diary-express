@@ -28,3 +28,7 @@ block content
                                 dd.big
                                     =expense.amount.toFixed(2)
                                     |&nbsp;€
+                                if expense.description
+                                    dt=t("expense.model.description")
+                                    dd
+                                        small.text-muted=expense.description

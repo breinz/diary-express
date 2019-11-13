@@ -29,6 +29,7 @@ router.get("/",
 
 router.get("/new",
     expenseCategoryMiddleware.getCategories,
+    expenseMiddleware.initForm,
     refererMiddleware.save,
     expenseController.getNew
 );

@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var EventModel_1 = __importDefault(require("../model/EventModel"));
 var eventCategoryMiddleware_1 = __importDefault(require("./eventCategoryMiddleware"));
 var EventValidator_1 = __importDefault(require("../validator/EventValidator"));
+var FormHelper_1 = __importDefault(require("../helper/FormHelper"));
 var EventMiddleware = (function () {
     function EventMiddleware() {
     }
@@ -134,6 +135,12 @@ var EventMiddleware = (function () {
                 }
             });
         });
+    };
+    EventMiddleware.prototype.initForm = function (req, res, next) {
+        res.locals.event = {};
+        var formHelper = new FormHelper_1.default(req.query, res.locals.event);
+        formHelper.extractDate("date");
+        next();
     };
     return EventMiddleware;
 }());

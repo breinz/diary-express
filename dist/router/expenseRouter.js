@@ -20,7 +20,7 @@ router.use(function (req, res, next) {
 });
 router.use("/category", expenseCategoryRouter_1.default);
 router.get("/", dateMiddleware_1.default.getPeriod, expenseMiddleware_1.default.getExpenses, expenseReportMiddleware_1.default.getMonth, expenseController_1.default.getIndex);
-router.get("/new", expenseCategoryMiddleware_1.default.getCategories, RefererMiddleware_1.default.save, expenseController_1.default.getNew);
+router.get("/new", expenseCategoryMiddleware_1.default.getCategories, expenseMiddleware_1.default.initForm, RefererMiddleware_1.default.save, expenseController_1.default.getNew);
 router.post('/new', expenseMiddleware_1.default.validNew, RefererMiddleware_1.default.retrieve, expenseController_1.default.postNew);
 router.get("/:id/edit", expenseCategoryMiddleware_1.default.getCategories, expenseMiddleware_1.default.getExpense, RefererMiddleware_1.default.save, expenseController_1.default.getEdit);
 router.post("/:id/edit", expenseMiddleware_1.default.getExpense, expenseMiddleware_1.default.validEdit, RefererMiddleware_1.default.retrieve, expenseController_1.default.postEdit);

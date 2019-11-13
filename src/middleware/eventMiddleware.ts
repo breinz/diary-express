@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import Event, { EventModel } from "../model/EventModel";
 import eventCategoryMiddleware from "./eventCategoryMiddleware";
 import EventValidator from "../validator/EventValidator";
+import FormHelper from "../helper/FormHelper";
 
 class EventMiddleware {
 
@@ -54,6 +55,17 @@ class EventMiddleware {
                 errors: validator.errors
             });
         }
+
+        next();
+    }
+
+    public initForm(req: Request, res: Response, next: NextFunction) {
+
+        res.locals.event = {};
+
+        const formHelper = new FormHelper(req.query, res.locals.event);
+
+        formHelper.extractDate("date");
 
         next();
     }

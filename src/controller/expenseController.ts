@@ -23,6 +23,8 @@ class ExpenseController {
     }
 
     public async postNew(req: Request, res: Response, next: NextFunction) {
+        req.body.user = req.current_user;
+
         req.expense = await Expense.create(req.body) as ExpenseModel;
 
         req.flash("success", req.t("expense.flash.created"));

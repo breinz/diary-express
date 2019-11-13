@@ -18,7 +18,7 @@ router.use(function (req, res, next) {
 });
 router.use("/category", eventCategoryRouter_1.default);
 router.get("/", eventMiddleware_1.default.getEvents, eventController_1.default.getIndex);
-router.get("/new", RefererMiddleware_1.default.save, eventCategoryMiddleware_1.default.getForSelect, eventController_1.default.getNew);
+router.get("/new", RefererMiddleware_1.default.save, eventCategoryMiddleware_1.default.getForSelect, eventMiddleware_1.default.initForm, eventController_1.default.getNew);
 router.post("/new", eventMiddleware_1.default.validNew, RefererMiddleware_1.default.retrieve, eventController_1.default.postNew);
 router.get("/:id/edit", eventMiddleware_1.default.getEvent, eventCategoryMiddleware_1.default.getForSelect, RefererMiddleware_1.default.save, eventController_1.default.getEdit);
 router.post("/:id/edit", eventMiddleware_1.default.validEdit, eventMiddleware_1.default.getEvent, RefererMiddleware_1.default.retrieve, eventController_1.default.postEdit);

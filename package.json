@@ -31,6 +31,7 @@
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@types/bcrypt": "^3.0.0",
+    "@types/bootstrap": "^4.3.1",
     "@types/bootstrap-toggle": "^2.2.1",
     "@types/chartist": "^0.9.46",
     "@types/cookie-parser": "^1.4.2",

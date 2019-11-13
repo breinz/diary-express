@@ -8,9 +8,14 @@ class Table {
 
     public convertToLink() {
         $("[data-link]").each(function () {
-            const link = $(this).attr("data-link");
-            $(this).css("cursor", "pointer");
-            $(this).on("click", () => {
+            const el = $(this);
+            const link = el.attr("data-link");
+            el.css("cursor", "pointer");
+            el.on("click", (e) => {
+                if ($(e.target).is("a") || $(e.target).is("button")) {
+                    return;
+                }
+
                 window.location.href = link;
             })
         })

@@ -4,12 +4,20 @@ block content
     .container
         .row
             .col
-                h1 Day
+                h1=day+" "+t(`month.${month-1}.long`)+" "+year
                 .row
-                    if journalData.events.length
-                        .col-md-6
-                            include day_events
-                    if journalData.expenses.length
-                        .col-md-6
-                            include day_expenses
-                            
+                    if !journalData.events.length && !journalData.expenses.length && !journalData.peoples.length
+                        .col
+                            .alert.alert-hollow
+                                +no-data
+                    else 
+                        if journalData.events.length
+                            .col-md-6
+                                include day_events
+                        if journalData.expenses.length
+                            .col-md-6
+                                include day_expenses
+                        if journalData.peoples.length
+                            .col-md-6
+                                include day_people
+                                

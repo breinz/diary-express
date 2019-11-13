@@ -223,7 +223,10 @@
             "edited": "People has been edited",
             "deleted": "People has been deleted",
             "recovered": "People has been recovered",
-            "removed": "People has been removed"
+            "removed": "People has been removed",
+            "error": {
+                "not_found": "*Not_found"
+            }
         },
         "note": {
             "btn": {
@@ -240,6 +243,11 @@
                 "created": "Note has been created",
                 "deleted": "Note has been deleted",
                 "edited": "Note has been edited"
+            },
+            "phrase": {
+                "none": "notes",
+                "one": "note",
+                "many": "notes"
             }
         }
     },
@@ -303,7 +311,8 @@
     },
     "journal": {
         "button": {
-            "new": "New entry"
+            "new": "New entry",
+            "day": "View details"
         }
     },
     "event": {

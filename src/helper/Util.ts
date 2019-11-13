@@ -84,7 +84,7 @@ export default class Util {
      * Return a 2 digits string starting with 0 if the input is below 10
      * @param value The value
      */
-    private zero(value: number): string {
+    public zero(value: number): string {
         if (value <= 9) {
             return "0" + value;
         }
@@ -106,6 +106,8 @@ export default class Util {
                 case "expenseCategory":
                 case "expense":
                     return "fa-euro-sign";
+                case "people":
+                    return "fa-user";
                 default:
                     return "fa-question";
             }

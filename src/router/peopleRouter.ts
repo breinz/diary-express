@@ -29,6 +29,7 @@ router.get("/",
 
 router.get("/new",
     countryMiddleware.getForSelect,
+    peopleMiddleware.initForm,
     peopleController.getNew
 );
 

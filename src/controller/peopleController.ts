@@ -15,7 +15,7 @@ class PeopleController {
     }
 
     public getNew(req: Request, res: Response, next: NextFunction) {
-        let people: any = {};
+        let people: any = res.locals.people || {};
 
         if (req.cookies.step_country) {
             Object.assign(people, req.cookies.step_country.data);

@@ -25,7 +25,7 @@ mixin no-data
         i.fa.fa-cat.text-muted
         |&nbsp;No data to show
 
-mixin new_btn(url, label, title, sameW)
+mixin new_btn(url, label, title, sameW, inline)
     a.btn.btn-outline-success.btn-sm(
         href=url 
         title=title && title.length > 0 ? title : false
@@ -33,7 +33,10 @@ mixin new_btn(url, label, title, sameW)
         )&attributes(attributes)
         i.fa.fa-plus.fa-fw
         if label
-            br
+            if !inline
+                br
+            else
+                |&nbsp;
             =label
 
 mixin edit_btn(url, label, title, sameW)
@@ -75,5 +78,11 @@ mixin deleted-alert(permanent_url, recover_url)
                 i.fa.fa-undo
                 |&nbsp;Recover
 
-mixin icon(element, defaut)
-    i.fa(class=util.icon(element, defaut) style=`color:${util.icon_color(element, defaut)}`)
+mixin icon(element, defaut, color)
+    i.fa(class=util.icon(element, defaut) style=`color:${color || util.icon_color(element, defaut)}`)
+
+mixin female(isFemale)
+    if isFemale
+        i.text-danger.fa.fa-female
+    else
+        i.text-info.fa.fa-male

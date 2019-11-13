@@ -13,6 +13,10 @@ import T from "./T"
 import Util from "./helper/Util"
 import { watch } from "fs"
 
+Date.prototype.removeTimezoneOffset = function () {
+    this.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+}
+
 let app = express();
 
 // Body parser

@@ -19,7 +19,7 @@ router.use(function (req, res, next) {
 });
 router.use("/:id/note", peopleMiddleware_1.default.getPeople, peopleNoteRouter_1.default);
 router.get("/", peopleMiddleware_1.default.getPeoples, peopleController_1.default.getIndex);
-router.get("/new", countryMiddleware_1.default.getForSelect, peopleController_1.default.getNew);
+router.get("/new", countryMiddleware_1.default.getForSelect, peopleMiddleware_1.default.initForm, peopleController_1.default.getNew);
 router.post("/new", stepMiddleware_1.default.saveStep, peopleMiddleware_1.default.validNew, peopleController_1.default.postNew);
 router.get("/:id/edit", RefererMiddleware_1.default.save, peopleMiddleware_1.default.getPeople, countryMiddleware_1.default.getForSelect, peopleController_1.default.getEdit);
 router.post("/:id/edit", peopleMiddleware_1.default.getPeople, peopleMiddleware_1.default.validEdit, RefererMiddleware_1.default.retrieve, peopleController_1.default.postEdit);

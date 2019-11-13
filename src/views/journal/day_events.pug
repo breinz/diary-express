@@ -1,7 +1,10 @@
 .alert.alert-hollow
-    h3=t("event.title.journal")
+    //h3=t("event.title.journal")
 
-    table.table.table-hover
+    .alert-icon
+        +icon(null, "event", "#CCC6")
+
+    table.table.table-hover.table-no-head.mb-0
         for event in journalData.events
             tr(data-show-hover=`event_show_hover${event._id}`)
                 td(data-link=`/event/${event._id}`)
@@ -17,3 +20,6 @@
                     .btn-group(class=`event_show_hover${event._id}`)
                         +edit_btn(`/event/${event._id}/edit`, null, t("action.edit"))
                         +delete_btn(`/event/${event._id}/delete`, null, t("action.delete"))
+    
+    .text-right
+        +new_btn(`/event/new?date=${year}-${util.zero(month)}-${util.zero(day)}`, t("event.button.new"), "", "", true)

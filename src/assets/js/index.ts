@@ -1,5 +1,6 @@
 import $ from "jquery";
 
+//const bootstrap = 
 import sameWidth from "./sameWidth";
 import table from "./table";
 import form from "./form";
@@ -19,5 +20,7 @@ $(document).ready(function () {
     form.init();
 
     (<any>window).jQuery = $;
+
+    require("bootstrap");
     require("bootstrap-toggle");
 });

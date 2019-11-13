@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var PeopleValidator_1 = __importDefault(require("../validator/PeopleValidator"));
 var countryMiddleware_1 = __importDefault(require("./countryMiddleware"));
 var PeopleModel_1 = __importDefault(require("../model/PeopleModel"));
+var FormHelper_1 = __importDefault(require("../helper/FormHelper"));
 var PeopleMiddleware = (function () {
     function PeopleMiddleware() {
     }
@@ -91,6 +92,12 @@ var PeopleMiddleware = (function () {
                 }
             });
         });
+    };
+    PeopleMiddleware.prototype.initForm = function (req, res, next) {
+        res.locals.people = {};
+        var formHelper = new FormHelper_1.default(req.query, res.locals.people);
+        formHelper.extractDate("met_at");
+        next();
     };
     PeopleMiddleware.prototype.validNew = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {

@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import PeopleValidator from "../validator/PeopleValidator";
 import countryMiddleware from "./countryMiddleware";
 import People, { PeopleModel } from "../model/PeopleModel";
+import FormHelper from "../helper/FormHelper";
 
 class PeopleMiddleware {
 
@@ -27,6 +28,17 @@ class PeopleMiddleware {
         }
 
         res.locals.people = req.people;
+
+        next();
+
+    }
+
+    public initForm(req: Request, res: Response, next: NextFunction) {
+        res.locals.people = {};
+
+        const formHelper = new FormHelper(req.query, res.locals.people);
+
+        formHelper.extractDate("met_at");
 
         next();
     }

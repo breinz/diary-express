@@ -97,7 +97,8 @@ class JournalMiddleware {
                     date: {
                         $gte: req.bop,
                         $lte: req.eop
-                    }
+                    },
+                    deleted: false
                 }
             }, {
                 $group: {
@@ -170,16 +171,21 @@ class JournalMiddleware {
     }
 
     public async getDayElements(req: Request, res: Response, next: NextFunction) {
-        await Expense.updateMany({}, { user: req.current_user });
 
-        const events = await Event.find({ user: req.current_user, date: req.bop, deleted: false }).populate("category");
+        /*const events = 
 
-        const expenses = await Expense.find({ user: req.current_user, date: req.bop }).populate("category").sort("-amount");
+        const expenses = */
+
+        const [events, expenses, peoples] = await Promise.all([
+            Event.find({ user: req.current_user, date: req.bop, deleted: false }).populate("category"),
+            Expense.find({ user: req.current_user, date: req.bop }).populate("category").sort("-amount"),
+            People.find({ user: req.current_user, met_at: req.bop, deleted: false }).populate("from")
+        ]);
 
 
         res.locals.journalData = {
             expenses,
-            //people,
+            peoples,
             events
         }
 

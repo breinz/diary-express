@@ -20,7 +20,18 @@ mixin line()
 
 mixin cell(day)
     div(style="min-height:80px;")
-        a.btn.btn-sm.btn-outline-success(href="/journal/new" style="float:right" title=t("journal.button.new") class=`cell${day}-content`)
+        .dropdown(class=`cell${day}-content` style="float:right")
+            button.btn.btn-sm.btn-outline-success(type="button" id=`actions-${day}` data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                i.fa.fa-plus(style="pointer-events:none")
+            .dropdown-menu(aria-labelledby=`actions-${day}`)
+                -date = year+"-"+util.zero(month+1)+"-"+util.zero(day)
+                a.dropdown-item(href=`/journal/${date}`)=t("journal.button.day")
+                .dropdown-divider
+                a.dropdown-item(href=`/expense/new?date=${date}`)=t("expense.title.new")
+                a.dropdown-item(href=`/event/new?date=${date}`)=t("event.title.new")
+                a.dropdown-item(href=`/people/new?met_at=${date}`)=t("people.title.new")
+
+        //a.btn.btn-sm.btn-outline-success(href="/journal/new" style="float:right" title=t("journal.button.new") class=`cell${day}-content`)
             i.fa.fa-plus
         if today.getDate() == day && today.getFullYear() == year && today.getMonth() == month
             b.text-info=day

@@ -26,6 +26,7 @@ router.get("/",
 router.get("/new",
     refererMiddleware.save,
     eventCategoryMiddleware.getForSelect,
+    eventMiddleware.initForm,
     eventController.getNew
 );
 

@@ -18,10 +18,7 @@ block content
                                 .btn-group
                                     +edit_btn(`/people/${people._id}/edit`, t("action.edit"), "", "a")
                                     +delete_btn(`/people/${people._id}/delete`, t("action.delete"), "", "a")
-                        if people.sexe
-                            i.text-danger.fa.fa-female
-                        else
-                            i.text-info.fa.fa-male
+                        +female(people.sexe)
                         |&nbsp;
                         =people.firstName+" "+people.lastName
                     

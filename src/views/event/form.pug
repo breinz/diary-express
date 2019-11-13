@@ -10,7 +10,7 @@ form(method="post")
         .col-md-6
             .form-group
                 label(for="date")=t("event.model.date")
-                input#date.form-control(type="date", name="date" value=(new Date(event.date||Date.now())).toISOString().substr(0,10))
+                input#date.form-control(type="date" name="date" value=(new Date(event.date||Date.now())).toISOString().substr(0,10))
     .form-group
         label(for="title")=t("event.model.title")
         input#title.form-control(type="text", name="title" value=event.title class=errors.title?"is-invalid":false)

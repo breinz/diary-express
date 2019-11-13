@@ -52,6 +52,9 @@ var mainRouter_1 = __importDefault(require("./router/mainRouter"));
 var T_1 = __importDefault(require("./T"));
 var Util_1 = __importDefault(require("./helper/Util"));
 var fs_1 = require("fs");
+Date.prototype.removeTimezoneOffset = function () {
+    this.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+};
 var app = express_1.default();
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
