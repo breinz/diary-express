@@ -3,7 +3,7 @@ import path from "path"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import session from "express-session"
-let reload = require("reload");//import reload from "reload";
+let reload = require("reload");
 import http from "http";
 
 import config from "./config";
@@ -149,20 +149,23 @@ server.listen(config.PORT, "0.0.0.0", () => {
     console.log("Reload could not start", err);
 });*/
 
-reload(app).then((reloadReturned: any) => {
+if (config.NODE_ENV == "development") {
 
-    watch(__dirname + "/../src/views", { recursive: true }, (e, f) => {
-        reloadReturned.reload();
-    });
+    reload(app).then((reloadReturned: any) => {
 
-    watch(__dirname + "/assets", { recursive: true }, (e, f) => {
-        reloadReturned.reload();
-    });
+        watch(__dirname + "/../src/views", { recursive: true }, (e, f) => {
+            reloadReturned.reload();
+        });
 
-    watch(__dirname + "/lang", (e, f) => {
-        reloadReturned.reload();
+        watch(__dirname + "/assets", { recursive: true }, (e, f) => {
+            reloadReturned.reload();
+        });
+
+        watch(__dirname + "/lang", (e, f) => {
+            reloadReturned.reload();
+        });
     });
-})
+}
 
 
 export default app;

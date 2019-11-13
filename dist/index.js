@@ -106,15 +106,17 @@ var server = http_1.default.createServer(app);
 server.listen(config_1.default.PORT, "0.0.0.0", function () {
     console.log("App running");
 });
-reload(app).then(function (reloadReturned) {
-    fs_1.watch(__dirname + "/../src/views", { recursive: true }, function (e, f) {
-        reloadReturned.reload();
+if (config_1.default.NODE_ENV == "development") {
+    reload(app).then(function (reloadReturned) {
+        fs_1.watch(__dirname + "/../src/views", { recursive: true }, function (e, f) {
+            reloadReturned.reload();
+        });
+        fs_1.watch(__dirname + "/assets", { recursive: true }, function (e, f) {
+            reloadReturned.reload();
+        });
+        fs_1.watch(__dirname + "/lang", function (e, f) {
+            reloadReturned.reload();
+        });
     });
-    fs_1.watch(__dirname + "/assets", { recursive: true }, function (e, f) {
-        reloadReturned.reload();
-    });
-    fs_1.watch(__dirname + "/lang", function (e, f) {
-        reloadReturned.reload();
-    });
-});
+}
 exports.default = app;
