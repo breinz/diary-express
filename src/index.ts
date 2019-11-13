@@ -3,7 +3,6 @@ import path from "path"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import session from "express-session"
-let reload = require("reload");
 import http from "http";
 
 import config from "./config";
@@ -151,7 +150,7 @@ server.listen(config.PORT, "0.0.0.0", () => {
 
 if (config.NODE_ENV == "development") {
 
-    reload(app).then((reloadReturned: any) => {
+    require("reload")(app).then((reloadReturned: any) => {
 
         watch(__dirname + "/../src/views", { recursive: true }, (e, f) => {
             reloadReturned.reload();

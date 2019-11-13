@@ -44,7 +44,6 @@ var path_1 = __importDefault(require("path"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var express_session_1 = __importDefault(require("express-session"));
-var reload = require("reload");
 var http_1 = __importDefault(require("http"));
 var config_1 = __importDefault(require("./config"));
 var userMiddleware_1 = __importDefault(require("./middleware/userMiddleware"));
@@ -107,7 +106,7 @@ server.listen(config_1.default.PORT, "0.0.0.0", function () {
     console.log("App running");
 });
 if (config_1.default.NODE_ENV == "development") {
-    reload(app).then(function (reloadReturned) {
+    require("reload")(app).then(function (reloadReturned) {
         fs_1.watch(__dirname + "/../src/views", { recursive: true }, function (e, f) {
             reloadReturned.reload();
         });
