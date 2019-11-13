@@ -1,0 +1,18 @@
+extends ../layout/layout
+
+block content
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    
+                    h1=event.title
+
+                    dl
+                        dt Icon
+                        dd
+                            .huge
+                                i.fa(class=util.icon(event.category, "event"))
+                        
+                        dt Date
+                        dd=util.todayOrDate(event.date)

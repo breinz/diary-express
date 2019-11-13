@@ -1,0 +1,20 @@
+.alert.alert-hollow
+    h3=t("expense.title.journal")
+
+    table.table.table-hover
+        for expense in journalData.expenses
+            tr(data-show-hover=`expense_show_hover${expense._id}`)
+                td(data-link=`/expense/${expense._id}`)
+                    +icon(expense.category, "expense")
+                    b
+                        |&nbsp;
+                        =expense.amount.toFixed(2)
+                        |&nbsp;€
+                    br
+                    small.text-muted
+                        =expense.description
+                        |&nbsp;
+                td.actions
+                    .btn-group(class=`expense_show_hover${expense._id}`)
+                        +edit_btn(`/expense/${expense._id}/edit`, null, t("action.edit"))
+                        +delete_btn(`/expense/${expense._id}/delete`, null, t("action.delete"))

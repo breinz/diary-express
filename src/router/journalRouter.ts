@@ -28,6 +28,8 @@ router.get("/:year(\\d{4})-:month(\\d{1,2})/",
 );
 
 router.get("/:year(\\d{4})-:month(\\d{1,2})-:day(\\d{1,2})/",
+    dateMiddleware.getPeriod,
+    journalMiddleware.getDayElements,
     journalController.getDay
 );
 

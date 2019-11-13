@@ -48,6 +48,11 @@ var EventController = (function () {
             events: req.events
         });
     };
+    EventController.prototype.getEvent = function (req, res, next) {
+        res.render("event/event", {
+            event: req.event
+        });
+    };
     EventController.prototype.getNew = function (req, res, next) {
         res.render("event/new");
     };
@@ -62,6 +67,43 @@ var EventController = (function () {
                         _a.sent();
                         req.flash("success", req.t("event.flash.created"));
                         res.redirect(req.referer);
+                        return [2];
+                }
+            });
+        });
+    };
+    EventController.prototype.getEdit = function (req, res, next) {
+        res.render("event/edit", {
+            event: req.event
+        });
+    };
+    EventController.prototype.postEdit = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        Object.assign(req.event, req.body);
+                        return [4, req.event.save()];
+                    case 1:
+                        _a.sent();
+                        req.flash("success", req.t("event.flash.edited"));
+                        res.redirect(req.referer);
+                        return [2];
+                }
+            });
+        });
+    };
+    EventController.prototype.deleteDelete = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        req.event.deleted = true;
+                        return [4, req.event.save()];
+                    case 1:
+                        _a.sent();
+                        req.flash("success", req.t("event.flash.deleted"));
+                        res.json({ success: true, redirect: req.headers.referer });
                         return [2];
                 }
             });

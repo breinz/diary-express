@@ -10,6 +10,11 @@ var EventValidator = (function () {
         this.categoryValid();
         return Object.keys(this.errors).length == 0;
     };
+    EventValidator.prototype.validEdit = function () {
+        this.titleRequired();
+        this.categoryValid();
+        return Object.keys(this.errors).length == 0;
+    };
     EventValidator.prototype.titleRequired = function () {
         if (!this.data.title || this.data.title.trim().length == 0) {
             this.errors.title = "required";

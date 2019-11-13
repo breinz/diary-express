@@ -56,6 +56,32 @@ var Util = (function () {
         }
         return value.toString();
     };
+    Util.prototype.icon = function (element, defaut) {
+        if (element == null || element.icon == null || element.icon.trim().length == 0) {
+            switch (defaut) {
+                case "eventCategory":
+                case "event":
+                    return "fa-calendar-alt";
+                case "expenseCategory":
+                case "expense":
+                    return "fa-euro-sign";
+                default:
+                    return "fa-question";
+            }
+        }
+        else {
+            return "fa-" + element.icon;
+        }
+    };
+    Util.prototype.icon_color = function (element, defaut) {
+        if (element == null || element.color == null || element.color.trim().length == 0) {
+            if (defaut === "event" || defaut === "expense") {
+                return this.t.t(defaut + "Category.none.color");
+            }
+            return "#CCC";
+        }
+        return element.color;
+    };
     return Util;
 }());
 exports.default = Util;

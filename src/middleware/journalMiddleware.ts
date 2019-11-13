@@ -156,8 +156,6 @@ class JournalMiddleware {
             }
         ]);
 
-        console.log(JSON.stringify(events));
-
         res.locals.journalData = {
             expenses,
             people,
@@ -166,6 +164,28 @@ class JournalMiddleware {
 
         res.locals.month = req.params.month;
         res.locals.year = req.params.year;
+        res.locals.day = req.params.day;
+
+        next();
+    }
+
+    public async getDayElements(req: Request, res: Response, next: NextFunction) {
+        await Expense.updateMany({}, { user: req.current_user });
+
+        const events = await Event.find({ user: req.current_user, date: req.bop, deleted: false }).populate("category");
+
+        const expenses = await Expense.find({ user: req.current_user, date: req.bop }).populate("category").sort("-amount");
+
+
+        res.locals.journalData = {
+            expenses,
+            //people,
+            events
+        }
+
+        res.locals.month = req.params.month;
+        res.locals.year = req.params.year;
+        res.locals.day = req.params.day;
 
         next();
     }

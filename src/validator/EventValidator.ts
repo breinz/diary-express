@@ -18,6 +18,13 @@ export default class EventValidator {
         return Object.keys(this.errors).length == 0;
     }
 
+    public validEdit(): boolean {
+        this.titleRequired();
+        this.categoryValid();
+
+        return Object.keys(this.errors).length == 0;
+    }
+
     private titleRequired() {
         if (!this.data.title || this.data.title.trim().length == 0) {
             this.errors.title = "required";

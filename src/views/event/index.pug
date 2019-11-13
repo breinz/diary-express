@@ -10,8 +10,8 @@ mixin line(event)
             =event.title
         td.actions
             .btn-group
-                +edit_btn(`/events/${event._id}/edit`, "", t("action.edit"))
-                +delete_btn(`/events/${event._id}/delete`, "", t("action.edit"))
+                +edit_btn(`/event/${event._id}/edit`, "", t("action.edit"))
+                +delete_btn(`/event/${event._id}/delete`, "", t("action.edit"))
 
 block content
 

@@ -44,12 +44,15 @@ var path_1 = __importDefault(require("path"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var express_session_1 = __importDefault(require("express-session"));
+var reload = require("reload");
+var http_1 = __importDefault(require("http"));
 var config_1 = __importDefault(require("./config"));
 var userMiddleware_1 = __importDefault(require("./middleware/userMiddleware"));
 var flashMiddleware_1 = __importDefault(require("./middleware/flashMiddleware"));
 var mainRouter_1 = __importDefault(require("./router/mainRouter"));
 var T_1 = __importDefault(require("./T"));
 var Util_1 = __importDefault(require("./helper/Util"));
+var fs_1 = require("fs");
 var app = express_1.default();
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
@@ -64,6 +67,7 @@ app.use(express_session_1.default({
 }));
 app.use(express_1.default.static("dist/assets"));
 app.set("view engine", "pug");
+app.disable("view cache");
 app.set('views', path_1.default.join(__dirname, '../src/views'));
 app.use(userMiddleware_1.default.getCurrentUser);
 app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -98,7 +102,19 @@ app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, fun
 }); });
 app.use(flashMiddleware_1.default.init);
 app.use(mainRouter_1.default);
-app.listen(config_1.default.PORT, "0.0.0.0", function () {
+var server = http_1.default.createServer(app);
+server.listen(config_1.default.PORT, "0.0.0.0", function () {
     console.log("App running");
+});
+reload(app).then(function (reloadReturned) {
+    fs_1.watch(__dirname + "/../src/views", { recursive: true }, function (e, f) {
+        reloadReturned.reload();
+    });
+    fs_1.watch(__dirname + "/assets", { recursive: true }, function (e, f) {
+        reloadReturned.reload();
+    });
+    fs_1.watch(__dirname + "/lang", function (e, f) {
+        reloadReturned.reload();
+    });
 });
 exports.default = app;

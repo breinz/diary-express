@@ -116,7 +116,8 @@
         "title": {
             "new": "New expense",
             "edit": "Edit expense",
-            "expense": "Expense"
+            "expense": "Expense",
+            "journal": "Expenses"
         },
         "model": {
             "amount": "Amount",
@@ -311,7 +312,8 @@
         },
         "title": {
             "index": "Events",
-            "new": "New event"
+            "new": "New event",
+            "journal": "Events"
         },
         "button": {
             "new": "New event",
@@ -326,7 +328,12 @@
             "category": "Category"
         },
         "flash": {
-            "created": "Event created"
+            "created": "Event created",
+            "edited": "Event edited",
+            "error": {
+                "not_found": "Event not found"
+            },
+            "deleted": "Event deleted"
         },
         "error": {
             "title": {

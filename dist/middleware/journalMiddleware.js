@@ -179,7 +179,6 @@ var JournalMiddleware = (function () {
                             ])];
                     case 3:
                         events = _a.sent();
-                        console.log(JSON.stringify(events));
                         res.locals.journalData = {
                             expenses: expenses,
                             people: people,
@@ -187,6 +186,34 @@ var JournalMiddleware = (function () {
                         };
                         res.locals.month = req.params.month;
                         res.locals.year = req.params.year;
+                        res.locals.day = req.params.day;
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
+    JournalMiddleware.prototype.getDayElements = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var events, expenses;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, ExpenseModel_1.default.updateMany({}, { user: req.current_user })];
+                    case 1:
+                        _a.sent();
+                        return [4, EventModel_1.default.find({ user: req.current_user, date: req.bop, deleted: false }).populate("category")];
+                    case 2:
+                        events = _a.sent();
+                        return [4, ExpenseModel_1.default.find({ user: req.current_user, date: req.bop }).populate("category").sort("-amount")];
+                    case 3:
+                        expenses = _a.sent();
+                        res.locals.journalData = {
+                            expenses: expenses,
+                            events: events
+                        };
+                        res.locals.month = req.params.month;
+                        res.locals.year = req.params.year;
+                        res.locals.day = req.params.day;
                         next();
                         return [2];
                 }

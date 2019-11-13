@@ -6,6 +6,7 @@ var expenseSchema = new mongoose_1.Schema({
     amount: Number,
     date: Date,
     category: { type: mongoose_1.Schema.Types.ObjectId, ref: "expenseCategory" },
+    user: { type: mongoose_1.Schema.Types.ObjectId, ref: "user" },
     description: String
 });
 var Expense = db_1.db.model("expense", expenseSchema);

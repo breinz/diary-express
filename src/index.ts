@@ -1,8 +1,10 @@
-import express, { Request, Response } from "express"
+import express from "express"
 import path from "path"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import session from "express-session"
+let reload = require("reload");//import reload from "reload";
+import http from "http";
 
 import config from "./config";
 import userMiddleware from "./middleware/userMiddleware"
@@ -10,6 +12,7 @@ import flashMiddleware from "./middleware/flashMiddleware"
 import mainRouter from "./router/mainRouter";
 import T from "./T"
 import Util from "./helper/Util"
+import { watch } from "fs"
 
 let app = express();
 
@@ -32,7 +35,8 @@ app.use(session({
 app.use(express.static("dist/assets"));
 
 // View engine
-app.set("view engine", "pug")
+app.set("view engine", "pug");
+app.disable("view cache");
 app.set('views', path.join(__dirname, '../src/views'));
 
 // Find logged in user
@@ -124,13 +128,40 @@ app.get("/", (req: Request, res: Response) => {
     res.render("index");
 });*/
 
+let server = http.createServer(app);
+
+//reload(app).then((reloadReturned: any) => {
+
+
 // Start server
-app.listen(config.PORT, "0.0.0.0", () => {
+server.listen(config.PORT, "0.0.0.0", () => {
     console.log("App running");
+    //reloadReturned.reload();
+
 
     //new CronJob("*/24 * * * *", () => {
     //    fakeController.init();
     //}, null, true);*/
+
+});
+/*}).catch((err: Error) => {
+
+    console.log("Reload could not start", err);
+});*/
+
+reload(app).then((reloadReturned: any) => {
+
+    watch(__dirname + "/../src/views", { recursive: true }, (e, f) => {
+        reloadReturned.reload();
+    });
+
+    watch(__dirname + "/assets", { recursive: true }, (e, f) => {
+        reloadReturned.reload();
+    });
+
+    watch(__dirname + "/lang", (e, f) => {
+        reloadReturned.reload();
+    });
 })
 
 

@@ -35,4 +35,28 @@ router.post("/new",
     eventController.postNew
 );
 
+router.get("/:id/edit",
+    eventMiddleware.getEvent,
+    eventCategoryMiddleware.getForSelect,
+    refererMiddleware.save,
+    eventController.getEdit
+);
+
+router.post("/:id/edit",
+    eventMiddleware.validEdit,
+    eventMiddleware.getEvent,
+    refererMiddleware.retrieve,
+    eventController.postEdit
+);
+
+router.delete("/:id/delete",
+    eventMiddleware.getEvent,
+    eventController.deleteDelete
+);
+
+router.get("/:id",
+    eventMiddleware.getEvent,
+    eventController.getEvent
+);
+
 export default router;

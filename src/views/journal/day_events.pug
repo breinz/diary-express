@@ -1,0 +1,19 @@
+.alert.alert-hollow
+    h3=t("event.title.journal")
+
+    table.table.table-hover
+        for event in journalData.events
+            tr(data-show-hover=`event_show_hover${event._id}`)
+                td(data-link=`/event/${event._id}`)
+                    +icon(event.category, "event")
+                    b
+                        |&nbsp;
+                        =event.title
+                    br
+                    small.text-muted
+                        =event.description
+                        |&nbsp;
+                td.actions
+                    .btn-group(class=`event_show_hover${event._id}`)
+                        +edit_btn(`/event/${event._id}/edit`, null, t("action.edit"))
+                        +delete_btn(`/event/${event._id}/delete`, null, t("action.delete"))

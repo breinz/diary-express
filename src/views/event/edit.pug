@@ -1,0 +1,13 @@
+extends ../layout/layout
+
+block content
+    
+    -old = old || event
+
+    .container
+        .row
+            .col
+                .alert.alert-hollow
+                    h1=old.title
+
+                    include form

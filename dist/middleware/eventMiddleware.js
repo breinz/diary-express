@@ -52,9 +52,39 @@ var EventMiddleware = (function () {
                 switch (_b.label) {
                     case 0:
                         _a = req;
-                        return [4, EventModel_1.default.find({ user: req.current_user }).sort("date").populate("category")];
+                        return [4, EventModel_1.default.find({ user: req.current_user, deleted: false }).sort("date").populate("category")];
                     case 1:
                         _a.events = (_b.sent());
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
+    EventMiddleware.prototype.getEvent = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ok, _a, error_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        ok = true;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        _a = req;
+                        return [4, EventModel_1.default.findById(req.params.id).populate("category")];
+                    case 2:
+                        _a.event = (_b.sent());
+                        return [3, 4];
+                    case 3:
+                        error_1 = _b.sent();
+                        ok = false;
+                        return [3, 4];
+                    case 4:
+                        if (!ok) {
+                            req.flash("error", req.t("event.flash.error.not_found"));
+                            return [2, res.redirect("/event")];
+                        }
                         next();
                         return [2];
                 }
@@ -73,6 +103,28 @@ var EventMiddleware = (function () {
                     case 1:
                         _a.sent();
                         return [2, res.render("event/new", {
+                                event: req.body,
+                                errors: validator.errors
+                            })];
+                    case 2:
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
+    EventMiddleware.prototype.validEdit = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var validator;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        validator = new EventValidator_1.default(req.body);
+                        if (!!validator.validEdit()) return [3, 2];
+                        return [4, eventCategoryMiddleware_1.default.getForSelect(req, res)];
+                    case 1:
+                        _a.sent();
+                        return [2, res.render("event/edit", {
                                 event: req.body,
                                 errors: validator.errors
                             })];

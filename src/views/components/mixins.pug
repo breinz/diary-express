@@ -74,3 +74,6 @@ mixin deleted-alert(permanent_url, recover_url)
             a.btn.btn-outline-secondary.btn-sm(href=recover_url data-samewidth="deleted_alert_sw") 
                 i.fa.fa-undo
                 |&nbsp;Recover
+
+mixin icon(element, defaut)
+    i.fa(class=util.icon(element, defaut) style=`color:${util.icon_color(element, defaut)}`)

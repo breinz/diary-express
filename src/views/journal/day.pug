@@ -5,5 +5,11 @@ block content
         .row
             .col
                 h1 Day
-                .alert.alert-hollow
-                    |... todo
+                .row
+                    if journalData.events.length
+                        .col-md-6
+                            include day_events
+                    if journalData.expenses.length
+                        .col-md-6
+                            include day_expenses
+                            
