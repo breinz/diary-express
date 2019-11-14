@@ -18,7 +18,7 @@ export default class Util {
 
         let d = new Date();
 
-        if (date.getTime() > d.setHours(0, 0, 0, 0)) {
+        if (date.getTime() >= d.setHours(0, 0, 0, 0)) {
             return this.t.t("today");
             //return format("hh:mm", date);
         } else {
@@ -108,6 +108,8 @@ export default class Util {
                     return "fa-euro-sign";
                 case "people":
                     return "fa-user";
+                case "list":
+                    return "fa-list-ul";
                 default:
                     return "fa-question";
             }

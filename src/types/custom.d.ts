@@ -8,6 +8,7 @@ import { PeopleModel } from "../model/PeopleModel";
 import { PageModel } from "../model/PageModel";
 import { EventCategoryModel } from "../model/EventCategoryModel";
 import { EventModel } from "../model/EventModel";
+import { ListModel } from "../model/ListModel";
 
 declare global {
 
@@ -41,6 +42,8 @@ declare global {
 
             eventCategories: EventCategoryModel[],
             eventCategory: EventCategoryModel,
+
+            lists: ListModel[],
 
             referer: string,
 

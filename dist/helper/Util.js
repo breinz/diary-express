@@ -10,7 +10,7 @@ var Util = (function () {
     }
     Util.prototype.todayOrDate = function (date) {
         var d = new Date();
-        if (date.getTime() > d.setHours(0, 0, 0, 0)) {
+        if (date.getTime() >= d.setHours(0, 0, 0, 0)) {
             return this.t.t("today");
         }
         else {
@@ -67,6 +67,8 @@ var Util = (function () {
                     return "fa-euro-sign";
                 case "people":
                     return "fa-user";
+                case "list":
+                    return "fa-list-ul";
                 default:
                     return "fa-question";
             }

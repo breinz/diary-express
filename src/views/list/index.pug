@@ -1,0 +1,68 @@
+extends ../layout/layout
+
+mixin list(list)
+    .col-lg-4.col-md-6
+        .alert.alert-hollow.no-overflow(data-show-hover=`list-${list._id}`)
+            .alert-icon
+                +icon(list, "list", "#CCC6")
+            .h1-actions(class=`list-${list._id}`)
+                .btn-group
+                    +edit_btn(`/list/${list._id}/edit`, "", t("action.edit"))
+                    +delete_btn(`/list/${list._id}/delete`, "", t("action.delete"))
+            h3
+                +icon(list, "list")
+                |&nbsp;
+                =list.title 
+            if list.items
+                table.table.table-hover.table-no-head
+                    for item in list.items
+                        tr(data-show-hover=`item-${item._id}`)
+                            td(data-link=`/list/${list._id}/${item._id}`)
+                                b=item.title
+                            td.actions
+                                .btn-group(class=`item-${item._id}`)
+                                    +edit_btn(`/list/${list._id}/${item._id}/edit`)
+                                    +delete_btn(`/list/${list._id}/${item._id}/delete`)
+            
+            // --- TODO --- table.table.table-hover.table-no-head.mb-0
+                for event in journalData.events
+                    tr(data-show-hover=`event_show_hover${event._id}`)
+                        td(data-link=`/event/${event._id}`)
+                            +icon(event.category, "event")
+                            b
+                                |&nbsp;
+                                =event.title
+                            br
+                            small.text-muted
+                                =event.description
+                                |&nbsp;
+                        td.actions
+                            .btn-group(class=`event_show_hover${event._id}`)
+                                +edit_btn(`/event/${event._id}/edit`, null, t("action.edit"))
+                                +delete_btn(`/event/${event._id}/delete`, null, t("action.delete"))
+
+            .text-right(class=`list-${list._id}`)
+                +new_btn(`/list/${list._id}/new`, t("list.element.button.new"), "", "", true)
+
+block content
+
+    .container
+        .row
+            .col-sm-12
+                .h1-actions
+                    .btn-group
+                        a.btn.btn-outline-success(href="/list/new" data-sameWidth="b")
+                            i.fa.fa-plus
+                            br
+                            =t("list.button.new")
+                        a.btn.btn-outline-secondary(href="/list/category" data-sameWidth="b")
+                            i.fa.fa-list
+                            br
+                            =t("event.button.categories.manage")
+
+                h1=t("list.title.index")
+                .clear
+
+                .row
+                    for list in lists
+                        +list(list)

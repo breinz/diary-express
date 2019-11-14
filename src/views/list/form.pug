@@ -1,0 +1,23 @@
+-list = list || {}
+-errors = errors || {}
+
++alert-error("list")
+
+form(method="post")
+
+    .form-group
+        label(for="title")=t("list.model.title")
+        input.form-control#title(type="text", name="title" value=list.title autofocus class=errors.title?"is-invalid":false)
+        +form-error(t(`list.error.title.${errors.title}`), errors.title)
+    
+    .form-group
+        label(for="icon")=t("list.model.icon")
+        input#icon.form-control(type="text", name="icon" value=list.icon class=errors.icon?"is-invalid":false)
+        +form-text(t("list.instruction.icon"), t(`list.error.icon.${errors.icon}`), errors.icon)
+    
+    .form-group
+        label(for="color")=t("list.model.color")
+        input#color.form-control(type="text", name="color" value=list.color class=errors.color?"is-invalid":false)
+        +form-text(t("list.instruction.color"), t(`list.error.color.${errors.color}`), errors.color)
+
+    input.btn.btn-success(type="submit", value=t("action.save"))
