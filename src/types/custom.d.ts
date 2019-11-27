@@ -44,6 +44,7 @@ declare global {
             eventCategory: EventCategoryModel,
 
             lists: ListModel[],
+            list: ListModel,
 
             referer: string,
 

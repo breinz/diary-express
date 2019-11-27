@@ -58,7 +58,8 @@ class ExpenseReportMiddleware {
                     date: {
                         $gte: this.req.bop,
                         $lt: this.req.eop
-                    }
+                    },
+                    user: this.req.current_user._id
                 }
             }, {
                 $group: {
@@ -86,7 +87,8 @@ class ExpenseReportMiddleware {
                     date: {
                         $gte: this.req.bop,
                         $lte: this.req.eop
-                    }
+                    },
+                    user: this.req.current_user._id
                 }
             }, {
                 $group: {

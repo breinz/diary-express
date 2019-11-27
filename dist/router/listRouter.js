@@ -15,4 +15,6 @@ router.use(function (req, res, next) {
 router.get("/", listMiddleware_1.default.getLists, listController_1.default.getIndex);
 router.get("/new", RefererMiddleware_1.default.save, listController_1.default.getNew);
 router.post("/new", listMiddleware_1.default.validNew, RefererMiddleware_1.default.retrieve, listController_1.default.postNew);
+router.get("/:id/edit", listMiddleware_1.default.getList, RefererMiddleware_1.default.save, listController_1.default.getEdit);
+router.post("/:id/edit", listMiddleware_1.default.getList, listMiddleware_1.default.validEdit, RefererMiddleware_1.default.retrieve, listController_1.default.postEdit);
 exports.default = router;

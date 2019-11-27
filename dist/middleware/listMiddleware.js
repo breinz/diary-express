@@ -60,10 +60,51 @@ var ListMiddleware = (function () {
             });
         });
     };
+    ListMiddleware.prototype.getList = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ok, _a, error_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        ok = true;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        _a = req;
+                        return [4, ListModel_1.default.findById(req.params.id)];
+                    case 2:
+                        _a.list = (_b.sent());
+                        return [3, 4];
+                    case 3:
+                        error_1 = _b.sent();
+                        ok = false;
+                        return [3, 4];
+                    case 4:
+                        if (!ok) {
+                            req.flash("error", req.t("list.flash.error.not_found"));
+                            return [2, res.redirect("/list")];
+                        }
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
     ListMiddleware.prototype.validNew = function (req, res, next) {
         var validator = new ListValidator_1.default(req.body);
         if (!validator.validNew()) {
             return res.render("list/new", {
+                list: req.body,
+                errors: validator.errors
+            });
+        }
+        next();
+    };
+    ListMiddleware.prototype.validEdit = function (req, res, next) {
+        var validator = new ListValidator_1.default(req.body);
+        if (!validator.validEdit()) {
+            return res.render("list/edit", {
+                old: req.list,
                 list: req.body,
                 errors: validator.errors
             });

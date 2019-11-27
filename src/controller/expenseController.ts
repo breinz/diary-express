@@ -3,8 +3,16 @@ import Expense, { ExpenseModel } from "../model/ExpenseModel";
 
 class ExpenseController {
 
-    public async getIndex(req: Request, res: Response, next: NextFunction) {
+    public getIndex(req: Request, res: Response, next: NextFunction) {
         res.render("expense/index", {
+            expenses: req.expenses,
+            report: req.expenseReport
+        });
+    }
+
+    public apiGetIndex(req: Request, res: Response, next: NextFunction) {
+        console.log("apiGetIndex");
+        res.json({
             expenses: req.expenses,
             report: req.expenseReport
         });

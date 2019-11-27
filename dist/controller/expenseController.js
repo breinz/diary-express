@@ -44,14 +44,16 @@ var ExpenseController = (function () {
     function ExpenseController() {
     }
     ExpenseController.prototype.getIndex = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                res.render("expense/index", {
-                    expenses: req.expenses,
-                    report: req.expenseReport
-                });
-                return [2];
-            });
+        res.render("expense/index", {
+            expenses: req.expenses,
+            report: req.expenseReport
+        });
+    };
+    ExpenseController.prototype.apiGetIndex = function (req, res, next) {
+        console.log("apiGetIndex");
+        res.json({
+            expenses: req.expenses,
+            report: req.expenseReport
         });
     };
     ExpenseController.prototype.getExpense = function (req, res, next) {

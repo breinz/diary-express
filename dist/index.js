@@ -56,6 +56,12 @@ Date.prototype.removeTimezoneOffset = function () {
     this.setMinutes(this.getMinutes() - this.getTimezoneOffset());
 };
 var app = express_1.default();
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
+    next();
+});
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(cookie_parser_1.default());

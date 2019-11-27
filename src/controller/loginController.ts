@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import uniqid from "uniqid";
+import User from "../model/UserModel";
 
 class LoginController {
 
@@ -21,6 +22,20 @@ class LoginController {
         req.flash("success", req.t("user.flash.logged_in"));
 
         res.redirect("/")
+    }
+
+    public async apiPostLogin(req: Request, res: Response, next: NextFunction) {
+
+        req.user.apiLogin();
+
+        res.json({
+            id: req.user._id,
+            name: req.user.name,
+            email: req.user.email,
+            token: req.user.api.token,
+            expireAt: req.user.api.expireAt,
+            lang: req.user.lang
+        });
     }
 
 }

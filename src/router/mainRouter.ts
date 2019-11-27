@@ -12,6 +12,7 @@ import adminRouter from "./adminRouter";
 import journalRouter from "./journalRouter";
 import eventRouter from "./eventRouter";
 import listRouter from "./listRouter";
+import apiRouter from "./apiRouter";
 
 const router = Router();
 
@@ -31,5 +32,6 @@ router.use("/admin", adminRouter);
 router.use("/journal", journalRouter);
 router.use("/event", eventRouter);
 router.use("/list", listRouter);
+router.use("/api", apiRouter);
 
 export default router;

@@ -55,6 +55,16 @@ router.delete("/:id/delete",
     eventController.deleteDelete
 );
 
+router.get("/:id/recover",
+    eventMiddleware.getEvent,
+    eventController.getRecover
+);
+
+router.delete("/:id/remove",
+    eventMiddleware.getEvent,
+    eventController.deleteRemove
+);
+
 router.get("/:id",
     eventMiddleware.getEvent,
     eventController.getEvent

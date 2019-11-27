@@ -67,6 +67,27 @@ var ListController = (function () {
             });
         });
     };
+    ListController.prototype.getEdit = function (req, res, next) {
+        res.render("list/edit", {
+            list: req.list
+        });
+    };
+    ListController.prototype.postEdit = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        Object.assign(req.list, req.body);
+                        return [4, req.list.save()];
+                    case 1:
+                        _a.sent();
+                        req.flash("success", req.t("list.flash.edited"));
+                        res.redirect(req.referer);
+                        return [2];
+                }
+            });
+        });
+    };
     return ListController;
 }());
 var listController = new ListController();

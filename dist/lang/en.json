@@ -342,7 +342,9 @@
             "error": {
                 "not_found": "Event not found"
             },
-            "deleted": "Event deleted"
+            "deleted": "Event deleted",
+            "recovered": "*Recovered",
+            "removed": "*Removed"
         },
         "error": {
             "title": {
@@ -413,11 +415,23 @@
             "color": "Try one of <b>#c3e6cb</b> (green) <b>#f5c6cb</b> (red) <b>#ffeeba</b> (yellow) <b>#b8daff</b> (blue) <b>#d6d8db</b> (gray) <b>#bee5eb</b> (cyan)"
         },
         "flash": {
-            "created": "List created"
+            "created": "List created",
+            "edited": "List has been edited"
         },
         "element": {
             "button": {
                 "new": "New element"
+            }
+        },
+        "error": {
+            "title": {
+                "required": "Title is required"
+            },
+            "icon": {
+                "required": "Icon is required"
+            },
+            "color": {
+                "required": "Color is required"
             }
         }
     }

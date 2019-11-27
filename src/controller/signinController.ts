@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import User from "../model/UserModel";
+import User, { UserModel } from "../model/UserModel";
 
 class SigninController {
 
@@ -17,6 +17,21 @@ class SigninController {
         res.redirect("/");
 
         next();
+    }
+
+    public async apiPostSignin(req: Request, res: Response, next: NextFunction) {
+
+        const user = await User.create(req.body) as UserModel;
+
+        user.apiLogin();
+
+        res.json({
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            token: user.api.token,
+            expireAt: user.api.expireAt
+        });
     }
 
 }

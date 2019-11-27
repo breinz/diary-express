@@ -66,6 +66,22 @@ var LoginController = (function () {
             });
         });
     };
+    LoginController.prototype.apiPostLogin = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                req.user.apiLogin();
+                res.json({
+                    id: req.user._id,
+                    name: req.user.name,
+                    email: req.user.email,
+                    token: req.user.api.token,
+                    expireAt: req.user.api.expireAt,
+                    lang: req.user.lang
+                });
+                return [2];
+            });
+        });
+    };
     return LoginController;
 }());
 var loginController = new LoginController();

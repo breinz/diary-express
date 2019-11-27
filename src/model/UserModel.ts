@@ -1,5 +1,6 @@
 import { Document, Schema, Model, Types } from "mongoose"
 import bcrypt from "bcrypt";
+import uniqId from "uniqid";
 
 import { db } from "../db"
 import config from "../config";
@@ -18,7 +19,13 @@ export type UserModel = Document & {
     admin: boolean,
     lang: string,
 
-    validatePassword: (pwd: string) => Promise<boolean>
+    api: {
+        token: string,
+        expireAt: Date
+    }
+
+    validatePassword: (pwd: string) => Promise<boolean>,
+    apiLogin: () => void
 }
 
 /**
@@ -31,7 +38,12 @@ const userSchema = new Schema({
     password: String,
     session: String,
     admin: Boolean,
-    lang: String,
+    lang: { type: String, default: "en" },
+
+    api: {
+        token: String,
+        expireAt: Date
+    }
 });
 
 userSchema.pre("save", async function (next) {
@@ -53,6 +65,23 @@ userSchema.methods.validatePassword = async function (compare: string) {
     const user = this as UserModel;
 
     return await bcrypt.compare(compare, user.password)
+}
+
+userSchema.methods.apiLogin = async function () {
+    const user = this as UserModel;
+
+    let expireAt = new Date();
+    expireAt.setHours(expireAt.getHours() + 1);
+
+    let token: string = user.api.token;
+
+    if (!user.api.token || !user.api.expireAt || user.api.expireAt < new Date()) {
+        token = Buffer.from(user._id + expireAt.getTime() + uniqId()).toString("base64");
+    }
+
+    user.api = { token, expireAt };
+
+    await user.save();
 }
 
 const User = db.model("user", userSchema) as Model<Document> & UserModel;

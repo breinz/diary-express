@@ -4,7 +4,14 @@ block content
     .container
         .row
             .col
+                if event.deleted
+                    +deleted-alert(`/event/${event._id}/remove`, `/event/${event._id}/recover`)
                 .alert.alert-hollow
+                    if !event.deleted
+                        .h1-actions
+                            .btn-group
+                                +edit_btn(`/event/${event._id}/edit`, t("action.edit"), "", "a")
+                                +delete_btn(`/event/${event._id}/delete`, t("action.delete"), "", "a")
                     
                     h1=event.title
 

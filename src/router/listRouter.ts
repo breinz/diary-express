@@ -27,4 +27,17 @@ router.post("/new",
     listController.postNew
 );
 
+router.get("/:id/edit",
+    listMiddleware.getList,
+    refererMiddleware.save,
+    listController.getEdit
+);
+
+router.post("/:id/edit",
+    listMiddleware.getList,
+    listMiddleware.validEdit,
+    refererMiddleware.retrieve,
+    listController.postEdit
+);
+
 export default router;

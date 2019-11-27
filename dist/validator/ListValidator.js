@@ -11,6 +11,12 @@ var ListValidator = (function () {
         this.colorRequired();
         return Object.keys(this.errors).length == 0;
     };
+    ListValidator.prototype.validEdit = function () {
+        this.titleRequired();
+        this.iconRequired();
+        this.colorRequired();
+        return Object.keys(this.errors).length == 0;
+    };
     ListValidator.prototype.titleRequired = function () {
         if (!this.data.title || !this.data.title.trim().length) {
             this.errors.title = "required";

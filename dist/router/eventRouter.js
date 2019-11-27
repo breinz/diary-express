@@ -23,5 +23,7 @@ router.post("/new", eventMiddleware_1.default.validNew, RefererMiddleware_1.defa
 router.get("/:id/edit", eventMiddleware_1.default.getEvent, eventCategoryMiddleware_1.default.getForSelect, RefererMiddleware_1.default.save, eventController_1.default.getEdit);
 router.post("/:id/edit", eventMiddleware_1.default.validEdit, eventMiddleware_1.default.getEvent, RefererMiddleware_1.default.retrieve, eventController_1.default.postEdit);
 router.delete("/:id/delete", eventMiddleware_1.default.getEvent, eventController_1.default.deleteDelete);
+router.get("/:id/recover", eventMiddleware_1.default.getEvent, eventController_1.default.getRecover);
+router.delete("/:id/remove", eventMiddleware_1.default.getEvent, eventController_1.default.deleteRemove);
 router.get("/:id", eventMiddleware_1.default.getEvent, eventController_1.default.getEvent);
 exports.default = router;

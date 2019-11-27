@@ -55,6 +55,24 @@ class EventController {
 
         res.json({ success: true, redirect: req.headers.referer });
     }
+
+    public async getRecover(req: Request, res: Response, next: NextFunction) {
+        req.event.deleted = false;
+
+        await req.event.save();
+
+        req.flash("success", req.t("event.flash.recovered"));
+
+        res.redirect(req.headers.referer);
+    }
+
+    public async deleteRemove(req: Request, res: Response, next: NextFunction) {
+        await Event.deleteOne({ id: req.event._id });
+
+        req.flash("success", req.t("event.flash.removed"));
+
+        res.json({ success: true, redirect: "/event" });
+    }
 }
 
 const eventController = new EventController();

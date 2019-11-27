@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
 var bcrypt_1 = __importDefault(require("bcrypt"));
+var uniqid_1 = __importDefault(require("uniqid"));
 var db_1 = require("../db");
 var config_1 = __importDefault(require("../config"));
 var userSchema = new mongoose_1.Schema({
@@ -50,7 +51,11 @@ var userSchema = new mongoose_1.Schema({
     password: String,
     session: String,
     admin: Boolean,
-    lang: String,
+    lang: { type: String, default: "en" },
+    api: {
+        token: String,
+        expireAt: Date
+    }
 });
 userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function () {
@@ -88,6 +93,28 @@ userSchema.methods.validatePassword = function (compare) {
                     user = this;
                     return [4, bcrypt_1.default.compare(compare, user.password)];
                 case 1: return [2, _a.sent()];
+            }
+        });
+    });
+};
+userSchema.methods.apiLogin = function () {
+    return __awaiter(this, void 0, void 0, function () {
+        var user, expireAt, token;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    user = this;
+                    expireAt = new Date();
+                    expireAt.setHours(expireAt.getHours() + 1);
+                    token = user.api.token;
+                    if (!user.api.token || !user.api.expireAt || user.api.expireAt < new Date()) {
+                        token = Buffer.from(user._id + expireAt.getTime() + uniqid_1.default()).toString("base64");
+                    }
+                    user.api = { token: token, expireAt: expireAt };
+                    return [4, user.save()];
+                case 1:
+                    _a.sent();
+                    return [2];
             }
         });
     });

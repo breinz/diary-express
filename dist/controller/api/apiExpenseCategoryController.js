@@ -39,85 +39,87 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var UserModel_1 = __importDefault(require("../model/UserModel"));
-var UserValidator = (function () {
-    function UserValidator(data) {
-        this.data = data;
-        this.errors = {};
+var ExpenseCategoryModel_1 = __importDefault(require("../../model/ExpenseCategoryModel"));
+var ApiExpenseCategoryController = (function () {
+    function ApiExpenseCategoryController() {
     }
-    UserValidator.prototype.validSignin = function () {
+    ApiExpenseCategoryController.prototype.getIndex = function (req, res, next) {
+        res.json({ categories: req.expenseCategories });
+    };
+    ApiExpenseCategoryController.prototype.postNew = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.emailRequired();
-                        this.emailValid();
-                        return [4, this.emailUnique()];
+                        req.body.user = req.current_user;
+                        return [4, ExpenseCategoryModel_1.default.create(req.body)];
                     case 1:
                         _a.sent();
-                        this.passwordRequired();
-                        this.passwordRepeatRequired();
-                        this.passwordValid();
-                        this.passwordsMatch();
-                        return [2, Object.keys(this.errors).length == 0];
-                }
-            });
-        });
-    };
-    UserValidator.prototype.validLogin = function () {
-        this.emailRequired();
-        this.emailValid();
-        this.passwordRequired();
-        this.passwordValid();
-        return Object.keys(this.errors).length == 0;
-    };
-    UserValidator.prototype.emailRequired = function () {
-        if (!this.data.email || this.data.email.trim().length == 0) {
-            this.errors.email = "required";
-        }
-    };
-    UserValidator.prototype.emailValid = function () {
-        if (!RegExp(UserValidator.EMAIL_REGEXP).test(this.data.email)) {
-            this.errors.email = this.errors.email || "unvalid";
-        }
-    };
-    UserValidator.prototype.emailUnique = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var user;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, UserModel_1.default.findOne({ email: this.data.email })];
-                    case 1:
-                        user = _a.sent();
-                        if (user) {
-                            this.errors.email = "taken";
-                        }
+                        res.json({ success: true });
                         return [2];
                 }
             });
         });
     };
-    UserValidator.prototype.passwordRequired = function () {
-        if (!this.data.password || this.data.password.trim().length == 0) {
-            this.errors.password = "required";
-        }
+    ApiExpenseCategoryController.prototype.postEdit = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        Object.assign(req.expenseCategory, req.body);
+                        return [4, req.expenseCategory.save()];
+                    case 1:
+                        _a.sent();
+                        res.json({ success: true });
+                        return [2];
+                }
+            });
+        });
     };
-    UserValidator.prototype.passwordRepeatRequired = function () {
-        if (!this.data.password_repeat || this.data.password_repeat.trim().length == 0) {
-            this.errors.password_repeat = "required";
-        }
+    ApiExpenseCategoryController.prototype.patchDelete = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        req.expenseCategory.deleted = true;
+                        return [4, req.expenseCategory.save()];
+                    case 1:
+                        _a.sent();
+                        res.json({ success: true });
+                        return [2];
+                }
+            });
+        });
     };
-    UserValidator.prototype.passwordValid = function () {
-        if (this.data.password && this.data.password.length < 4) {
-            this.errors.password = this.errors.password || "unvalid";
-        }
+    ApiExpenseCategoryController.prototype.patchRecover = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        req.expenseCategory.deleted = false;
+                        return [4, req.expenseCategory.save()];
+                    case 1:
+                        _a.sent();
+                        res.json({ success: true });
+                        return [2];
+                }
+            });
+        });
     };
-    UserValidator.prototype.passwordsMatch = function () {
-        if (this.data.password != this.data.password_repeat) {
-            this.errors.password = this.errors.password || "no_match";
-        }
+    ApiExpenseCategoryController.prototype.deleteRemove = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, ExpenseCategoryModel_1.default.deleteOne({ _id: req.expenseCategory._id })];
+                    case 1:
+                        _a.sent();
+                        res.json({ success: true });
+                        return [2];
+                }
+            });
+        });
     };
-    UserValidator.EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^ <>() \[\]\\.,;: \s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return UserValidator;
+    return ApiExpenseCategoryController;
 }());
-exports.default = UserValidator;
+var apiExpenseCategoryController = new ApiExpenseCategoryController();
+exports.default = apiExpenseCategoryController;

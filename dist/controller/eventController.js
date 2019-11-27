@@ -109,6 +109,36 @@ var EventController = (function () {
             });
         });
     };
+    EventController.prototype.getRecover = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        req.event.deleted = false;
+                        return [4, req.event.save()];
+                    case 1:
+                        _a.sent();
+                        req.flash("success", req.t("event.flash.recovered"));
+                        res.redirect(req.headers.referer);
+                        return [2];
+                }
+            });
+        });
+    };
+    EventController.prototype.deleteRemove = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, EventModel_1.default.deleteOne({ id: req.event._id })];
+                    case 1:
+                        _a.sent();
+                        req.flash("success", req.t("event.flash.removed"));
+                        res.json({ success: true, redirect: "/event" });
+                        return [2];
+                }
+            });
+        });
+    };
     return EventController;
 }());
 var eventController = new EventController();

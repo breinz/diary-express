@@ -21,6 +21,22 @@ class ListController {
 
         res.redirect(req.referer);
     }
+
+    public getEdit(req: Request, res: Response, next: NextFunction) {
+        res.render("list/edit", {
+            list: req.list
+        });
+    }
+
+    public async postEdit(req: Request, res: Response, next: NextFunction) {
+        Object.assign(req.list, req.body);
+
+        await req.list.save();
+
+        req.flash("success", req.t("list.flash.edited"));
+
+        res.redirect(req.referer);
+    }
 }
 
 const listController = new ListController();

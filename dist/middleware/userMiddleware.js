@@ -124,6 +124,24 @@ var UserMiddleware = (function () {
             });
         });
     };
+    UserMiddleware.prototype.apiValidSignin = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var validator;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        validator = new UserValidator_1.default(req.body);
+                        return [4, validator.validSignin()];
+                    case 1:
+                        if (!(_a.sent())) {
+                            return [2, res.status(400).json({ errors: validator.errors })];
+                        }
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
     UserMiddleware.prototype.validLogin = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             var validator, user;
@@ -164,6 +182,76 @@ var UserMiddleware = (function () {
                 }
             });
         });
+    };
+    UserMiddleware.prototype.apiValidLogin = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var validator, user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        validator = new UserValidator_1.default(req.body);
+                        if (!validator.validLogin()) {
+                            return [2, res.status(400).json({ error: true })];
+                        }
+                        return [4, UserModel_1.default.findOne({ email: req.body.email })];
+                    case 1:
+                        user = _a.sent();
+                        if (!user) {
+                            return [2, res.status(400).json({ error: true })];
+                        }
+                        return [4, user.validatePassword(req.body.password)];
+                    case 2:
+                        if (!(_a.sent())) {
+                            return [2, res.status(400).json({ error: true })];
+                        }
+                        req.user = user;
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
+    UserMiddleware.prototype.apiLogin = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2];
+            });
+        });
+    };
+    UserMiddleware.prototype.apiFindUser = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ok, _a, error_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        ok = true;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        _a = req;
+                        return [4, UserModel_1.default.findById(req.query.uid)];
+                    case 2:
+                        _a.current_user = (_b.sent());
+                        return [3, 4];
+                    case 3:
+                        error_2 = _b.sent();
+                        ok = false;
+                        return [3, 4];
+                    case 4:
+                        if (!ok || !req.current_user) {
+                            return [2, res.status(401).json({ error: "INVALID_USER" })];
+                        }
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
+    UserMiddleware.prototype.tokenShield = function (req, res, next) {
+        if (!req.query.token || req.query.token !== req.current_user.api.token) {
+            return res.status(401).json({ error: "invalid token" });
+        }
+        next();
     };
     return UserMiddleware;
 }());

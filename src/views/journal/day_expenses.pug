@@ -15,7 +15,10 @@
                         |&nbsp;€
                     br
                     small.text-muted
-                        =expense.description
+                        b=expense.category.name
+                        if expense.description
+                            |&nbsp;-&nbsp;
+                            =expense.description
                         |&nbsp;
                 td.actions
                     .btn-group(class=`expense_show_hover${expense._id}`)

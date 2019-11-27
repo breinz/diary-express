@@ -39,85 +39,73 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var UserModel_1 = __importDefault(require("../model/UserModel"));
-var UserValidator = (function () {
-    function UserValidator(data) {
-        this.data = data;
-        this.errors = {};
+var ExpenseCategoryValidator_1 = __importDefault(require("../../validator/ExpenseCategoryValidator"));
+var ExpenseCategoryModel_1 = __importDefault(require("../../model/ExpenseCategoryModel"));
+var ApiExpenseCategoryMiddleware = (function () {
+    function ApiExpenseCategoryMiddleware() {
     }
-    UserValidator.prototype.validSignin = function () {
+    ApiExpenseCategoryMiddleware.prototype.validNew = function (req, res, next) {
+        var validator = new ExpenseCategoryValidator_1.default(req.body);
+        if (!validator.validNew()) {
+            return res.status(400).json({ errors: validator.errors });
+        }
+        next();
+    };
+    ApiExpenseCategoryMiddleware.prototype.validEdit = function (req, res, next) {
+        var validator = new ExpenseCategoryValidator_1.default(req.body);
+        if (!validator.validEdit()) {
+            return res.status(400).json({ errors: validator.errors });
+        }
+        next();
+    };
+    ApiExpenseCategoryMiddleware.prototype.getCategories = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        this.emailRequired();
-                        this.emailValid();
-                        return [4, this.emailUnique()];
+                        _a = req;
+                        return [4, ExpenseCategoryModel_1.default.find({ user: req.current_user }).sort("name")];
                     case 1:
-                        _a.sent();
-                        this.passwordRequired();
-                        this.passwordRepeatRequired();
-                        this.passwordValid();
-                        this.passwordsMatch();
-                        return [2, Object.keys(this.errors).length == 0];
-                }
-            });
-        });
-    };
-    UserValidator.prototype.validLogin = function () {
-        this.emailRequired();
-        this.emailValid();
-        this.passwordRequired();
-        this.passwordValid();
-        return Object.keys(this.errors).length == 0;
-    };
-    UserValidator.prototype.emailRequired = function () {
-        if (!this.data.email || this.data.email.trim().length == 0) {
-            this.errors.email = "required";
-        }
-    };
-    UserValidator.prototype.emailValid = function () {
-        if (!RegExp(UserValidator.EMAIL_REGEXP).test(this.data.email)) {
-            this.errors.email = this.errors.email || "unvalid";
-        }
-    };
-    UserValidator.prototype.emailUnique = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var user;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, UserModel_1.default.findOne({ email: this.data.email })];
-                    case 1:
-                        user = _a.sent();
-                        if (user) {
-                            this.errors.email = "taken";
-                        }
+                        _a.expenseCategories = (_b.sent());
+                        if (next)
+                            next();
                         return [2];
                 }
             });
         });
     };
-    UserValidator.prototype.passwordRequired = function () {
-        if (!this.data.password || this.data.password.trim().length == 0) {
-            this.errors.password = "required";
-        }
+    ApiExpenseCategoryMiddleware.prototype.getCategory = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ok, _a, error_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        console.log(req.query);
+                        ok = true;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        _a = req;
+                        return [4, ExpenseCategoryModel_1.default.findById(req.query.id)];
+                    case 2:
+                        _a.expenseCategory = (_b.sent());
+                        return [3, 4];
+                    case 3:
+                        error_1 = _b.sent();
+                        ok = false;
+                        return [3, 4];
+                    case 4:
+                        if (!req.expenseCategory || !ok) {
+                            return [2, res.status(404).send()];
+                        }
+                        next();
+                        return [2];
+                }
+            });
+        });
     };
-    UserValidator.prototype.passwordRepeatRequired = function () {
-        if (!this.data.password_repeat || this.data.password_repeat.trim().length == 0) {
-            this.errors.password_repeat = "required";
-        }
-    };
-    UserValidator.prototype.passwordValid = function () {
-        if (this.data.password && this.data.password.length < 4) {
-            this.errors.password = this.errors.password || "unvalid";
-        }
-    };
-    UserValidator.prototype.passwordsMatch = function () {
-        if (this.data.password != this.data.password_repeat) {
-            this.errors.password = this.errors.password || "no_match";
-        }
-    };
-    UserValidator.EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^ <>() \[\]\\.,;: \s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return UserValidator;
+    return ApiExpenseCategoryMiddleware;
 }());
-exports.default = UserValidator;
+var middleware = new ApiExpenseCategoryMiddleware();
+exports.default = middleware;

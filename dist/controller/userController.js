@@ -40,84 +40,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var UserModel_1 = __importDefault(require("../model/UserModel"));
-var UserValidator = (function () {
-    function UserValidator(data) {
-        this.data = data;
-        this.errors = {};
+var UserController = (function () {
+    function UserController() {
     }
-    UserValidator.prototype.validSignin = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        this.emailRequired();
-                        this.emailValid();
-                        return [4, this.emailUnique()];
-                    case 1:
-                        _a.sent();
-                        this.passwordRequired();
-                        this.passwordRepeatRequired();
-                        this.passwordValid();
-                        this.passwordsMatch();
-                        return [2, Object.keys(this.errors).length == 0];
-                }
-            });
-        });
-    };
-    UserValidator.prototype.validLogin = function () {
-        this.emailRequired();
-        this.emailValid();
-        this.passwordRequired();
-        this.passwordValid();
-        return Object.keys(this.errors).length == 0;
-    };
-    UserValidator.prototype.emailRequired = function () {
-        if (!this.data.email || this.data.email.trim().length == 0) {
-            this.errors.email = "required";
-        }
-    };
-    UserValidator.prototype.emailValid = function () {
-        if (!RegExp(UserValidator.EMAIL_REGEXP).test(this.data.email)) {
-            this.errors.email = this.errors.email || "unvalid";
-        }
-    };
-    UserValidator.prototype.emailUnique = function () {
+    UserController.prototype.emailTaken = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             var user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, UserModel_1.default.findOne({ email: this.data.email })];
+                    case 0: return [4, UserModel_1.default.findOne({ email: req.body.email })];
                     case 1:
                         user = _a.sent();
-                        if (user) {
-                            this.errors.email = "taken";
-                        }
-                        return [2];
+                        return [2, res.json({ taken: !!user })];
                 }
             });
         });
     };
-    UserValidator.prototype.passwordRequired = function () {
-        if (!this.data.password || this.data.password.trim().length == 0) {
-            this.errors.password = "required";
-        }
-    };
-    UserValidator.prototype.passwordRepeatRequired = function () {
-        if (!this.data.password_repeat || this.data.password_repeat.trim().length == 0) {
-            this.errors.password_repeat = "required";
-        }
-    };
-    UserValidator.prototype.passwordValid = function () {
-        if (this.data.password && this.data.password.length < 4) {
-            this.errors.password = this.errors.password || "unvalid";
-        }
-    };
-    UserValidator.prototype.passwordsMatch = function () {
-        if (this.data.password != this.data.password_repeat) {
-            this.errors.password = this.errors.password || "no_match";
-        }
-    };
-    UserValidator.EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^ <>() \[\]\\.,;: \s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return UserValidator;
+    return UserController;
 }());
-exports.default = UserValidator;
+var userController = new UserController();
+exports.default = userController;

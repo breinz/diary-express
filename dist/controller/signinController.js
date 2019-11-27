@@ -62,6 +62,27 @@ var SigninController = (function () {
             });
         });
     };
+    SigninController.prototype.apiPostSignin = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, UserModel_1.default.create(req.body)];
+                    case 1:
+                        user = _a.sent();
+                        user.apiLogin();
+                        res.json({
+                            id: user._id,
+                            name: user.name,
+                            email: user.email,
+                            token: user.api.token,
+                            expireAt: user.api.expireAt
+                        });
+                        return [2];
+                }
+            });
+        });
+    };
     return SigninController;
 }());
 var signinController = new SigninController();

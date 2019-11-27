@@ -1,4 +1,5 @@
-import { UserModel } from "../model/UserModel";
+import User, { UserModel } from "../model/UserModel";
+import { threadId } from "worker_threads";
 
 export default class UserValidator {
 
@@ -13,9 +14,10 @@ export default class UserValidator {
         this.errors = {};
     }
 
-    public validSignin(): boolean {
+    public async validSignin(): Promise<boolean> {
         this.emailRequired();
         this.emailValid();
+        await this.emailUnique();
         this.passwordRequired();
         this.passwordRepeatRequired();
         this.passwordValid();
@@ -42,6 +44,14 @@ export default class UserValidator {
     private emailValid() {
         if (!RegExp(UserValidator.EMAIL_REGEXP).test(this.data.email)) {
             this.errors.email = this.errors.email || "unvalid";
+        }
+    }
+
+    private async emailUnique() {
+        const user = await User.findOne({ email: this.data.email });
+
+        if (user) {
+            this.errors.email = "taken";
         }
     }
 

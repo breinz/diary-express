@@ -35,6 +35,6 @@ form(method="post")
                     i.big.fa.fa-fw(class=`fa-${category.icon}`)
                     br
                     =category.name
-                input(type="radio", name="category" value=category._id id=`category_${category._id}` checked=category._id.equals(event.category))
+                input(type="radio", name="category" value=category._id id=`category_${category._id}` checked=category._id.equals(event.category?event.category._id:null))
     
     input.btn.btn-success(type="submit", value=t("action.save"))

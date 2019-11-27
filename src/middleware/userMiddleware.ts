@@ -121,6 +121,16 @@ class UserMiddleware {
         next();
     }
 
+    public async apiValidSignin(req: Request, res: Response, next: NextFunction) {
+        const validator = new UserValidator(req.body);
+
+        if (!await validator.validSignin()) {
+            return res.status(400).json({ errors: validator.errors });
+        }
+
+        next();
+    }
+
     /*public async getBySigninToken(req: Request, res: Response, next: NextFunction) {
         req.user = await User.findOne({ "token.signin": req.params.token }) as UserModel;
 
@@ -172,6 +182,55 @@ class UserMiddleware {
         }
 
         req.user = user;
+
+        next();
+    }
+
+    public async apiValidLogin(req: Request, res: Response, next: NextFunction) {
+        const validator = new UserValidator(req.body);
+
+        if (!validator.validLogin()) {
+            return res.status(400).json({ error: true });
+        }
+
+        const user = await User.findOne({ email: req.body.email }) as UserModel;
+
+        if (!user) {
+            return res.status(400).json({ error: true });
+        }
+
+        if (!await user.validatePassword(req.body.password)) {
+            return res.status(400).json({ error: true });
+        }
+
+        req.user = user;
+
+        next();
+    }
+
+    public async apiLogin(req: Request, res: Response, next: NextFunction) {
+
+    }
+
+    public async apiFindUser(req: Request, res: Response, next: NextFunction) {
+        let ok = true;
+        try {
+            req.current_user = await User.findById(req.query.uid) as UserModel;
+        } catch (error) {
+            ok = false;
+        }
+
+        if (!ok || !req.current_user) {
+            return res.status(401).json({ error: "INVALID_USER" });
+        }
+
+        next();
+    }
+
+    public tokenShield(req: Request, res: Response, next: NextFunction) {
+        if (!req.query.token || req.query.token !== req.current_user.api.token) {
+            return res.status(401).json({ error: "invalid token" });
+        }
 
         next();
     }
