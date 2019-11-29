@@ -39,45 +39,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ExpenseCategoryValidator_1 = __importDefault(require("../../validator/ExpenseCategoryValidator"));
-var ExpenseCategoryModel_1 = __importDefault(require("../../model/ExpenseCategoryModel"));
-var ApiExpenseCategoryMiddleware = (function () {
-    function ApiExpenseCategoryMiddleware() {
+var ExpenseValidator_1 = __importDefault(require("../../validator/ExpenseValidator"));
+var ExpenseModel_1 = __importDefault(require("../../model/ExpenseModel"));
+var ApiExpenseMiddleware = (function () {
+    function ApiExpenseMiddleware() {
     }
-    ApiExpenseCategoryMiddleware.prototype.validNew = function (req, res, next) {
-        var validator = new ExpenseCategoryValidator_1.default(req.body);
-        if (!validator.validNew()) {
-            return res.status(400).json({ errors: validator.errors });
-        }
-        next();
-    };
-    ApiExpenseCategoryMiddleware.prototype.validEdit = function (req, res, next) {
-        var validator = new ExpenseCategoryValidator_1.default(req.body);
-        if (!validator.validEdit()) {
-            return res.status(400).json({ errors: validator.errors });
-        }
-        next();
-    };
-    ApiExpenseCategoryMiddleware.prototype.getCategories = function (req, res, next) {
+    ApiExpenseMiddleware.prototype.getExpense = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = req;
-                        return [4, ExpenseCategoryModel_1.default.find({ user: req.current_user }).sort("name")];
-                    case 1:
-                        _a.expenseCategories = (_b.sent());
-                        if (next)
-                            next();
-                        return [2];
-                }
-            });
-        });
-    };
-    ApiExpenseCategoryMiddleware.prototype.getCategory = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            var ok, _a, error_1;
+            var ok, _a, e_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -86,16 +55,16 @@ var ApiExpenseCategoryMiddleware = (function () {
                     case 1:
                         _b.trys.push([1, 3, , 4]);
                         _a = req;
-                        return [4, ExpenseCategoryModel_1.default.findById(req.query.id)];
+                        return [4, ExpenseModel_1.default.findById(req.query.id).populate("category")];
                     case 2:
-                        _a.expenseCategory = (_b.sent());
+                        _a.expense = (_b.sent());
                         return [3, 4];
                     case 3:
-                        error_1 = _b.sent();
+                        e_1 = _b.sent();
                         ok = false;
                         return [3, 4];
                     case 4:
-                        if (!req.expenseCategory || !ok) {
+                        if (!ok) {
                             return [2, res.status(404).send()];
                         }
                         next();
@@ -104,7 +73,22 @@ var ApiExpenseCategoryMiddleware = (function () {
             });
         });
     };
-    return ApiExpenseCategoryMiddleware;
+    ApiExpenseMiddleware.prototype.validNew = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var validator;
+            return __generator(this, function (_a) {
+                validator = new ExpenseValidator_1.default(req.body);
+                if (!validator.validNew()) {
+                    return [2, res.status(400).json({
+                            errors: validator.errors
+                        })];
+                }
+                next();
+                return [2];
+            });
+        });
+    };
+    return ApiExpenseMiddleware;
 }());
-var middleware = new ApiExpenseCategoryMiddleware();
-exports.default = middleware;
+var apiExpenseMiddleware = new ApiExpenseMiddleware();
+exports.default = apiExpenseMiddleware;

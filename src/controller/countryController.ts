@@ -13,6 +13,8 @@ class CountryController {
     }
 
     public async postNew(req: Request, res: Response, next: NextFunction) {
+        req.body.user = req.current_user;
+
         req.country = await Country.create(req.body) as CountryModel;
 
         if (req.cookies.step_country) {

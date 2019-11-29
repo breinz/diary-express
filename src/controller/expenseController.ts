@@ -11,7 +11,6 @@ class ExpenseController {
     }
 
     public apiGetIndex(req: Request, res: Response, next: NextFunction) {
-        console.log("apiGetIndex");
         res.json({
             expenses: req.expenses,
             report: req.expenseReport

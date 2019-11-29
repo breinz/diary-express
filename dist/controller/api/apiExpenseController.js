@@ -39,72 +39,66 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ExpenseCategoryValidator_1 = __importDefault(require("../../validator/ExpenseCategoryValidator"));
-var ExpenseCategoryModel_1 = __importDefault(require("../../model/ExpenseCategoryModel"));
-var ApiExpenseCategoryMiddleware = (function () {
-    function ApiExpenseCategoryMiddleware() {
+var ExpenseModel_1 = __importDefault(require("../../model/ExpenseModel"));
+var ApiExpenseController = (function () {
+    function ApiExpenseController() {
     }
-    ApiExpenseCategoryMiddleware.prototype.validNew = function (req, res, next) {
-        var validator = new ExpenseCategoryValidator_1.default(req.body);
-        if (!validator.validNew()) {
-            return res.status(400).json({ errors: validator.errors });
-        }
-        next();
+    ApiExpenseController.prototype.getIndex = function (req, res, next) {
+        res.json(req.expenses);
     };
-    ApiExpenseCategoryMiddleware.prototype.validEdit = function (req, res, next) {
-        var validator = new ExpenseCategoryValidator_1.default(req.body);
-        if (!validator.validEdit()) {
-            return res.status(400).json({ errors: validator.errors });
-        }
-        next();
+    ApiExpenseController.prototype.getExpense = function (req, res, next) {
+        res.json(req.expense);
     };
-    ApiExpenseCategoryMiddleware.prototype.getCategories = function (req, res, next) {
+    ApiExpenseController.prototype.patchExpense = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _a = req;
-                        return [4, ExpenseCategoryModel_1.default.find({ user: req.current_user }).sort("name")];
+                        Object.assign(req.expense, req.body);
+                        return [4, req.expense.save()];
                     case 1:
-                        _a.expenseCategories = (_b.sent());
-                        if (next)
-                            next();
+                        _a.sent();
+                        res.json({ ok: true });
                         return [2];
                 }
             });
         });
     };
-    ApiExpenseCategoryMiddleware.prototype.getCategory = function (req, res, next) {
+    ApiExpenseController.prototype.getReport = function (req, res, next) {
+        res.json(req.expenseReport);
+    };
+    ApiExpenseController.prototype.postNew = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var ok, _a, error_1;
+            var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        ok = true;
-                        _b.label = 1;
-                    case 1:
-                        _b.trys.push([1, 3, , 4]);
+                        req.body.user = req.current_user;
                         _a = req;
-                        return [4, ExpenseCategoryModel_1.default.findById(req.query.id)];
-                    case 2:
-                        _a.expenseCategory = (_b.sent());
-                        return [3, 4];
-                    case 3:
-                        error_1 = _b.sent();
-                        ok = false;
-                        return [3, 4];
-                    case 4:
-                        if (!req.expenseCategory || !ok) {
-                            return [2, res.status(404).send()];
-                        }
+                        return [4, ExpenseModel_1.default.create(req.body)];
+                    case 1:
+                        _a.expense = (_b.sent());
+                        res.json({ ok: true });
                         next();
                         return [2];
                 }
             });
         });
     };
-    return ApiExpenseCategoryMiddleware;
+    ApiExpenseController.prototype.deleteDelete = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, ExpenseModel_1.default.deleteOne({ _id: req.expense._id })];
+                    case 1:
+                        _a.sent();
+                        res.json({ ok: true });
+                        return [2];
+                }
+            });
+        });
+    };
+    return ApiExpenseController;
 }());
-var middleware = new ApiExpenseCategoryMiddleware();
-exports.default = middleware;
+var apiExpenseController = new ApiExpenseController();
+exports.default = apiExpenseController;

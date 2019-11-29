@@ -57,6 +57,7 @@ var CountryController = (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        req.body.user = req.current_user;
                         _a = req;
                         return [4, CountryModel_1.default.create(req.body)];
                     case 1:

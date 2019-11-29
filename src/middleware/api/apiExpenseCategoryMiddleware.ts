@@ -31,7 +31,6 @@ class ApiExpenseCategoryMiddleware {
     }
 
     public async getCategory(req: Request, res: Response, next: NextFunction) {
-        console.log(req.query);
         let ok = true;
         try {
             req.expenseCategory = await ExpenseCategory.findById(req.query.id) as ExpenseCategoryModel;

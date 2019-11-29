@@ -8,10 +8,16 @@ var userMiddleware_1 = __importDefault(require("../../middleware/userMiddleware"
 var dateMiddleware_1 = __importDefault(require("../../middleware/dateMiddleware"));
 var expenseReportMiddleware_1 = __importDefault(require("../../middleware/expenseReportMiddleware"));
 var expenseMiddleware_1 = __importDefault(require("../../middleware/expenseMiddleware"));
-var expenseController_1 = __importDefault(require("../../controller/expenseController"));
 var apiExpenseCategoryRouter_1 = __importDefault(require("../../router/api/apiExpenseCategoryRouter"));
+var apiExpenseController_1 = __importDefault(require("../../controller/api/apiExpenseController"));
+var apiExpenseMiddleware_1 = __importDefault(require("../../middleware/api/apiExpenseMiddleware"));
 var router = express_1.Router();
 router.use(userMiddleware_1.default.apiFindUser, userMiddleware_1.default.tokenShield);
 router.use("/category", apiExpenseCategoryRouter_1.default);
-router.get("/", dateMiddleware_1.default.getPeriod, expenseMiddleware_1.default.getExpenses, expenseReportMiddleware_1.default.getMonth, expenseController_1.default.apiGetIndex);
+router.get("/", dateMiddleware_1.default.getPeriod, expenseMiddleware_1.default.getExpenses, apiExpenseController_1.default.getIndex);
+router.delete("/", apiExpenseMiddleware_1.default.getExpense, apiExpenseController_1.default.deleteDelete);
+router.get("/expense", apiExpenseMiddleware_1.default.getExpense, apiExpenseController_1.default.getExpense);
+router.patch("/", apiExpenseMiddleware_1.default.getExpense, apiExpenseController_1.default.patchExpense);
+router.get('/report', dateMiddleware_1.default.getPeriod, expenseReportMiddleware_1.default.getMonth, apiExpenseController_1.default.getReport);
+router.post('/new', apiExpenseMiddleware_1.default.validNew, apiExpenseController_1.default.postNew);
 exports.default = router;

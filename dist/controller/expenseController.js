@@ -50,7 +50,6 @@ var ExpenseController = (function () {
         });
     };
     ExpenseController.prototype.apiGetIndex = function (req, res, next) {
-        console.log("apiGetIndex");
         res.json({
             expenses: req.expenses,
             report: req.expenseReport
