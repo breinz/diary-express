@@ -48,14 +48,16 @@ var ApiCountryController = (function () {
     };
     ApiCountryController.prototype.post = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         req.body.user = req.current_user;
+                        _a = req;
                         return [4, CountryModel_1.default.create(req.body)];
                     case 1:
-                        _a.sent();
-                        res.json({ ok: true });
+                        _a.country = (_b.sent());
+                        res.json({ ok: true, id: req.country._id });
                         return [2];
                 }
             });
@@ -80,7 +82,7 @@ var ApiCountryController = (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, CountryModel_1.default.deleteOne({ _id: req.country._id })];
+                    case 0: return [4, req.country.remove()];
                     case 1:
                         _a.sent();
                         res.json({ ok: true });

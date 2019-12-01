@@ -3,10 +3,10 @@ extends ../layout/layout
 mixin line(people)
     tr
         td(data-link=`/people/${people._id}`)
-            =people.firstName+" "+people.lastName
+            =people.firstName+" "+(people.lastName || '')
             small.text-muted
                 |&nbsp;
-                =people.from.name
+                =people.from ? people.from.name : "?"
         td(data-link=`/people/${people._id}`)
             =people.metIn
             small.text-muted

@@ -6,6 +6,7 @@ import ApiSigninRouter from "./api/apiSigninRouter";
 import ApiUserRouter from "./api/apiUserRouter";
 import ApiPeopleRouter from "./api/apiPeopleRouter";
 import ApiCountryRouter from "./api/apiCountryRouter";
+import ApiEventRouter from "./api/apiEventRouter";
 
 
 const router = Router();
@@ -16,6 +17,7 @@ router.use("/user", ApiUserRouter);
 router.use("/expense", ApiExpenseRouter);
 router.use("/people", ApiPeopleRouter);
 router.use("/country", ApiCountryRouter);
+router.use("/event", ApiEventRouter);
 
 //router.get("/");
 

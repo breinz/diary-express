@@ -39,73 +39,60 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var CountryModel_1 = __importDefault(require("../../model/CountryModel"));
-var ApiCountryMiddleware = (function () {
-    function ApiCountryMiddleware() {
+var EventCategoryModel_1 = __importDefault(require("../../model/EventCategoryModel"));
+var ApiEventCategoryController = (function () {
+    function ApiEventCategoryController() {
     }
-    ApiCountryMiddleware.prototype.getCountries = function (req, res, next) {
+    ApiEventCategoryController.prototype.post = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _a = req;
-                        return [4, CountryModel_1.default.aggregate([
-                                {
-                                    $match: {
-                                        user: req.current_user._id
-                                    }
-                                }, {
-                                    $lookup: {
-                                        from: 'peoples',
-                                        localField: '_id',
-                                        foreignField: 'from',
-                                        as: 'peoples'
-                                    }
-                                }, {
-                                    $sort: {
-                                        name: 1
-                                    }
-                                }
-                            ])];
+                        req.body.user = req.current_user;
+                        return [4, EventCategoryModel_1.default.create(req.body)];
                     case 1:
-                        _a.countries = (_b.sent());
-                        next();
+                        _a.sent();
+                        res.json({ ok: true });
                         return [2];
                 }
             });
         });
     };
-    ApiCountryMiddleware.prototype.getCountry = function (req, res, next) {
+    ApiEventCategoryController.prototype.getList = function (req, res, next) {
+        res.json(req.eventCategories);
+    };
+    ApiEventCategoryController.prototype.getItem = function (req, res, next) {
+        res.json(req.eventCategory);
+    };
+    ApiEventCategoryController.prototype.patch = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var ok, _a, error_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        ok = true;
-                        _b.label = 1;
+                        Object.assign(req.eventCategory, req.body);
+                        return [4, req.eventCategory.save()];
                     case 1:
-                        _b.trys.push([1, 3, , 4]);
-                        _a = req;
-                        return [4, CountryModel_1.default.findById(req.query.id)];
-                    case 2:
-                        _a.country = (_b.sent());
-                        return [3, 4];
-                    case 3:
-                        error_1 = _b.sent();
-                        ok = false;
-                        return [3, 4];
-                    case 4:
-                        if (!ok || !req.country) {
-                            return [2, res.status(404).json({ error: "not_found" })];
-                        }
-                        next();
+                        _a.sent();
+                        res.json({ ok: true });
                         return [2];
                 }
             });
         });
     };
-    return ApiCountryMiddleware;
+    ApiEventCategoryController.prototype.delete = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, req.eventCategory.remove()];
+                    case 1:
+                        _a.sent();
+                        res.json({ ok: true });
+                        return [2];
+                }
+            });
+        });
+    };
+    return ApiEventCategoryController;
 }());
-var middleware = new ApiCountryMiddleware();
-exports.default = middleware;
+var controller = new ApiEventCategoryController();
+exports.default = controller;

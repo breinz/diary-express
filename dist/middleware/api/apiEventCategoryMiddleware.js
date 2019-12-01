@@ -39,44 +39,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var CountryModel_1 = __importDefault(require("../../model/CountryModel"));
-var ApiCountryMiddleware = (function () {
-    function ApiCountryMiddleware() {
+var EventCategoryModel_1 = __importDefault(require("../../model/EventCategoryModel"));
+var mongoose_1 = require("mongoose");
+var ApiEventCategoryMiddleware = (function () {
+    function ApiEventCategoryMiddleware() {
     }
-    ApiCountryMiddleware.prototype.getCountries = function (req, res, next) {
+    ApiEventCategoryMiddleware.prototype.getList = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = req;
-                        return [4, CountryModel_1.default.aggregate([
+                        return [4, EventCategoryModel_1.default.aggregate([
                                 {
                                     $match: {
                                         user: req.current_user._id
                                     }
                                 }, {
                                     $lookup: {
-                                        from: 'peoples',
+                                        from: 'events',
                                         localField: '_id',
-                                        foreignField: 'from',
-                                        as: 'peoples'
-                                    }
-                                }, {
-                                    $sort: {
-                                        name: 1
+                                        foreignField: 'category',
+                                        as: 'events'
                                     }
                                 }
                             ])];
                     case 1:
-                        _a.countries = (_b.sent());
+                        _a.eventCategories = (_b.sent());
                         next();
                         return [2];
                 }
             });
         });
     };
-    ApiCountryMiddleware.prototype.getCountry = function (req, res, next) {
+    ApiEventCategoryMiddleware.prototype.getItem = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             var ok, _a, error_1;
             return __generator(this, function (_b) {
@@ -87,17 +84,17 @@ var ApiCountryMiddleware = (function () {
                     case 1:
                         _b.trys.push([1, 3, , 4]);
                         _a = req;
-                        return [4, CountryModel_1.default.findById(req.query.id)];
+                        return [4, EventCategoryModel_1.default.findById(req.query.id)];
                     case 2:
-                        _a.country = (_b.sent());
+                        _a.eventCategory = (_b.sent());
                         return [3, 4];
                     case 3:
                         error_1 = _b.sent();
                         ok = false;
                         return [3, 4];
                     case 4:
-                        if (!ok || !req.country) {
-                            return [2, res.status(404).json({ error: "not_found" })];
+                        if (!ok || !req.eventCategory) {
+                            res.status(404).json({});
                         }
                         next();
                         return [2];
@@ -105,7 +102,52 @@ var ApiCountryMiddleware = (function () {
             });
         });
     };
-    return ApiCountryMiddleware;
+    ApiEventCategoryMiddleware.prototype.getItemPopulated = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ok, aggregate, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        ok = true;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4, EventCategoryModel_1.default.aggregate([{
+                                    $match: {
+                                        _id: mongoose_1.Types.ObjectId(req.query.id)
+                                    }
+                                }, {
+                                    $lookup: {
+                                        from: 'events',
+                                        localField: '_id',
+                                        foreignField: 'category',
+                                        as: 'events'
+                                    }
+                                }])];
+                    case 2:
+                        aggregate = _a.sent();
+                        if (aggregate[0]) {
+                            req.eventCategory = aggregate[0];
+                        }
+                        else {
+                            ok = false;
+                        }
+                        return [3, 4];
+                    case 3:
+                        error_2 = _a.sent();
+                        ok = false;
+                        return [3, 4];
+                    case 4:
+                        if (!ok || !req.eventCategory) {
+                            res.status(404).json({});
+                        }
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
+    return ApiEventCategoryMiddleware;
 }());
-var middleware = new ApiCountryMiddleware();
+var middleware = new ApiEventCategoryMiddleware();
 exports.default = middleware;
