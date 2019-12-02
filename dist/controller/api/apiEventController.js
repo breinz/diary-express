@@ -39,62 +39,62 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var EventCategoryModel_1 = __importDefault(require("../../model/EventCategoryModel"));
-var ApiEventCategoryController = (function () {
-    function ApiEventCategoryController() {
+var EventModel_1 = __importDefault(require("../../model/EventModel"));
+var ApiEventController = (function () {
+    function ApiEventController() {
     }
-    ApiEventCategoryController.prototype.post = function (req, res, next) {
+    ApiEventController.prototype.getList = function (req, res, next) {
+        res.json(req.events);
+    };
+    ApiEventController.prototype.getEvent = function (req, res, next) {
+        res.json(req.event);
+    };
+    ApiEventController.prototype.post = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        req.body.user = req.current_user;
+                        req.body.user = req.current_user._id;
                         _a = req;
-                        return [4, EventCategoryModel_1.default.create(req.body)];
+                        return [4, EventModel_1.default.create(req.body)];
                     case 1:
-                        _a.eventCategory = (_b.sent());
-                        res.json({ ok: true, id: req.eventCategory._id });
+                        _a.event = (_b.sent());
+                        res.json({});
                         return [2];
                 }
             });
         });
     };
-    ApiEventCategoryController.prototype.getList = function (req, res, next) {
-        res.json(req.eventCategories);
-    };
-    ApiEventCategoryController.prototype.getItem = function (req, res, next) {
-        res.json(req.eventCategory);
-    };
-    ApiEventCategoryController.prototype.patch = function (req, res, next) {
+    ApiEventController.prototype.patch = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        Object.assign(req.eventCategory, req.body);
-                        return [4, req.eventCategory.save()];
+                        Object.assign(req.event, req.body);
+                        return [4, req.event.save()];
                     case 1:
                         _a.sent();
-                        res.json({ ok: true });
+                        res.json({});
                         return [2];
                 }
             });
         });
     };
-    ApiEventCategoryController.prototype.delete = function (req, res, next) {
+    ApiEventController.prototype.delete = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, req.eventCategory.remove()];
+                    case 0: return [4, req.event.remove()];
                     case 1:
                         _a.sent();
-                        res.json({ ok: true });
+                        res.json({});
                         return [2];
                 }
             });
         });
     };
-    return ApiEventCategoryController;
+    return ApiEventController;
 }());
-var controller = new ApiEventCategoryController();
+var controller = new ApiEventController();
 exports.default = controller;
