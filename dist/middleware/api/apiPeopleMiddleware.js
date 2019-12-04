@@ -82,6 +82,28 @@ var ApiPeopleMiddleware = (function () {
             });
         });
     };
+    ApiPeopleMiddleware.prototype.getPeoplePopulated = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, error_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        _a = req;
+                        return [4, PeopleModel_1.default.findById(req.query.id).populate('from')];
+                    case 1:
+                        _a.people = (_b.sent());
+                        return [3, 3];
+                    case 2:
+                        error_2 = _b.sent();
+                        return [2, res.status(404).json({})];
+                    case 3:
+                        next();
+                        return [2];
+                }
+            });
+        });
+    };
     ApiPeopleMiddleware.prototype.validNew = function (req, res, next) {
         var validator = new PeopleValidator_1.default(req.body);
         if (!validator.validNew()) {

@@ -18,6 +18,15 @@ class ApiPeopleMiddleware {
         next();
     }
 
+    public async getPeoplePopulated(req: Request, res: Response, next: NextFunction) {
+        try {
+            req.people = await People.findById(req.query.id).populate('from') as PeopleModel;
+        } catch (error) {
+            return res.status(404).json({});
+        }
+        next();
+    }
+
     public validNew(req: Request, res: Response, next: NextFunction) {
         const validator = new PeopleValidator(req.body);
 

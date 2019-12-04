@@ -68,7 +68,7 @@ var JournalMiddleware = (function () {
                                 $match: {
                                     date: {
                                         $gte: req.bop,
-                                        $lte: req.eop
+                                        $lt: req.eop
                                     }
                                 }
                             }, {
@@ -104,7 +104,7 @@ var JournalMiddleware = (function () {
                                         user: req.current_user._id,
                                         met_at: {
                                             $gte: req.bop,
-                                            $lte: req.eop
+                                            $lt: req.eop
                                         }
                                     }
                                 }, {
@@ -129,7 +129,7 @@ var JournalMiddleware = (function () {
                                         user: req.current_user._id,
                                         date: {
                                             $gte: req.bop,
-                                            $lte: req.eop
+                                            $lt: req.eop
                                         },
                                         deleted: false
                                     }
@@ -180,6 +180,9 @@ var JournalMiddleware = (function () {
                             ])];
                     case 3:
                         events = _a.sent();
+                        req.expenses = expenses;
+                        req.peoples = people;
+                        req.events = events;
                         res.locals.journalData = {
                             expenses: expenses,
                             people: people,
@@ -206,6 +209,9 @@ var JournalMiddleware = (function () {
                         ])];
                     case 1:
                         _a = _b.sent(), events = _a[0], expenses = _a[1], peoples = _a[2];
+                        req.events = events;
+                        req.expenses = expenses;
+                        req.peoples = peoples;
                         res.locals.journalData = {
                             expenses: expenses,
                             peoples: peoples,

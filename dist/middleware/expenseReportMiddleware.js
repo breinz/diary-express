@@ -139,7 +139,7 @@ var ExpenseReportMiddleware = (function () {
                                 $match: {
                                     date: {
                                         $gte: this.req.bop,
-                                        $lte: this.req.eop
+                                        $lt: this.req.eop
                                     },
                                     user: this.req.current_user._id
                                 }
@@ -235,7 +235,7 @@ var ExpenseReportMiddleware = (function () {
                                                                 $gte: ["$date", this.req.bop]
                                                             },
                                                             {
-                                                                $lte: ["$date", this.req.eop]
+                                                                $lt: ["$date", this.req.eop]
                                                             }
                                                         ]
                                                     }
@@ -299,7 +299,7 @@ var ExpenseReportMiddleware = (function () {
                                                         ]
                                                     },
                                                     {
-                                                        $lte: [
+                                                        $lt: [
                                                             "$$expense.date",
                                                             this.req.eop
                                                         ]

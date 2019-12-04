@@ -86,7 +86,7 @@ class ExpenseReportMiddleware {
                 $match: {
                     date: {
                         $gte: this.req.bop,
-                        $lte: this.req.eop
+                        $lt: this.req.eop
                     },
                     user: this.req.current_user._id
                 }
@@ -185,7 +185,7 @@ class ExpenseReportMiddleware {
                                                 $gte: ["$date", this.req.bop]
                                             },
                                             {
-                                                $lte: ["$date", this.req.eop]
+                                                $lt: ["$date", this.req.eop]
                                             }
                                         ]
                                     }
@@ -248,7 +248,7 @@ class ExpenseReportMiddleware {
                                             ]
                                         },
                                         {
-                                            $lte: [
+                                            $lt: [
                                                 "$$expense.date",
                                                 this.req.eop
                                             ]

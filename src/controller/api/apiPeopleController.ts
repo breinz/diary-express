@@ -7,6 +7,10 @@ class ApiPeopleController {
         res.json(req.peoples);
     }
 
+    public getPeople(req: Request, res: Response, next: NextFunction) {
+        res.json(req.people);
+    }
+
     public async post(req: Request, res: Response, next: NextFunction) {
         req.body.user = req.current_user;
 
@@ -24,11 +28,13 @@ class ApiPeopleController {
     }
 
     public async delete(req: Request, res: Response, next: NextFunction) {
-        req.people.deleted = true;
+        await req.people.remove();
 
-        await req.people.save();
+        // req.people.deleted = true;
 
-        res.json({ ok: true });
+        // await req.people.save();
+
+        res.json({});
     }
 }
 

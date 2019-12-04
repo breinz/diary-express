@@ -1,11 +1,10 @@
 import { Router } from "express";
 import userMiddleware from "../../middleware/userMiddleware";
 import dateMiddleware from "../../middleware/dateMiddleware";
+import apiDateMiddleware from "../../middleware/api/apiDateMiddleware";
 import expenseReportMiddleware from "../../middleware/expenseReportMiddleware";
 import expenseMiddleware from "../../middleware/expenseMiddleware";
-import expenseController from "../../controller/expenseController";
 import apiExpenseCategoryRouter from "../../router/api/apiExpenseCategoryRouter";
-import apiExpenseCategoryController from "../../controller/api/apiExpenseCategoryController";
 import apiExpenseController from "../../controller/api/apiExpenseController";
 import apiExpenseMiddleware from "../../middleware/api/apiExpenseMiddleware";
 
@@ -19,7 +18,7 @@ router.use(
 router.use("/category", apiExpenseCategoryRouter);
 
 router.get("/",
-    dateMiddleware.getPeriod,
+    apiDateMiddleware.getPeriod,
     expenseMiddleware.getExpenses,
     //expenseReportMiddleware.getMonth,
     apiExpenseController.getIndex
@@ -41,7 +40,7 @@ router.patch("/",
 );
 
 router.get('/report',
-    dateMiddleware.getPeriod,
+    apiDateMiddleware.getPeriod,
     expenseReportMiddleware.getMonth,
     apiExpenseController.getReport
 

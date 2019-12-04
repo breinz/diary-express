@@ -10,6 +10,7 @@ var userMiddleware_1 = __importDefault(require("../../middleware/userMiddleware"
 var router = express_1.Router();
 router.use(userMiddleware_1.default.apiFindUser, userMiddleware_1.default.tokenShield);
 router.get('/', apiPeopleMiddleware_1.default.getList, apiPeopleController_1.default.getList);
+router.get('/people', apiPeopleMiddleware_1.default.getPeoplePopulated, apiPeopleController_1.default.getPeople);
 router.post("/", apiPeopleMiddleware_1.default.validNew, apiPeopleController_1.default.post);
 router.patch("/", apiPeopleMiddleware_1.default.getPeople, apiPeopleController_1.default.patch);
 router.delete("/", apiPeopleMiddleware_1.default.getPeople, apiPeopleController_1.default.delete);

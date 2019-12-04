@@ -46,6 +46,9 @@ var ApiPeopleController = (function () {
     ApiPeopleController.prototype.getList = function (req, res, next) {
         res.json(req.peoples);
     };
+    ApiPeopleController.prototype.getPeople = function (req, res, next) {
+        res.json(req.people);
+    };
     ApiPeopleController.prototype.post = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -80,12 +83,10 @@ var ApiPeopleController = (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        req.people.deleted = true;
-                        return [4, req.people.save()];
+                    case 0: return [4, req.people.remove()];
                     case 1:
                         _a.sent();
-                        res.json({ ok: true });
+                        res.json({});
                         return [2];
                 }
             });

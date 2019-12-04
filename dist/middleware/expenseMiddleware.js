@@ -113,7 +113,7 @@ var ExpenseMiddleware = (function () {
                 switch (_b.label) {
                     case 0:
                         _a = req;
-                        return [4, ExpenseModel_1.default.find({ date: { $gte: req.bop, $lte: req.eop }, user: req.current_user }).sort("-date -amount").populate("category")];
+                        return [4, ExpenseModel_1.default.find({ date: { $gte: req.bop, $lt: req.eop }, user: req.current_user }).sort("-date -amount").populate("category")];
                     case 1:
                         _a.expenses = (_b.sent());
                         next();

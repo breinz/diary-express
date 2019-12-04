@@ -16,6 +16,11 @@ router.get('/',
     apiPeopleController.getList
 );
 
+router.get('/people',
+    apiPeopleMiddleware.getPeoplePopulated,
+    apiPeopleController.getPeople
+);
+
 router.post("/",
     apiPeopleMiddleware.validNew,
     apiPeopleController.post

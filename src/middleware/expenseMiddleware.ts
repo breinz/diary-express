@@ -43,7 +43,7 @@ class ExpenseMiddleware {
     public async getExpenses(req: Request, res: Response, next: NextFunction) {
         //expenseMiddleware.getPeriod(req);
 
-        req.expenses = await Expense.find({ date: { $gte: req.bop, $lte: req.eop }, user: req.current_user }).sort("-date -amount").populate("category") as ExpenseModel[];
+        req.expenses = await Expense.find({ date: { $gte: req.bop, $lt: req.eop }, user: req.current_user }).sort("-date -amount").populate("category") as ExpenseModel[];
 
         next();
     }

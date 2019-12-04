@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import Expense from "../model/ExpenseModel";
-import People from "../model/PeopleModel";
-import Event from "../model/EventModel";
+import Expense, { ExpenseModel } from "../model/ExpenseModel";
+import People, { PeopleModel } from "../model/PeopleModel";
+import Event, { EventModel } from "../model/EventModel";
 
 class JournalMiddleware {
 
@@ -20,12 +20,13 @@ class JournalMiddleware {
     }
 
     public async getElements(req: Request, res: Response, next: NextFunction) {
+
         let expenses = await Expense.aggregate([
             {
                 $match: {
                     date: {
                         $gte: req.bop,
-                        $lte: req.eop
+                        $lt: req.eop
                     }
                 }
             }, {
@@ -66,7 +67,7 @@ class JournalMiddleware {
                     user: req.current_user._id,
                     met_at: {
                         $gte: req.bop,
-                        $lte: req.eop
+                        $lt: req.eop
                     }
                 }
             }, {
@@ -96,7 +97,7 @@ class JournalMiddleware {
                     user: req.current_user._id,
                     date: {
                         $gte: req.bop,
-                        $lte: req.eop
+                        $lt: req.eop
                     },
                     deleted: false
                 }
@@ -157,6 +158,10 @@ class JournalMiddleware {
             }
         ]);
 
+        req.expenses = expenses;
+        req.peoples = people;
+        req.events = events;
+
         res.locals.journalData = {
             expenses,
             people,
@@ -182,6 +187,9 @@ class JournalMiddleware {
             People.find({ user: req.current_user, met_at: req.bop, deleted: false }).populate("from")
         ]);
 
+        req.events = events as EventModel[];
+        req.expenses = expenses as ExpenseModel[];
+        req.peoples = peoples as PeopleModel[];
 
         res.locals.journalData = {
             expenses,
