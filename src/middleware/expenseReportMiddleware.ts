@@ -126,9 +126,9 @@ class ExpenseReportMiddleware {
 
         let daysIn: number;
 
-        if (this.req.params.year) {
+        if (this.req.params.year || this.req.query.year) {
 
-            if (this.req.params.month) {
+            if (this.req.params.month || this.req.query.month) {
 
                 let d = new Date();
                 d.setDate(1);

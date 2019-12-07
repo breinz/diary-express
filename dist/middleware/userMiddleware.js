@@ -224,7 +224,6 @@ var UserMiddleware = (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        console.log("find user");
                         ok = true;
                         _b.label = 1;
                     case 1:

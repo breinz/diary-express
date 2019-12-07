@@ -26,7 +26,6 @@ class ApiContactController {
             return res.status(503).json({ ok: false });
 
         }
-        console.log("ok, sent!");
         return res.json({});
     }
 }

@@ -80,9 +80,7 @@ var ApiContactController = (function () {
                         console.log("Error");
                         console.log(error_1);
                         return [2, res.status(503).json({ ok: false })];
-                    case 4:
-                        console.log("ok, sent!");
-                        return [2, res.json({})];
+                    case 4: return [2, res.json({})];
                 }
             });
         });

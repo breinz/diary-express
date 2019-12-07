@@ -184,8 +184,8 @@ var ExpenseReportMiddleware = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (this.req.params.year) {
-                            if (this.req.params.month) {
+                        if (this.req.params.year || this.req.query.year) {
+                            if (this.req.params.month || this.req.query.month) {
                                 d = new Date();
                                 d.setDate(1);
                                 d.setHours(0, 0, 0, 0);
