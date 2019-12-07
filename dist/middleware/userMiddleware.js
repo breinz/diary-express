@@ -248,8 +248,11 @@ var UserMiddleware = (function () {
         });
     };
     UserMiddleware.prototype.tokenShield = function (req, res, next) {
+        if (req.current_user.api.expireAt < new Date()) {
+            return res.status(401).json({ error: "OUTDATED_TOKEN" });
+        }
         if (!req.query.token || req.query.token !== req.current_user.api.token) {
-            return res.status(401).json({ error: "invalid token" });
+            return res.status(401).json({ error: "INVALID_TOKEN" });
         }
         next();
     };

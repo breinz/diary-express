@@ -21,7 +21,8 @@ export type UserModel = Document & {
 
     api: {
         token: string,
-        expireAt: Date
+        expireAt: Date,
+        refreshToken: string
     }
 
     validatePassword: (pwd: string) => Promise<boolean>,
@@ -42,7 +43,8 @@ const userSchema = new Schema({
 
     api: {
         token: String,
-        expireAt: Date
+        expireAt: Date,
+        refreshToken: String
     }
 });
 
@@ -71,7 +73,8 @@ userSchema.methods.apiLogin = async function () {
     const user = this as UserModel;
 
     let expireAt = new Date();
-    expireAt.setHours(expireAt.getHours() + 1);
+    expireAt.setHours(expireAt.getHours() + 6);
+    //expireAt.setMinutes(expireAt.getMinutes() + 6);
 
     let token: string = user.api.token;
 
@@ -79,7 +82,13 @@ userSchema.methods.apiLogin = async function () {
         token = Buffer.from(user._id + expireAt.getTime() + uniqId()).toString("base64");
     }
 
-    user.api = { token, expireAt };
+    let refreshToken = user.api.refreshToken;
+
+    if (!user.api.refreshToken || !user.api.expireAt || user.api.expireAt < new Date()) {
+        refreshToken = Buffer.from(uniqId() + user._id + "saltpompoi" + uniqId()).toString("base64");
+    }
+
+    user.api = { token, expireAt, refreshToken };
 
     await user.save();
 }

@@ -54,7 +54,8 @@ var userSchema = new mongoose_1.Schema({
     lang: { type: String, default: "en" },
     api: {
         token: String,
-        expireAt: Date
+        expireAt: Date,
+        refreshToken: String
     }
 });
 userSchema.pre("save", function (next) {
@@ -99,18 +100,22 @@ userSchema.methods.validatePassword = function (compare) {
 };
 userSchema.methods.apiLogin = function () {
     return __awaiter(this, void 0, void 0, function () {
-        var user, expireAt, token;
+        var user, expireAt, token, refreshToken;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     user = this;
                     expireAt = new Date();
-                    expireAt.setHours(expireAt.getHours() + 1);
+                    expireAt.setHours(expireAt.getHours() + 6);
                     token = user.api.token;
                     if (!user.api.token || !user.api.expireAt || user.api.expireAt < new Date()) {
                         token = Buffer.from(user._id + expireAt.getTime() + uniqid_1.default()).toString("base64");
                     }
-                    user.api = { token: token, expireAt: expireAt };
+                    refreshToken = user.api.refreshToken;
+                    if (!user.api.refreshToken || !user.api.expireAt || user.api.expireAt < new Date()) {
+                        refreshToken = Buffer.from(uniqid_1.default() + user._id + "saltpompoi" + uniqid_1.default()).toString("base64");
+                    }
+                    user.api = { token: token, expireAt: expireAt, refreshToken: refreshToken };
                     return [4, user.save()];
                 case 1:
                     _a.sent();

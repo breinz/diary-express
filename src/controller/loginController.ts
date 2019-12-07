@@ -33,6 +33,7 @@ class LoginController {
             name: req.user.name,
             email: req.user.email,
             token: req.user.api.token,
+            refreshToken: req.user.api.refreshToken,
             expireAt: req.user.api.expireAt,
             lang: req.user.lang
         });

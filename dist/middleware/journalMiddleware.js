@@ -66,6 +66,7 @@ var JournalMiddleware = (function () {
                     case 0: return [4, ExpenseModel_1.default.aggregate([
                             {
                                 $match: {
+                                    user: req.current_user._id,
                                     date: {
                                         $gte: req.bop,
                                         $lt: req.eop
@@ -78,11 +79,8 @@ var JournalMiddleware = (function () {
                                     foreignField: '_id',
                                     as: 'category'
                                 }
-                            }, {
-                                $match: {
-                                    "category.0.user": req.current_user._id
-                                }
-                            }, {
+                            },
+                            {
                                 $group: {
                                     _id: "$date",
                                     amount: {

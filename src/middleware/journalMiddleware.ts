@@ -24,6 +24,7 @@ class JournalMiddleware {
         let expenses = await Expense.aggregate([
             {
                 $match: {
+                    user: req.current_user._id,
                     date: {
                         $gte: req.bop,
                         $lt: req.eop
@@ -36,11 +37,11 @@ class JournalMiddleware {
                     foreignField: '_id',
                     as: 'category'
                 }
-            }, {
+            }, /*{
                 $match: {
                     "category.0.user": req.current_user._id
                 }
-            }, {
+            }, */{
                 $group: {
                     _id: "$date",
                     amount: {
