@@ -213,6 +213,7 @@ class UserMiddleware {
     }
 
     public async apiFindUser(req: Request, res: Response, next: NextFunction) {
+        console.log("find user");
         let ok = true;
         try {
             req.current_user = await User.findById(req.query.uid) as UserModel;

@@ -52,6 +52,7 @@ var mainRouter_1 = __importDefault(require("./router/mainRouter"));
 var T_1 = __importDefault(require("./T"));
 var Util_1 = __importDefault(require("./helper/Util"));
 var fs_1 = require("fs");
+var mailer = require("pug-mailer");
 Date.prototype.removeTimezoneOffset = function () {
     this.setMinutes(this.getMinutes() - this.getTimezoneOffset());
 };
@@ -60,6 +61,10 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
+    next();
+});
+app.use(function (req, res, next) {
+    mailer.init(config_1.default.EMAIL_TRANSPORT);
     next();
 });
 app.use(body_parser_1.default.json());

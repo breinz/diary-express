@@ -21,6 +21,8 @@ declare global {
             bop: Date, // Begining Of Period 
             eop: Date,// End Of Period
 
+            mail: { send: (params: { from: string, to: string, subject: string, template: string, data?: any }) => Promise<any> },
+
             expense: ExpenseModel,
             expenses: ExpenseModel[],
 

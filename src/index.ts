@@ -12,6 +12,8 @@ import mainRouter from "./router/mainRouter";
 import T from "./T"
 import Util from "./helper/Util"
 import { watch } from "fs"
+//import nodemailer from "pug-mailer";
+const mailer = require("pug-mailer")
 
 Date.prototype.removeTimezoneOffset = function () {
     this.setMinutes(this.getMinutes() - this.getTimezoneOffset());
@@ -24,6 +26,23 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
+    next();
+});
+
+// Init mailer
+app.use((req, res, next) => {
+    mailer.init(config.EMAIL_TRANSPORT);
+
+    /*mailer
+        .send({
+            from: "diary@julien-breiner.com",
+            to: "julien.breiner@gmail.com",
+            subject: "Test from Diary",
+            template: "test"
+        })
+        .then(response => console.log(response))
+        .catch(err => console.log(err));*/
+
     next();
 });
 
