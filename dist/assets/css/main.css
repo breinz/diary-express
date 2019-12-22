@@ -12218,7 +12218,9 @@ body {
       background-color: #e9ecef;
       box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.34); }
   .alert-hollow-link .badge {
-    font-weight: normal; }
+    font-weight: normal;
+    margin-right: 2px;
+    margin-bottom: 2px; }
 
 .h1-actions {
   float: right;

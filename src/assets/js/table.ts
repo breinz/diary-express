@@ -12,6 +12,7 @@ class Table {
             const link = el.attr("data-link");
             el.css("cursor", "pointer");
             el.on("click", (e) => {
+                e.preventDefault();
                 if ($(e.target).is("a") || $(e.target).is("button")) {
                     return;
                 }

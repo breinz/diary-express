@@ -4,45 +4,56 @@ block content
     .container
         .row
             .col-lg-3.col-md-4.col-sm-6
-                a.alert-hollow-link(href="https://diary.julien-breiner.com")
+                .alert-hollow-link(data-link="https://diary.julien-breiner.com")
                     .alert.alert-hollow
                         img.img-responsive(src="img/diary.png", alt="diary" style="width:100%")
                         h4 Diary
                         .badge.badge-secondary
                             i.fab.fa-node-js 
                             |&nbsp;node js
-                        |&nbsp;
-                        .badge.badge-secondary
-                            |&nbsp;express api
-                        |&nbsp;
+                        a(href="https://github.com/breinz/diary-express")
+                            .badge.badge-dark
+                                i.fab.fa-github
+                                |&nbsp;express api
                         .badge.badge-secondary
                             i.fab.fa-angular
                             |&nbsp;angular
-                        |&nbsp;
                         .badge.badge-secondary
                             |chartist
-                        |&nbsp;
-                        .badge.badge-dark
-                            i.fab.fa-github
-                            |&nbsp;git
+                        a(href="https://github.com/breinz/diary-angular")
+                            .badge.badge-dark
+                                i.fab.fa-github
+                                |&nbsp;git
             .col-lg-3.col-md-4.col-sm-6
-                a.alert-hollow-link(href="http://lazybuttgames.com")
+                .alert-hollow-link(data-link="http://lazybuttgames.com")
                     .alert.alert-hollow
                         img.img-responsive(src="img/lazybuttgames.png", alt="lazybuttgames" style="width:100%")
                         h4 Lazy Butt Games
                         .badge.badge-secondary
                             i.fab.fa-node-js 
                             |&nbsp;node js
-                        |&nbsp;
                         .badge.badge-secondary
                             |&nbsp;express
-                        |&nbsp;
                         .badge.badge-secondary
                             |pixi.js
-                        |&nbsp;
-                        .badge.badge-dark
-                            i.fab.fa-github
-                            |&nbsp;git
+                        //a(href="pompolm")
+                            .badge.badge-dark(data-link="pompom")
+                                i.fab.fa-github
+                                |&nbsp;git
+            .col-lg-3.col-md-4.col-sm-6
+                .alert-hollow-link(data-link="http://job.julien-breiner.com")
+                    .alert.alert-hollow
+                        img.img-responsive(src="img/job.png", alt="job" style="width:100%")
+                        h4 Job
+                        .badge.badge-secondary
+                            i.fab.fa-node-js 
+                            |&nbsp;node js
+                        .badge.badge-secondary
+                            |&nbsp;express
+                        a(href="https://github.com/breinz/job")
+                            .badge.badge-dark
+                                i.fab.fa-github
+                                |&nbsp;git
                 //if page
                     h1=page.title
                     p=page.content

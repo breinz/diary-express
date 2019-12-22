@@ -24944,6 +24944,7 @@ var Table = (function () {
             var link = el.attr("data-link");
             el.css("cursor", "pointer");
             el.on("click", function (e) {
+                e.preventDefault();
                 if (jquery_1.default(e.target).is("a") || jquery_1.default(e.target).is("button")) {
                     return;
                 }
