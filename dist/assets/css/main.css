@@ -4387,6 +4387,21 @@ readers do not read off random characters that represent icons */
   font-family: 'Font Awesome 5 Free';
   font-weight: 900; }
 
+/*!
+ * Font Awesome Free 5.11.2 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ */
+@font-face {
+  font-family: 'Font Awesome 5 Brands';
+  font-style: normal;
+  font-weight: normal;
+  font-display: auto;
+  src: url("../webfonts/fa-brands-400.eot");
+  src: url("../webfonts/fa-brands-400.eot?#iefix") format("embedded-opentype"), url("../webfonts/fa-brands-400.woff2") format("woff2"), url("../webfonts/fa-brands-400.woff") format("woff"), url("../webfonts/fa-brands-400.ttf") format("truetype"), url("../webfonts/fa-brands-400.svg#fontawesome") format("svg"); }
+
+.fab {
+  font-family: 'Font Awesome 5 Brands'; }
+
 .ct-label {
   fill: rgba(0, 0, 0, 0.4);
   color: rgba(0, 0, 0, 0.4);
@@ -12139,7 +12154,10 @@ a.text-dark:hover, a.text-dark:focus {
     width: 1rem; }
   #topbar #topbar-title {
     display: inline-block;
-    margin-right: 2rem; }
+    margin-right: 2rem;
+    color: #fff; }
+    #topbar #topbar-title:hover {
+      color: #ced4da; }
     #topbar #topbar-title #topbar-title-1,
     #topbar #topbar-title #topbar-title-2 {
       display: inline-block;
@@ -12190,6 +12208,17 @@ body {
   pointer-events: none;
   font-size: 8rem;
   font-weight: bold; }
+
+.alert-hollow-link {
+  color: #000; }
+  .alert-hollow-link:hover {
+    text-decoration: none;
+    color: #000; }
+    .alert-hollow-link:hover .alert-hollow {
+      background-color: #e9ecef;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.34); }
+  .alert-hollow-link .badge {
+    font-weight: normal; }
 
 .h1-actions {
   float: right;

@@ -1,5 +1,6 @@
 @import "fontawesome";
 @import "solid";
+@import "brands";
 
 @import "chartist";
 
@@ -67,6 +68,23 @@ body {
   pointer-events: none;
   font-size: 8rem;
   font-weight: bold;
+}
+
+.alert-hollow-link {
+  color: $black;
+  &:hover {
+    text-decoration: none;
+    color: $black;
+
+    .alert-hollow {
+      background-color: $gray-200;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.34);
+    }
+  }
+
+  .badge {
+    font-weight: normal;
+  }
 }
 
 // ---------------------------------------------------------------

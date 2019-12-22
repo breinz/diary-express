@@ -10,9 +10,9 @@ class ApiExpenseCategoryController {
     public async postNew(req: Request, res: Response, next: NextFunction) {
         req.body.user = req.current_user;
 
-        await ExpenseCategory.create(req.body);
+        const cat = await ExpenseCategory.create(req.body);
 
-        res.json({ success: true });
+        res.json({ success: true, id: cat._id });
     }
 
     public async postEdit(req: Request, res: Response, next: NextFunction) {

@@ -3,7 +3,46 @@ extends layout/layout
 block content
     .container
         .row
-            .col
-                if page
+            .col-lg-3.col-md-4.col-sm-6
+                a.alert-hollow-link(href="https://diary.julien-breiner.com")
+                    .alert.alert-hollow
+                        img.img-responsive(src="img/diary.png", alt="diary" style="width:100%")
+                        h4 Diary
+                        .badge.badge-secondary
+                            i.fab.fa-node-js 
+                            |&nbsp;node js
+                        |&nbsp;
+                        .badge.badge-secondary
+                            |&nbsp;express api
+                        |&nbsp;
+                        .badge.badge-secondary
+                            i.fab.fa-angular
+                            |&nbsp;angular
+                        |&nbsp;
+                        .badge.badge-secondary
+                            |chartist
+                        |&nbsp;
+                        .badge.badge-dark
+                            i.fab.fa-github
+                            |&nbsp;git
+            .col-lg-3.col-md-4.col-sm-6
+                a.alert-hollow-link(href="http://lazybuttgames.com")
+                    .alert.alert-hollow
+                        img.img-responsive(src="img/lazybuttgames.png", alt="lazybuttgames" style="width:100%")
+                        h4 Lazy Butt Games
+                        .badge.badge-secondary
+                            i.fab.fa-node-js 
+                            |&nbsp;node js
+                        |&nbsp;
+                        .badge.badge-secondary
+                            |&nbsp;express
+                        |&nbsp;
+                        .badge.badge-secondary
+                            |pixi.js
+                        |&nbsp;
+                        .badge.badge-dark
+                            i.fab.fa-github
+                            |&nbsp;git
+                //if page
                     h1=page.title
                     p=page.content

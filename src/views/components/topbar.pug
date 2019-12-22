@@ -2,7 +2,7 @@
     .container
         .row
             .col-sm-9
-                #topbar-title 
+                a#topbar-title(href="/")
                     #topbar-title-1 Julien 
                     #topbar-title-2 Breiner
                 ul.inline.margin
@@ -42,8 +42,10 @@
                     if current_user
                         li
                             a.btn.text-muted(href="/logout")
-                                i.fa.fa-sign-out-alt
+                                |Logout
+                                //i.fa.fa-sign-out-alt
                     else
                         li
                             a.btn.text-muted(href="/login")
-                                i.fa.fa-sign-in-alt
+                                |Login
+                                //i.fa.fa-sign-in-alt

@@ -68,7 +68,7 @@ var ApiContactController = (function () {
                         return [4, mailer.send({
                                 from: "diary@julien-breiner.com",
                                 to: "julien.breiner@gmail.com",
-                                subject: "Test from Diary",
+                                subject: "Message from Diary",
                                 template: "test",
                                 data: __assign(__assign({}, req.body), { date: date })
                             })];

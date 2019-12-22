@@ -16,7 +16,7 @@ class ApiContactController {
             await mailer.send({
                 from: "diary@julien-breiner.com",
                 to: "julien.breiner@gmail.com",
-                subject: "Test from Diary",
+                subject: "Message from Diary",
                 template: "test",
                 data: { ...req.body, date }
             });

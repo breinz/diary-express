@@ -48,14 +48,15 @@ var ApiExpenseCategoryController = (function () {
     };
     ApiExpenseCategoryController.prototype.postNew = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
+            var cat;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         req.body.user = req.current_user;
                         return [4, ExpenseCategoryModel_1.default.create(req.body)];
                     case 1:
-                        _a.sent();
-                        res.json({ success: true });
+                        cat = _a.sent();
+                        res.json({ success: true, id: cat._id });
                         return [2];
                 }
             });
